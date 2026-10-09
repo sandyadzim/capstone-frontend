@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="Property management for residents, administrators, and technicians."
+    />
+    <script>
+      // Match the persisted preference before CSS paints the page.
+      try {
+        const stored = JSON.parse(localStorage.getItem('property-appearance'))
+        const preference = stored?.state?.theme
+        const theme = ['light', 'dark', 'system'].includes(preference)
+          ? preference
+          : 'system'
+        const dark =
+          theme === 'dark' ||
+          (theme === 'system' &&
+            matchMedia('(prefers-color-scheme: dark)').matches)
+        document.documentElement.classList.toggle('dark', dark)
+        document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
+      } catch {
+        const dark = matchMedia('(prefers-color-scheme: dark)').matches
+        document.documentElement.classList.toggle('dark', dark)
+        document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
+      }
+    </script>
+    <title>Property</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
