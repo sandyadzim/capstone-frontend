@@ -9,11 +9,15 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default defineConfig([
-  globalIgnores(['dist', 'src/routeTree.gen.ts', '.impeccable']),
+  globalIgnores(['dist', 'coverage', 'src/routeTree.gen.ts', '.impeccable']),
   {
     files: ['**/*.{js,ts,tsx}'],
     extends: [js.configs.recommended, tseslint.configs.recommended],
     languageOptions: { globals: globals.node },
+  },
+  {
+    files: ['tests/**/*.{ts,tsx}'],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
   },
   {
     files: ['src/**/*.{ts,tsx}'],

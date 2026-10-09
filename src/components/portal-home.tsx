@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { ArrowUpRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { portals, type PortalId } from '@/layouts/portals'
+import { HealthDemo } from '@/features/health/health-demo'
 
 export function PortalHome({ portal }: { portal: PortalId }) {
   const config = portals[portal]
@@ -41,6 +42,7 @@ export function PortalHome({ portal }: { portal: PortalId }) {
           Try example form <ArrowUpRight aria-hidden="true" />
         </Button>
       </section>
+      <HealthDemo />
       <p className="text-center text-xs leading-5 text-muted-foreground">
         Starter preview · No live property data
       </p>
