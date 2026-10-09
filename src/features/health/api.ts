@@ -1,10 +1,16 @@
 import { queryOptions } from '@tanstack/react-query'
-import { apiClient } from '@/lib/api/client'
+import type { AxiosResponse } from 'axios'
+import type { z } from 'zod'
+import { healthControllerGetHealth } from '@/lib/api/generated/endpoints'
+import type { HealthResponseDto } from '@/lib/api/generated/endpoints.schemas'
 import { ApiError } from '@/lib/api/error'
 import { healthSchema } from '@/features/health/schema'
 
-export async function getHealth(signal?: AbortSignal) {
-  const response = await apiClient.get<unknown>('/health', { signal })
+export async function getHealth(
+  signal?: AbortSignal,
+): Promise<z.output<typeof healthSchema>> {
+  const response: AxiosResponse<HealthResponseDto> =
+    await healthControllerGetHealth({ signal })
   const parsed = healthSchema.safeParse(response.data)
   if (!parsed.success) {
     throw new ApiError(
