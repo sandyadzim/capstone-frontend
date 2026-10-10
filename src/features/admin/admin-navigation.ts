@@ -1,14 +1,10 @@
-import { z } from 'zod'
+export { accountsSearchSchema } from './accounts/account-schema'
 
 export const accountRoles = {
   RESIDENT: 'Residents',
   TECHNICIAN: 'Technicians',
   ADMIN: 'Administrators',
 } as const
-
-export const accountsSearchSchema = z.object({
-  role: z.enum(['ADMIN', 'TECHNICIAN', 'RESIDENT']).optional().catch(undefined),
-})
 
 export function adminPageTitle(pathname: string, role?: string) {
   if (pathname === '/admin/accounts') {

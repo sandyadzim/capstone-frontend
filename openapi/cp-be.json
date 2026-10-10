@@ -16,9 +16,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HealthResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/HealthResponseDto" }
               }
             }
           },
@@ -26,9 +24,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
@@ -70,9 +66,7 @@
             "headers": {
               "Set-Cookie": {
                 "description": "HttpOnly session cookie named __Host-sid",
-                "schema": {
-                  "type": "string"
-                }
+                "schema": { "type": "string" }
               }
             },
             "description": "",
@@ -88,9 +82,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -98,9 +90,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -108,9 +98,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -118,9 +106,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
@@ -148,9 +134,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -158,18 +142,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Get the authenticated account",
         "tags": ["Auth"]
       }
@@ -183,9 +161,7 @@
             "headers": {
               "Set-Cookie": {
                 "description": "Expires the __Host-sid session cookie",
-                "schema": {
-                  "type": "string"
-                }
+                "schema": { "type": "string" }
               }
             },
             "description": ""
@@ -194,9 +170,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -204,9 +178,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
@@ -223,11 +195,7 @@
             "name": "page",
             "required": false,
             "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "default": 1
-            }
+            "schema": { "type": "integer", "minimum": 1, "default": 1 }
           },
           {
             "name": "pageSize",
@@ -239,6 +207,13 @@
               "maximum": 100,
               "default": 20
             }
+          },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string", "maxLength": 254 },
+            "description": "Case-insensitive literal substring of name or login identifier; trimmed, blank means no search"
           },
           {
             "name": "role",
@@ -253,10 +228,7 @@
             "name": "isActive",
             "required": false,
             "in": "query",
-            "schema": {
-              "type": "string",
-              "enum": ["true", "false"]
-            }
+            "schema": { "type": "string", "enum": ["true", "false"] }
           }
         ],
         "responses": {
@@ -274,9 +246,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -284,9 +254,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -294,9 +262,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -304,9 +270,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -314,19 +278,13 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
-        "summary": "List accounts; filter active Technicians with role and isActive",
+        "security": [{ "cookie": [] }],
+        "summary": "List accounts with name/login search, role and active-status filters",
         "tags": ["Accounts"]
       },
       "post": {
@@ -344,9 +302,7 @@
                     "minLength": 1,
                     "maxLength": 160
                   },
-                  "loginIdentifier": {
-                    "type": "string"
-                  },
+                  "loginIdentifier": { "type": "string" },
                   "password": {
                     "type": "string",
                     "minLength": 12,
@@ -356,10 +312,7 @@
                     "type": "string",
                     "enum": ["ADMIN", "TECHNICIAN", "RESIDENT"]
                   },
-                  "isActive": {
-                    "default": true,
-                    "type": "boolean"
-                  },
+                  "isActive": { "default": true, "type": "boolean" },
                   "unitId": {
                     "anyOf": [
                       {
@@ -367,11 +320,7 @@
                         "format": "uuid",
                         "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                       },
-                      {
-                        "type": "string",
-                        "nullable": true,
-                        "enum": [null]
-                      }
+                      { "type": "string", "nullable": true, "enum": [null] }
                     ]
                   }
                 },
@@ -386,9 +335,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AccountResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/AccountResponseDto" }
               }
             }
           },
@@ -396,9 +343,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -406,9 +351,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -416,9 +359,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -426,9 +367,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -436,9 +375,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -446,18 +383,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Create an account and optionally place a Resident",
         "tags": ["Accounts"]
       }
@@ -482,9 +413,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AccountResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/AccountResponseDto" }
               }
             }
           },
@@ -492,9 +421,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -502,9 +429,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -512,9 +437,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -522,9 +445,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -532,18 +453,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Read an account, including inactive accounts",
         "tags": ["Accounts"]
       },
@@ -573,9 +488,7 @@
                     "minLength": 1,
                     "maxLength": 160
                   },
-                  "loginIdentifier": {
-                    "type": "string"
-                  },
+                  "loginIdentifier": { "type": "string" },
                   "password": {
                     "type": "string",
                     "minLength": 12,
@@ -585,9 +498,7 @@
                     "type": "string",
                     "enum": ["ADMIN", "TECHNICIAN", "RESIDENT"]
                   },
-                  "isActive": {
-                    "type": "boolean"
-                  },
+                  "isActive": { "type": "boolean" },
                   "unitId": {
                     "anyOf": [
                       {
@@ -595,11 +506,7 @@
                         "format": "uuid",
                         "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                       },
-                      {
-                        "type": "string",
-                        "nullable": true,
-                        "enum": [null]
-                      }
+                      { "type": "string", "nullable": true, "enum": [null] }
                     ]
                   }
                 },
@@ -613,9 +520,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AccountResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/AccountResponseDto" }
               }
             }
           },
@@ -623,9 +528,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -633,9 +536,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -643,9 +544,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -653,9 +552,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -663,9 +560,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -673,18 +568,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Update an account and optionally place or release a Resident",
         "tags": ["Accounts"]
       }
@@ -709,9 +598,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AccountResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/AccountResponseDto" }
               }
             }
           },
@@ -719,9 +606,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -729,9 +614,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -739,9 +622,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -749,9 +630,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -759,9 +638,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -769,18 +646,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Deactivate an account while preserving history; idempotent",
         "tags": ["Accounts"]
       }
@@ -793,11 +664,7 @@
             "name": "page",
             "required": false,
             "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "default": 1
-            }
+            "schema": { "type": "integer", "minimum": 1, "default": 1 }
           },
           {
             "name": "pageSize",
@@ -814,21 +681,8 @@
             "name": "q",
             "required": false,
             "in": "query",
-            "schema": {
-              "type": "string",
-              "maxLength": 40
-            },
+            "schema": { "type": "string", "maxLength": 40 },
             "description": "Case-insensitive literal substring of unitNumber; trimmed, blank means no search"
-          },
-          {
-            "name": "isArchived",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "enum": ["true", "false"],
-              "default": "false"
-            }
           },
           {
             "name": "displayStatus",
@@ -839,6 +693,16 @@
               "enum": ["MAINTENANCE", "OCCUPIED", "VACANT"]
             },
             "description": "Computed unit status; maintenance takes precedence over active resident occupancy"
+          },
+          {
+            "name": "isArchived",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["true", "false"],
+              "default": "false"
+            }
           }
         ],
         "responses": {
@@ -846,9 +710,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnitListResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/UnitListResponseDto" }
               }
             }
           },
@@ -856,9 +718,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -866,9 +726,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -876,9 +734,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -886,9 +742,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -896,18 +750,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "List property units (Admin), newest first (createdAt DESC, id DESC)",
         "tags": ["Units"]
       },
@@ -931,9 +779,7 @@
                     "minimum": -32768,
                     "maximum": 32767
                   },
-                  "maintenanceFlag": {
-                    "type": "boolean"
-                  }
+                  "maintenanceFlag": { "type": "boolean" }
                 },
                 "required": ["unitNumber", "floor"],
                 "additionalProperties": false
@@ -946,9 +792,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnitResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/UnitResponseDto" }
               }
             }
           },
@@ -956,9 +800,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -966,9 +808,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -976,9 +816,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -986,9 +824,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -996,9 +832,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1006,18 +840,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Create an empty unit (Admin)",
         "tags": ["Units"]
       }
@@ -1042,9 +870,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnitResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/UnitResponseDto" }
               }
             }
           },
@@ -1052,9 +878,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1062,9 +886,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1072,9 +894,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1082,9 +902,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1092,18 +910,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Read a unit, including archived units (Admin)",
         "tags": ["Units"]
       },
@@ -1138,9 +950,7 @@
                     "minimum": -32768,
                     "maximum": 32767
                   },
-                  "maintenanceFlag": {
-                    "type": "boolean"
-                  }
+                  "maintenanceFlag": { "type": "boolean" }
                 },
                 "additionalProperties": false
               }
@@ -1152,9 +962,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnitResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/UnitResponseDto" }
               }
             }
           },
@@ -1162,9 +970,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1172,9 +978,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1182,9 +986,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1192,9 +994,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1202,9 +1002,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1212,18 +1010,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Update an unarchived unit (Admin)",
         "tags": ["Units"]
       }
@@ -1248,9 +1040,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnitResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/UnitResponseDto" }
               }
             }
           },
@@ -1258,9 +1048,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1268,9 +1056,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1278,9 +1064,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1288,9 +1072,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1298,9 +1080,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1308,18 +1088,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Archive an empty unit with no active reports (Admin); idempotent",
         "tags": ["Units"]
       }
@@ -1363,9 +1137,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnitResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/UnitResponseDto" }
               }
             }
           },
@@ -1373,9 +1145,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1383,9 +1153,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1393,9 +1161,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1403,9 +1169,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1413,9 +1177,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1423,18 +1185,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Place or atomically move an active resident (Admin); occupied destinations conflict",
         "tags": ["Units"]
       },
@@ -1457,9 +1213,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnitResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/UnitResponseDto" }
               }
             }
           },
@@ -1467,9 +1221,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1477,9 +1229,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1487,9 +1237,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1497,9 +1245,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1507,9 +1253,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1517,18 +1261,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Release the resident without deactivating the account (Admin); idempotent",
         "tags": ["Units"]
       }
@@ -1542,9 +1280,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PropertyResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/PropertyResponseDto" }
               }
             }
           },
@@ -1552,9 +1288,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1562,9 +1296,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1572,9 +1304,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1582,18 +1312,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Read the configured property (all authenticated roles)",
         "tags": ["Property"]
       },
@@ -1612,10 +1336,7 @@
                     "minLength": 1,
                     "maxLength": 160
                   },
-                  "address": {
-                    "type": "string",
-                    "minLength": 1
-                  },
+                  "address": { "type": "string", "minLength": 1 },
                   "logoUrl": {
                     "type": "string",
                     "nullable": true,
@@ -1632,9 +1353,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PropertyResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/PropertyResponseDto" }
               }
             }
           },
@@ -1642,9 +1361,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1652,9 +1369,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1662,9 +1377,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1672,9 +1385,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1682,18 +1393,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Update the property (Admin); logoUrl only accepts null to clear the logo",
         "tags": ["Property"]
       }
@@ -1706,11 +1411,7 @@
             "name": "page",
             "required": false,
             "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "default": 1
-            }
+            "schema": { "type": "integer", "minimum": 1, "default": 1 }
           },
           {
             "name": "pageSize",
@@ -1727,10 +1428,7 @@
             "name": "q",
             "required": false,
             "in": "query",
-            "schema": {
-              "type": "string",
-              "maxLength": 160
-            },
+            "schema": { "type": "string", "maxLength": 160 },
             "description": "Case-insensitive partial match against report number or title; maximum 160 characters."
           },
           {
@@ -1770,30 +1468,21 @@
             "name": "priority",
             "required": false,
             "in": "query",
-            "schema": {
-              "type": "string",
-              "enum": ["LOW", "MEDIUM", "HIGH"]
-            },
+            "schema": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH"] },
             "description": "Matches final priority, or proposed priority when the report has not been reviewed."
           },
           {
             "name": "dateFrom",
             "required": false,
             "in": "query",
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
+            "schema": { "type": "string", "format": "date" },
             "description": "Inclusive calendar date in Asia/Jakarta (YYYY-MM-DD), applied to reportedAt."
           },
           {
             "name": "dateTo",
             "required": false,
             "in": "query",
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
+            "schema": { "type": "string", "format": "date" },
             "description": "Inclusive calendar date in Asia/Jakarta (YYYY-MM-DD), applied to reportedAt."
           }
         ],
@@ -1812,9 +1501,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1822,9 +1509,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1832,9 +1517,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1842,9 +1525,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1852,18 +1533,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "List reports visible to the authenticated actor",
         "tags": ["Reports"]
       },
@@ -1887,10 +1562,7 @@
                     "minLength": 1,
                     "maxLength": 160
                   },
-                  "description": {
-                    "type": "string",
-                    "minLength": 1
-                  },
+                  "description": { "type": "string", "minLength": 1 },
                   "category": {
                     "type": "string",
                     "enum": [
@@ -1934,9 +1606,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1944,9 +1614,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1954,9 +1622,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1964,9 +1630,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1974,9 +1638,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -1984,18 +1646,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Create a damage report as an Admin or Resident",
         "tags": ["Reports"]
       }
@@ -2030,9 +1686,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2040,9 +1694,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2050,9 +1702,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2060,9 +1710,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2070,18 +1718,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Read an accessible report",
         "tags": ["Reports"]
       }
@@ -2112,10 +1754,7 @@
                     "type": "string",
                     "enum": ["LOW", "MEDIUM", "HIGH"]
                   },
-                  "reviewNote": {
-                    "type": "string",
-                    "minLength": 1
-                  }
+                  "reviewNote": { "type": "string", "minLength": 1 }
                 },
                 "required": ["finalPriority"],
                 "additionalProperties": false
@@ -2138,9 +1777,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2148,9 +1785,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2158,9 +1793,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2168,9 +1801,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2178,9 +1809,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2188,18 +1817,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Verify a Resident report and set its final priority (Admin)",
         "tags": ["Reports"]
       }
@@ -2230,14 +1853,8 @@
                     "type": "string",
                     "enum": ["LOW", "MEDIUM", "HIGH"]
                   },
-                  "rejectionReason": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "reviewNote": {
-                    "type": "string",
-                    "minLength": 1
-                  }
+                  "rejectionReason": { "type": "string", "minLength": 1 },
+                  "reviewNote": { "type": "string", "minLength": 1 }
                 },
                 "required": ["finalPriority", "rejectionReason"],
                 "additionalProperties": false
@@ -2260,9 +1877,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2270,9 +1885,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2280,9 +1893,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2290,9 +1901,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2300,9 +1909,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2310,18 +1917,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Reject a Resident report with a reason (Admin)",
         "tags": ["Reports"]
       }
@@ -2353,10 +1954,7 @@
                     "format": "uuid",
                     "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                   },
-                  "note": {
-                    "type": "string",
-                    "minLength": 1
-                  }
+                  "note": { "type": "string", "minLength": 1 }
                 },
                 "required": ["technicianUserId"],
                 "additionalProperties": false
@@ -2379,9 +1977,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2389,9 +1985,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2399,9 +1993,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2409,9 +2001,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2419,9 +2009,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2429,18 +2017,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Assign an active Technician to a verified report (Admin)",
         "tags": ["Reports"]
       }
@@ -2494,9 +2076,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2504,9 +2084,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2514,9 +2092,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2524,9 +2100,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2534,9 +2108,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2544,18 +2116,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Start assigned work with an estimated arrival time (Technician)",
         "tags": ["Maintenance execution"]
       }
@@ -2599,14 +2165,8 @@
                   },
                   "additionalNotes": {
                     "anyOf": [
-                      {
-                        "type": "string"
-                      },
-                      {
-                        "type": "string",
-                        "nullable": true,
-                        "enum": [null]
-                      }
+                      { "type": "string" },
+                      { "type": "string", "nullable": true, "enum": [null] }
                     ]
                   }
                 },
@@ -2635,9 +2195,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2645,9 +2203,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2655,9 +2211,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2665,9 +2219,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2675,9 +2227,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2685,18 +2235,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Save or replace assigned work result",
         "tags": ["Maintenance execution"]
       }
@@ -2777,9 +2321,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2787,9 +2329,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2797,9 +2337,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2807,9 +2345,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2817,9 +2353,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2827,18 +2361,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Replace maintenance cost items",
         "tags": ["Maintenance execution"]
       }
@@ -2885,9 +2413,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2895,9 +2421,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2905,9 +2429,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2915,9 +2437,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2925,9 +2445,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -2935,18 +2453,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Submit completed assigned maintenance work",
         "tags": ["Maintenance execution"]
       }
@@ -2993,9 +2505,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3003,9 +2513,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3013,9 +2521,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3023,9 +2529,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3033,9 +2537,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3043,18 +2545,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Approve and close completed maintenance work (Admin)",
         "tags": ["Maintenance execution"]
       }
@@ -3082,10 +2578,7 @@
                 "type": "object",
                 "required": ["file"],
                 "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  }
+                  "file": { "type": "string", "format": "binary" }
                 },
                 "additionalProperties": false
               }
@@ -3107,9 +2600,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3117,9 +2608,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3127,9 +2616,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3137,9 +2624,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3147,18 +2632,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Upload a damage photo",
         "tags": ["Attachments"]
       }
@@ -3186,10 +2665,7 @@
                 "type": "object",
                 "required": ["file"],
                 "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  }
+                  "file": { "type": "string", "format": "binary" }
                 },
                 "additionalProperties": false
               }
@@ -3211,9 +2687,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3221,9 +2695,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3231,9 +2703,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3241,9 +2711,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3251,18 +2719,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Upload a repair photo",
         "tags": ["Attachments"]
       }
@@ -3290,10 +2752,7 @@
                 "type": "object",
                 "required": ["file"],
                 "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  }
+                  "file": { "type": "string", "format": "binary" }
                 },
                 "additionalProperties": false
               }
@@ -3315,9 +2774,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3325,9 +2782,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3335,9 +2790,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3345,9 +2798,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3355,18 +2806,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Upload or replace a report receipt",
         "tags": ["Attachments"]
       }
@@ -3383,10 +2828,7 @@
                 "type": "object",
                 "required": ["file"],
                 "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  }
+                  "file": { "type": "string", "format": "binary" }
                 },
                 "additionalProperties": false
               }
@@ -3398,9 +2840,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PropertyResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/PropertyResponseDto" }
               }
             }
           },
@@ -3408,9 +2848,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3418,9 +2856,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3428,9 +2864,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3438,18 +2872,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Upload or replace the property logo (Admin)",
         "tags": ["Attachments"]
       }
@@ -3472,11 +2900,7 @@
             "name": "page",
             "required": false,
             "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "default": 1
-            }
+            "schema": { "type": "integer", "minimum": 1, "default": 1 }
           },
           {
             "name": "pageSize",
@@ -3505,9 +2929,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3515,9 +2937,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3525,9 +2945,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3535,9 +2953,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3545,18 +2961,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "List closed maintenance history for an accessible unit",
         "tags": ["Dashboard and history"]
       }
@@ -3580,9 +2990,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3590,9 +2998,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3600,9 +3006,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           },
@@ -3610,18 +3014,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponseDto"
-                }
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
               }
             }
           }
         },
-        "security": [
-          {
-            "cookie": []
-          }
-        ],
+        "security": [{ "cookie": [] }],
         "summary": "Read Admin maintenance dashboard metrics",
         "tags": ["Dashboard and history"]
       }
@@ -3631,21 +3029,12 @@
   "servers": [],
   "components": {
     "securitySchemes": {
-      "cookie": {
-        "type": "apiKey",
-        "in": "cookie",
-        "name": "__Host-sid"
-      }
+      "cookie": { "type": "apiKey", "in": "cookie", "name": "__Host-sid" }
     },
     "schemas": {
       "HealthResponseDto": {
         "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "example": "ok"
-          }
-        },
+        "properties": { "status": { "type": "string", "example": "ok" } },
         "required": ["status"]
       },
       "ApiValidationIssueDto": {
@@ -3654,14 +3043,9 @@
           "path": {
             "example": ["loginIdentifier"],
             "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
-          "message": {
-            "type": "string",
-            "example": "Invalid login identifier"
-          }
+          "message": { "type": "string", "example": "Invalid login identifier" }
         },
         "required": ["path", "message"]
       },
@@ -3670,9 +3054,7 @@
         "properties": {
           "issues": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ApiValidationIssueDto"
-            }
+            "items": { "$ref": "#/components/schemas/ApiValidationIssueDto" }
           }
         },
         "required": ["issues"]
@@ -3680,10 +3062,7 @@
       "ApiErrorResponseDto": {
         "type": "object",
         "properties": {
-          "statusCode": {
-            "type": "number",
-            "example": 400
-          },
+          "statusCode": { "type": "number", "example": 400 },
           "code": {
             "type": "string",
             "enum": [
@@ -3701,26 +3080,16 @@
             "type": "string",
             "example": "Request validation failed"
           },
-          "details": {
-            "$ref": "#/components/schemas/ApiErrorDetailsDto"
-          }
+          "details": { "$ref": "#/components/schemas/ApiErrorDetailsDto" }
         },
         "required": ["statusCode", "code", "message"]
       },
       "AuthenticatedActorResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "loginIdentifier": {
-            "type": "string",
-            "maxLength": 254
-          },
+          "id": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" },
+          "loginIdentifier": { "type": "string", "maxLength": 254 },
           "role": {
             "type": "string",
             "enum": ["ADMIN", "TECHNICIAN", "RESIDENT"]
@@ -3731,61 +3100,30 @@
       "AccountUnitResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "unitNumber": {
-            "type": "string",
-            "maxLength": 40
-          },
-          "floor": {
-            "type": "integer",
-            "minimum": -32768,
-            "maximum": 32767
-          }
+          "id": { "type": "string", "format": "uuid" },
+          "unitNumber": { "type": "string", "maxLength": 40 },
+          "floor": { "type": "integer", "minimum": -32768, "maximum": 32767 }
         },
         "required": ["id", "unitNumber", "floor"]
       },
       "AccountResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 160
-          },
-          "loginIdentifier": {
-            "type": "string",
-            "maxLength": 254
-          },
+          "id": { "type": "string", "format": "uuid" },
+          "name": { "type": "string", "maxLength": 160 },
+          "loginIdentifier": { "type": "string", "maxLength": 254 },
           "role": {
             "type": "string",
             "enum": ["ADMIN", "TECHNICIAN", "RESIDENT"]
           },
-          "isActive": {
-            "type": "boolean"
-          },
+          "isActive": { "type": "boolean" },
           "activeUnit": {
             "nullable": true,
             "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/AccountUnitResponseDto"
-              }
-            ]
+            "allOf": [{ "$ref": "#/components/schemas/AccountUnitResponseDto" }]
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
         },
         "required": [
           "id",
@@ -3801,25 +3139,15 @@
       "AccountPaginationMetaDto": {
         "type": "object",
         "properties": {
-          "page": {
-            "type": "integer",
-            "minimum": 1,
-            "default": 1
-          },
+          "page": { "type": "integer", "minimum": 1, "default": 1 },
           "pageSize": {
             "type": "integer",
             "minimum": 1,
             "maximum": 100,
             "default": 20
           },
-          "total": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "totalPages": {
-            "type": "integer",
-            "minimum": 0
-          }
+          "total": { "type": "integer", "minimum": 0 },
+          "totalPages": { "type": "integer", "minimum": 0 }
         },
         "required": ["page", "pageSize", "total", "totalPages"]
       },
@@ -3828,59 +3156,30 @@
         "properties": {
           "data": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AccountResponseDto"
-            }
+            "items": { "$ref": "#/components/schemas/AccountResponseDto" }
           },
-          "meta": {
-            "$ref": "#/components/schemas/AccountPaginationMetaDto"
-          }
+          "meta": { "$ref": "#/components/schemas/AccountPaginationMetaDto" }
         },
         "required": ["data", "meta"]
       },
       "ActiveResidentResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "loginIdentifier": {
-            "type": "string",
-            "maxLength": 254
-          }
+          "id": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" },
+          "loginIdentifier": { "type": "string", "maxLength": 254 }
         },
         "required": ["id", "name", "loginIdentifier"]
       },
       "UnitResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "unitNumber": {
-            "type": "string",
-            "maxLength": 40
-          },
-          "floor": {
-            "type": "integer",
-            "minimum": -32768,
-            "maximum": 32767
-          },
-          "maintenanceFlag": {
-            "type": "boolean"
-          },
-          "isArchived": {
-            "type": "boolean"
-          },
+          "id": { "type": "string", "format": "uuid" },
+          "propertyId": { "type": "string", "format": "uuid" },
+          "unitNumber": { "type": "string", "maxLength": 40 },
+          "floor": { "type": "integer", "minimum": -32768, "maximum": 32767 },
+          "maintenanceFlag": { "type": "boolean" },
+          "isArchived": { "type": "boolean" },
           "displayStatus": {
             "type": "string",
             "enum": ["MAINTENANCE", "OCCUPIED", "VACANT"]
@@ -3889,19 +3188,11 @@
             "nullable": true,
             "type": "object",
             "allOf": [
-              {
-                "$ref": "#/components/schemas/ActiveResidentResponseDto"
-              }
+              { "$ref": "#/components/schemas/ActiveResidentResponseDto" }
             ]
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
         },
         "required": [
           "id",
@@ -3919,25 +3210,15 @@
       "UnitPaginationMetaDto": {
         "type": "object",
         "properties": {
-          "page": {
-            "type": "integer",
-            "minimum": 1,
-            "default": 1
-          },
+          "page": { "type": "integer", "minimum": 1, "default": 1 },
           "pageSize": {
             "type": "integer",
             "minimum": 1,
             "maximum": 100,
             "default": 20
           },
-          "total": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "totalPages": {
-            "type": "integer",
-            "minimum": 0
-          }
+          "total": { "type": "integer", "minimum": 0 },
+          "totalPages": { "type": "integer", "minimum": 0 }
         },
         "required": ["page", "pageSize", "total", "totalPages"]
       },
@@ -3946,43 +3227,21 @@
         "properties": {
           "data": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/UnitResponseDto"
-            }
+            "items": { "$ref": "#/components/schemas/UnitResponseDto" }
           },
-          "meta": {
-            "$ref": "#/components/schemas/UnitPaginationMetaDto"
-          }
+          "meta": { "$ref": "#/components/schemas/UnitPaginationMetaDto" }
         },
         "required": ["data", "meta"]
       },
       "PropertyResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 160
-          },
-          "address": {
-            "type": "string"
-          },
-          "logoUrl": {
-            "type": "string",
-            "nullable": true,
-            "format": "uri"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
+          "id": { "type": "string", "format": "uuid" },
+          "name": { "type": "string", "maxLength": 160 },
+          "address": { "type": "string" },
+          "logoUrl": { "type": "string", "nullable": true, "format": "uri" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
         },
         "required": [
           "id",
@@ -3996,35 +3255,19 @@
       "ReportUnitResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "unitNumber": {
-            "type": "string"
-          },
-          "floor": {
-            "type": "integer"
-          }
+          "id": { "type": "string", "format": "uuid" },
+          "unitNumber": { "type": "string" },
+          "floor": { "type": "integer" }
         },
         "required": ["id", "unitNumber", "floor"]
       },
       "ReportListItemResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "reportNumber": {
-            "type": "string"
-          },
-          "unit": {
-            "$ref": "#/components/schemas/ReportUnitResponseDto"
-          },
-          "title": {
-            "type": "string"
-          },
+          "id": { "type": "string", "format": "uuid" },
+          "reportNumber": { "type": "string" },
+          "unit": { "$ref": "#/components/schemas/ReportUnitResponseDto" },
+          "title": { "type": "string" },
           "category": {
             "type": "string",
             "enum": [
@@ -4058,10 +3301,7 @@
               "CLOSED"
             ]
           },
-          "reportedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
+          "reportedAt": { "type": "string", "format": "date-time" }
         },
         "required": [
           "id",
@@ -4078,25 +3318,15 @@
       "ReportPaginationMetaDto": {
         "type": "object",
         "properties": {
-          "page": {
-            "type": "integer",
-            "minimum": 1,
-            "default": 1
-          },
+          "page": { "type": "integer", "minimum": 1, "default": 1 },
           "pageSize": {
             "type": "integer",
             "minimum": 1,
             "maximum": 100,
             "default": 20
           },
-          "total": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "totalPages": {
-            "type": "integer",
-            "minimum": 0
-          }
+          "total": { "type": "integer", "minimum": 0 },
+          "totalPages": { "type": "integer", "minimum": 0 }
         },
         "required": ["page", "pageSize", "total", "totalPages"]
       },
@@ -4109,63 +3339,43 @@
               "$ref": "#/components/schemas/ReportListItemResponseDto"
             }
           },
-          "meta": {
-            "$ref": "#/components/schemas/ReportPaginationMetaDto"
-          }
+          "meta": { "$ref": "#/components/schemas/ReportPaginationMetaDto" }
         },
         "required": ["data", "meta"]
       },
       "ReportPersonResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          }
+          "id": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" }
         },
         "required": ["id", "name"]
       },
       "ReportAssignmentResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
+          "id": { "type": "string", "format": "uuid" },
           "technician": {
             "nullable": true,
             "type": "object",
             "allOf": [
-              {
-                "$ref": "#/components/schemas/ReportPersonResponseDto"
-              }
+              { "$ref": "#/components/schemas/ReportPersonResponseDto" }
             ]
           },
           "assignedBy": {
             "nullable": true,
             "type": "object",
             "allOf": [
-              {
-                "$ref": "#/components/schemas/ReportPersonResponseDto"
-              }
+              { "$ref": "#/components/schemas/ReportPersonResponseDto" }
             ]
           },
-          "assignedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
+          "assignedAt": { "type": "string", "format": "date-time" },
           "estimatedArrivalAt": {
             "type": "string",
             "format": "date-time",
             "nullable": true
           },
-          "note": {
-            "type": "object",
-            "nullable": true
-          }
+          "note": { "type": "object", "nullable": true }
         },
         "required": [
           "id",
@@ -4178,48 +3388,22 @@
       "ReportPhotoResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "fileUrl": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          }
+          "id": { "type": "string", "format": "uuid" },
+          "fileUrl": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" }
         },
         "required": ["id", "fileUrl", "createdAt"]
       },
       "MaintenanceResultResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "inspectionResult": {
-            "type": "string"
-          },
-          "problemFound": {
-            "type": "string"
-          },
-          "repairAction": {
-            "type": "string"
-          },
-          "additionalNotes": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
+          "id": { "type": "string", "format": "uuid" },
+          "inspectionResult": { "type": "string" },
+          "problemFound": { "type": "string" },
+          "repairAction": { "type": "string" },
+          "additionalNotes": { "type": "string", "nullable": true },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
         },
         "required": [
           "id",
@@ -4234,37 +3418,14 @@
       "CostItemResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["SERVICE", "MATERIAL"]
-          },
-          "description": {
-            "type": "string"
-          },
-          "quantity": {
-            "type": "string",
-            "example": "1.250"
-          },
-          "unitPrice": {
-            "type": "string",
-            "example": "125000.00"
-          },
-          "subtotal": {
-            "type": "string",
-            "example": "156250.00"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
+          "id": { "type": "string", "format": "uuid" },
+          "type": { "type": "string", "enum": ["SERVICE", "MATERIAL"] },
+          "description": { "type": "string" },
+          "quantity": { "type": "string", "example": "1.250" },
+          "unitPrice": { "type": "string", "example": "125000.00" },
+          "subtotal": { "type": "string", "example": "156250.00" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
         },
         "required": [
           "id",
@@ -4280,19 +3441,10 @@
       "ReportDetailResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "reportNumber": {
-            "type": "string"
-          },
-          "unit": {
-            "$ref": "#/components/schemas/ReportUnitResponseDto"
-          },
-          "title": {
-            "type": "string"
-          },
+          "id": { "type": "string", "format": "uuid" },
+          "reportNumber": { "type": "string" },
+          "unit": { "$ref": "#/components/schemas/ReportUnitResponseDto" },
+          "title": { "type": "string" },
           "category": {
             "type": "string",
             "enum": [
@@ -4326,117 +3478,75 @@
               "CLOSED"
             ]
           },
-          "reportedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "description": {
-            "type": "string"
-          },
-          "rejectionReason": {
-            "type": "object",
-            "nullable": true
-          },
-          "reviewNote": {
-            "type": "string",
-            "nullable": true
-          },
+          "reportedAt": { "type": "string", "format": "date-time" },
+          "description": { "type": "string" },
+          "rejectionReason": { "type": "object", "nullable": true },
+          "reviewNote": { "type": "string", "nullable": true },
           "closedAt": {
             "type": "string",
             "format": "date-time",
             "nullable": true
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" },
           "assignment": {
             "nullable": true,
             "type": "object",
             "allOf": [
-              {
-                "$ref": "#/components/schemas/ReportAssignmentResponseDto"
-              }
+              { "$ref": "#/components/schemas/ReportAssignmentResponseDto" }
             ]
           },
           "damagePhotos": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ReportPhotoResponseDto"
-            }
+            "items": { "$ref": "#/components/schemas/ReportPhotoResponseDto" }
           },
           "repairPhotos": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ReportPhotoResponseDto"
-            }
+            "items": { "$ref": "#/components/schemas/ReportPhotoResponseDto" }
           },
           "receipt": {
             "nullable": true,
             "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ReportPhotoResponseDto"
-              }
-            ]
+            "allOf": [{ "$ref": "#/components/schemas/ReportPhotoResponseDto" }]
           },
           "maintenanceResult": {
             "nullable": true,
             "type": "object",
             "allOf": [
-              {
-                "$ref": "#/components/schemas/MaintenanceResultResponseDto"
-              }
+              { "$ref": "#/components/schemas/MaintenanceResultResponseDto" }
             ]
           },
-          "totalCost": {
-            "type": "string",
-            "example": "156250.00"
-          },
+          "totalCost": { "type": "string", "example": "156250.00" },
           "costItems": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CostItemResponseDto"
-            }
+            "items": { "$ref": "#/components/schemas/CostItemResponseDto" }
           },
           "createdBy": {
             "nullable": true,
             "type": "object",
             "allOf": [
-              {
-                "$ref": "#/components/schemas/ReportPersonResponseDto"
-              }
+              { "$ref": "#/components/schemas/ReportPersonResponseDto" }
             ]
           },
           "reportedBy": {
             "nullable": true,
             "type": "object",
             "allOf": [
-              {
-                "$ref": "#/components/schemas/ReportPersonResponseDto"
-              }
+              { "$ref": "#/components/schemas/ReportPersonResponseDto" }
             ]
           },
           "reviewedBy": {
             "nullable": true,
             "type": "object",
             "allOf": [
-              {
-                "$ref": "#/components/schemas/ReportPersonResponseDto"
-              }
+              { "$ref": "#/components/schemas/ReportPersonResponseDto" }
             ]
           },
           "closedBy": {
             "nullable": true,
             "type": "object",
             "allOf": [
-              {
-                "$ref": "#/components/schemas/ReportPersonResponseDto"
-              }
+              { "$ref": "#/components/schemas/ReportPersonResponseDto" }
             ]
           }
         },
@@ -4466,47 +3576,26 @@
       "AttachmentResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "fileUrl": {
-            "type": "string",
-            "format": "uri"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          }
+          "id": { "type": "string", "format": "uuid" },
+          "fileUrl": { "type": "string", "format": "uri" },
+          "createdAt": { "type": "string", "format": "date-time" }
         },
         "required": ["id", "fileUrl", "createdAt"]
       },
       "HistoryTechnicianResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          }
+          "id": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" }
         },
         "required": ["id", "name"]
       },
       "MaintenanceHistoryItemResponseDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "reportNumber": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
+          "id": { "type": "string", "format": "uuid" },
+          "reportNumber": { "type": "string" },
+          "title": { "type": "string" },
           "category": {
             "type": "string",
             "enum": [
@@ -4518,36 +3607,23 @@
               "OTHER"
             ]
           },
-          "reportedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "closedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
+          "reportedAt": { "type": "string", "format": "date-time" },
+          "closedAt": { "type": "string", "format": "date-time" },
           "technician": {
             "nullable": true,
             "type": "object",
             "allOf": [
-              {
-                "$ref": "#/components/schemas/HistoryTechnicianResponseDto"
-              }
+              { "$ref": "#/components/schemas/HistoryTechnicianResponseDto" }
             ]
           },
           "maintenanceResult": {
             "nullable": true,
             "type": "object",
             "allOf": [
-              {
-                "$ref": "#/components/schemas/MaintenanceResultResponseDto"
-              }
+              { "$ref": "#/components/schemas/MaintenanceResultResponseDto" }
             ]
           },
-          "totalCost": {
-            "type": "string",
-            "example": "156250.00"
-          },
+          "totalCost": { "type": "string", "example": "156250.00" },
           "status": {
             "type": "string",
             "enum": [
@@ -4577,25 +3653,15 @@
       "MaintenanceHistoryMetaResponseDto": {
         "type": "object",
         "properties": {
-          "page": {
-            "type": "integer",
-            "minimum": 1,
-            "default": 1
-          },
+          "page": { "type": "integer", "minimum": 1, "default": 1 },
           "pageSize": {
             "type": "integer",
             "minimum": 1,
             "maximum": 100,
             "default": 20
           },
-          "total": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "totalPages": {
-            "type": "integer",
-            "minimum": 0
-          }
+          "total": { "type": "integer", "minimum": 0 },
+          "totalPages": { "type": "integer", "minimum": 0 }
         },
         "required": ["page", "pageSize", "total", "totalPages"]
       },
@@ -4617,30 +3683,12 @@
       "DashboardSummaryResponseDto": {
         "type": "object",
         "properties": {
-          "totalUnits": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "totalReports": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "activeReports": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "inProgressReports": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "closedReportsThisMonth": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "totalClosedCost": {
-            "type": "string",
-            "example": "0.00"
-          }
+          "totalUnits": { "type": "integer", "minimum": 0 },
+          "totalReports": { "type": "integer", "minimum": 0 },
+          "activeReports": { "type": "integer", "minimum": 0 },
+          "inProgressReports": { "type": "integer", "minimum": 0 },
+          "closedReportsThisMonth": { "type": "integer", "minimum": 0 },
+          "totalClosedCost": { "type": "string", "example": "0.00" }
         },
         "required": [
           "totalUnits",

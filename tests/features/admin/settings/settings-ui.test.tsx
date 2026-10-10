@@ -51,6 +51,17 @@ beforeEach(() => {
   apiClient.defaults.adapter = async (config) => {
     if (config.url === '/auth/me')
       return { data: admin, status: 200, statusText: 'OK', headers: {}, config }
+    if (config.url === '/accounts')
+      return {
+        data: {
+          data: [],
+          meta: { page: 1, pageSize: 20, total: 0, totalPages: 0 },
+        },
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config,
+      }
     if (config.method !== 'get') {
       writes.push(config.url ?? '')
       current =
@@ -395,6 +406,9 @@ it.each(['RESIDENT', 'TECHNICIAN'] as const)(
 it('validates account search, opens the correct submenu, and supports keyboard collapse and navigation', async () => {
   expect(accountsSearchSchema.parse({ role: 'OWNER' })).toEqual({
     role: undefined,
+    q: '',
+    page: 1,
+    pageSize: 20,
   })
   const user = userEvent.setup()
   const router = await show('/admin/accounts?role=RESIDENT')

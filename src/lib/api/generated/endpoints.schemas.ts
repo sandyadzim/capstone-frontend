@@ -516,6 +516,11 @@ export type AccountsControllerListParams = {
    * @maximum 100
    */
   pageSize?: number
+  /**
+   * Case-insensitive literal substring of name or login identifier; trimmed, blank means no search
+   * @maxLength 254
+   */
+  q?: string
   role?: AccountsControllerListRole
   isActive?: AccountsControllerListIsActive
 }
@@ -604,20 +609,12 @@ export type UnitsControllerListParams = {
    * @maxLength 40
    */
   q?: string
-  isArchived?: UnitsControllerListIsArchived
   /**
    * Computed unit status; maintenance takes precedence over active resident occupancy
    */
   displayStatus?: UnitsControllerListDisplayStatus
+  isArchived?: UnitsControllerListIsArchived
 }
-
-export type UnitsControllerListIsArchived =
-  (typeof UnitsControllerListIsArchived)[keyof typeof UnitsControllerListIsArchived]
-
-export const UnitsControllerListIsArchived = {
-  true: 'true',
-  false: 'false',
-} as const
 
 export type UnitsControllerListDisplayStatus =
   (typeof UnitsControllerListDisplayStatus)[keyof typeof UnitsControllerListDisplayStatus]
@@ -626,6 +623,14 @@ export const UnitsControllerListDisplayStatus = {
   MAINTENANCE: 'MAINTENANCE',
   OCCUPIED: 'OCCUPIED',
   VACANT: 'VACANT',
+} as const
+
+export type UnitsControllerListIsArchived =
+  (typeof UnitsControllerListIsArchived)[keyof typeof UnitsControllerListIsArchived]
+
+export const UnitsControllerListIsArchived = {
+  true: 'true',
+  false: 'false',
 } as const
 
 export type UnitsControllerCreateBody = {

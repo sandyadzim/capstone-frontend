@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { AdminPlaceholder } from '@/features/admin/components/admin-placeholder'
+import { AccountsPage } from '@/features/admin/accounts/pages/accounts-page'
 import {
   accountRoles,
   accountsSearchSchema,
@@ -14,13 +14,8 @@ export const Route = createFileRoute('/admin/accounts')({
       },
     ],
   }),
-  component: function AccountsPage() {
+  component: function AccountsRoute() {
     const { role } = Route.useSearch()
-    return (
-      <AdminPlaceholder
-        title={role ? accountRoles[role] : 'All accounts'}
-        description="Manage administrator, resident, and technician accounts and their access."
-      />
-    )
+    return <AccountsPage key={role ?? 'all'} />
   },
 })
