@@ -93,7 +93,7 @@ export function AdminLayout() {
             <main
               id="main-content"
               tabIndex={-1}
-              className="w-full max-w-5xl scroll-mt-[calc(5rem+env(safe-area-inset-top))] px-4 pt-[calc(5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))] outline-none md:px-6 md:pb-8 [&_:is(input,textarea,button,a)]:scroll-mt-[calc(5rem+env(safe-area-inset-top))]"
+              className="w-full scroll-mt-[calc(5rem+env(safe-area-inset-top))] px-4 pt-[calc(5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))] outline-none md:px-6 md:pb-8 [&_:is(input,textarea,button,a)]:scroll-mt-[calc(5rem+env(safe-area-inset-top))]"
             >
               <Outlet />
             </main>

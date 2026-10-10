@@ -1,12 +1,13 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { AdminPlaceholder } from '@/features/admin/components/admin-placeholder'
+import {
+  createFileRoute,
+  Outlet,
+  stripSearchParams,
+} from '@tanstack/react-router'
+import { unitsSearchSchema } from '@/features/admin/units/unit-schema'
 
 export const Route = createFileRoute('/admin/units')({
+  validateSearch: unitsSearchSchema,
+  search: { middlewares: [stripSearchParams(unitsSearchSchema.parse({}))] },
   head: () => ({ meta: [{ title: 'Units · Admin · Property' }] }),
-  component: () => (
-    <AdminPlaceholder
-      title="Units"
-      description="Manage property units, resident placement, and maintenance history."
-    />
-  ),
+  component: Outlet,
 })

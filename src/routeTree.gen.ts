@@ -22,7 +22,16 @@ import { Route as AdminUnitsRouteImport } from './routes/admin.units'
 import { Route as TechnicianIndexRouteImport } from './routes/technician.index'
 import { Route as ResidentExamplesFormRouteImport } from './routes/_resident.examples.form'
 import { Route as AdminExamplesFormRouteImport } from './routes/admin.examples.form'
+import { Route as AdminUnitsIndexRouteImport } from './routes/admin.units.index'
+import { Route as AdminUnitsUnitIdRouteImport } from './routes/admin.units.$unitId'
+import { Route as AdminUnitsNewRouteImport } from './routes/admin.units.new'
 import { Route as TechnicianExamplesFormRouteImport } from './routes/technician.examples.form'
+import { Route as AdminUnitsUnitIdIndexRouteImport } from './routes/admin.units.$unitId.index'
+import { Route as AdminUnitsUnitIdEditRouteImport } from './routes/admin.units.$unitId.edit'
+import { Route as AdminUnitsUnitIdHistoryRouteImport } from './routes/admin.units.$unitId.history'
+import { Route as AdminUnitsUnitIdResidentRouteImport } from './routes/admin.units.$unitId.resident'
+import { Route as AdminUnitsUnitIdHistoryIndexRouteImport } from './routes/admin.units.$unitId.history.index'
+import { Route as AdminUnitsUnitIdHistoryReportIdRouteImport } from './routes/admin.units.$unitId.history.$reportId'
 
 const ResidentRoute = ResidentRouteImport.update({
   id: '/_resident',
@@ -88,11 +97,59 @@ const AdminExamplesFormRoute = AdminExamplesFormRouteImport.update({
   path: '/examples/form',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminUnitsIndexRoute = AdminUnitsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminUnitsRoute,
+} as any)
+const AdminUnitsUnitIdRoute = AdminUnitsUnitIdRouteImport.update({
+  id: '/$unitId',
+  path: '/$unitId',
+  getParentRoute: () => AdminUnitsRoute,
+} as any)
+const AdminUnitsNewRoute = AdminUnitsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AdminUnitsRoute,
+} as any)
 const TechnicianExamplesFormRoute = TechnicianExamplesFormRouteImport.update({
   id: '/examples/form',
   path: '/examples/form',
   getParentRoute: () => TechnicianRoute,
 } as any)
+const AdminUnitsUnitIdIndexRoute = AdminUnitsUnitIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminUnitsUnitIdRoute,
+} as any)
+const AdminUnitsUnitIdEditRoute = AdminUnitsUnitIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => AdminUnitsUnitIdRoute,
+} as any)
+const AdminUnitsUnitIdHistoryRoute = AdminUnitsUnitIdHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => AdminUnitsUnitIdRoute,
+} as any)
+const AdminUnitsUnitIdResidentRoute =
+  AdminUnitsUnitIdResidentRouteImport.update({
+    id: '/resident',
+    path: '/resident',
+    getParentRoute: () => AdminUnitsUnitIdRoute,
+  } as any)
+const AdminUnitsUnitIdHistoryIndexRoute =
+  AdminUnitsUnitIdHistoryIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AdminUnitsUnitIdHistoryRoute,
+  } as any)
+const AdminUnitsUnitIdHistoryReportIdRoute =
+  AdminUnitsUnitIdHistoryReportIdRouteImport.update({
+    id: '/$reportId',
+    path: '/$reportId',
+    getParentRoute: () => AdminUnitsUnitIdHistoryRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof ResidentIndexRoute
@@ -102,25 +159,40 @@ export interface FileRoutesByFullPath {
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/units': typeof AdminUnitsRoute
+  '/admin/units': typeof AdminUnitsRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/technician/': typeof TechnicianIndexRoute
   '/examples/form': typeof ResidentExamplesFormRoute
   '/admin/examples/form': typeof AdminExamplesFormRoute
+  '/admin/units/$unitId': typeof AdminUnitsUnitIdRouteWithChildren
+  '/admin/units/new': typeof AdminUnitsNewRoute
   '/technician/examples/form': typeof TechnicianExamplesFormRoute
+  '/admin/units/': typeof AdminUnitsIndexRoute
+  '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
+  '/admin/units/$unitId/history': typeof AdminUnitsUnitIdHistoryRouteWithChildren
+  '/admin/units/$unitId/resident': typeof AdminUnitsUnitIdResidentRoute
+  '/admin/units/$unitId/': typeof AdminUnitsUnitIdIndexRoute
+  '/admin/units/$unitId/history/$reportId': typeof AdminUnitsUnitIdHistoryReportIdRoute
+  '/admin/units/$unitId/history/': typeof AdminUnitsUnitIdHistoryIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/units': typeof AdminUnitsRoute
   '/': typeof ResidentIndexRoute
   '/admin': typeof AdminIndexRoute
   '/technician': typeof TechnicianIndexRoute
   '/examples/form': typeof ResidentExamplesFormRoute
   '/admin/examples/form': typeof AdminExamplesFormRoute
+  '/admin/units/new': typeof AdminUnitsNewRoute
   '/technician/examples/form': typeof TechnicianExamplesFormRoute
+  '/admin/units': typeof AdminUnitsIndexRoute
+  '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
+  '/admin/units/$unitId/resident': typeof AdminUnitsUnitIdResidentRoute
+  '/admin/units/$unitId': typeof AdminUnitsUnitIdIndexRoute
+  '/admin/units/$unitId/history/$reportId': typeof AdminUnitsUnitIdHistoryReportIdRoute
+  '/admin/units/$unitId/history': typeof AdminUnitsUnitIdHistoryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -131,13 +203,22 @@ export interface FileRoutesById {
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/units': typeof AdminUnitsRoute
+  '/admin/units': typeof AdminUnitsRouteWithChildren
   '/_resident/': typeof ResidentIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/technician/': typeof TechnicianIndexRoute
   '/_resident/examples/form': typeof ResidentExamplesFormRoute
   '/admin/examples/form': typeof AdminExamplesFormRoute
+  '/admin/units/$unitId': typeof AdminUnitsUnitIdRouteWithChildren
+  '/admin/units/new': typeof AdminUnitsNewRoute
   '/technician/examples/form': typeof TechnicianExamplesFormRoute
+  '/admin/units/': typeof AdminUnitsIndexRoute
+  '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
+  '/admin/units/$unitId/history': typeof AdminUnitsUnitIdHistoryRouteWithChildren
+  '/admin/units/$unitId/resident': typeof AdminUnitsUnitIdResidentRoute
+  '/admin/units/$unitId/': typeof AdminUnitsUnitIdIndexRoute
+  '/admin/units/$unitId/history/$reportId': typeof AdminUnitsUnitIdHistoryReportIdRoute
+  '/admin/units/$unitId/history/': typeof AdminUnitsUnitIdHistoryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -154,20 +235,35 @@ export interface FileRouteTypes {
     | '/technician/'
     | '/examples/form'
     | '/admin/examples/form'
+    | '/admin/units/$unitId'
+    | '/admin/units/new'
     | '/technician/examples/form'
+    | '/admin/units/'
+    | '/admin/units/$unitId/edit'
+    | '/admin/units/$unitId/history'
+    | '/admin/units/$unitId/resident'
+    | '/admin/units/$unitId/'
+    | '/admin/units/$unitId/history/$reportId'
+    | '/admin/units/$unitId/history/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
     | '/admin/accounts'
     | '/admin/reports'
     | '/admin/settings'
-    | '/admin/units'
     | '/'
     | '/admin'
     | '/technician'
     | '/examples/form'
     | '/admin/examples/form'
+    | '/admin/units/new'
     | '/technician/examples/form'
+    | '/admin/units'
+    | '/admin/units/$unitId/edit'
+    | '/admin/units/$unitId/resident'
+    | '/admin/units/$unitId'
+    | '/admin/units/$unitId/history/$reportId'
+    | '/admin/units/$unitId/history'
   id:
     | '__root__'
     | '/_resident'
@@ -183,7 +279,16 @@ export interface FileRouteTypes {
     | '/technician/'
     | '/_resident/examples/form'
     | '/admin/examples/form'
+    | '/admin/units/$unitId'
+    | '/admin/units/new'
     | '/technician/examples/form'
+    | '/admin/units/'
+    | '/admin/units/$unitId/edit'
+    | '/admin/units/$unitId/history'
+    | '/admin/units/$unitId/resident'
+    | '/admin/units/$unitId/'
+    | '/admin/units/$unitId/history/$reportId'
+    | '/admin/units/$unitId/history/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -286,12 +391,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminExamplesFormRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/units/': {
+      id: '/admin/units/'
+      path: '/'
+      fullPath: '/admin/units/'
+      preLoaderRoute: typeof AdminUnitsIndexRouteImport
+      parentRoute: typeof AdminUnitsRoute
+    }
+    '/admin/units/$unitId': {
+      id: '/admin/units/$unitId'
+      path: '/$unitId'
+      fullPath: '/admin/units/$unitId'
+      preLoaderRoute: typeof AdminUnitsUnitIdRouteImport
+      parentRoute: typeof AdminUnitsRoute
+    }
+    '/admin/units/new': {
+      id: '/admin/units/new'
+      path: '/new'
+      fullPath: '/admin/units/new'
+      preLoaderRoute: typeof AdminUnitsNewRouteImport
+      parentRoute: typeof AdminUnitsRoute
+    }
     '/technician/examples/form': {
       id: '/technician/examples/form'
       path: '/examples/form'
       fullPath: '/technician/examples/form'
       preLoaderRoute: typeof TechnicianExamplesFormRouteImport
       parentRoute: typeof TechnicianRoute
+    }
+    '/admin/units/$unitId/': {
+      id: '/admin/units/$unitId/'
+      path: '/'
+      fullPath: '/admin/units/$unitId/'
+      preLoaderRoute: typeof AdminUnitsUnitIdIndexRouteImport
+      parentRoute: typeof AdminUnitsUnitIdRoute
+    }
+    '/admin/units/$unitId/edit': {
+      id: '/admin/units/$unitId/edit'
+      path: '/edit'
+      fullPath: '/admin/units/$unitId/edit'
+      preLoaderRoute: typeof AdminUnitsUnitIdEditRouteImport
+      parentRoute: typeof AdminUnitsUnitIdRoute
+    }
+    '/admin/units/$unitId/history': {
+      id: '/admin/units/$unitId/history'
+      path: '/history'
+      fullPath: '/admin/units/$unitId/history'
+      preLoaderRoute: typeof AdminUnitsUnitIdHistoryRouteImport
+      parentRoute: typeof AdminUnitsUnitIdRoute
+    }
+    '/admin/units/$unitId/resident': {
+      id: '/admin/units/$unitId/resident'
+      path: '/resident'
+      fullPath: '/admin/units/$unitId/resident'
+      preLoaderRoute: typeof AdminUnitsUnitIdResidentRouteImport
+      parentRoute: typeof AdminUnitsUnitIdRoute
+    }
+    '/admin/units/$unitId/history/': {
+      id: '/admin/units/$unitId/history/'
+      path: '/'
+      fullPath: '/admin/units/$unitId/history/'
+      preLoaderRoute: typeof AdminUnitsUnitIdHistoryIndexRouteImport
+      parentRoute: typeof AdminUnitsUnitIdHistoryRoute
+    }
+    '/admin/units/$unitId/history/$reportId': {
+      id: '/admin/units/$unitId/history/$reportId'
+      path: '/$reportId'
+      fullPath: '/admin/units/$unitId/history/$reportId'
+      preLoaderRoute: typeof AdminUnitsUnitIdHistoryReportIdRouteImport
+      parentRoute: typeof AdminUnitsUnitIdHistoryRoute
     }
   }
 }
@@ -310,11 +478,60 @@ const ResidentRouteWithChildren = ResidentRoute._addFileChildren(
   ResidentRouteChildren,
 )
 
+interface AdminUnitsUnitIdHistoryRouteChildren {
+  AdminUnitsUnitIdHistoryReportIdRoute: typeof AdminUnitsUnitIdHistoryReportIdRoute
+  AdminUnitsUnitIdHistoryIndexRoute: typeof AdminUnitsUnitIdHistoryIndexRoute
+}
+
+const AdminUnitsUnitIdHistoryRouteChildren: AdminUnitsUnitIdHistoryRouteChildren =
+  {
+    AdminUnitsUnitIdHistoryReportIdRoute: AdminUnitsUnitIdHistoryReportIdRoute,
+    AdminUnitsUnitIdHistoryIndexRoute: AdminUnitsUnitIdHistoryIndexRoute,
+  }
+
+const AdminUnitsUnitIdHistoryRouteWithChildren =
+  AdminUnitsUnitIdHistoryRoute._addFileChildren(
+    AdminUnitsUnitIdHistoryRouteChildren,
+  )
+
+interface AdminUnitsUnitIdRouteChildren {
+  AdminUnitsUnitIdEditRoute: typeof AdminUnitsUnitIdEditRoute
+  AdminUnitsUnitIdHistoryRoute: typeof AdminUnitsUnitIdHistoryRouteWithChildren
+  AdminUnitsUnitIdResidentRoute: typeof AdminUnitsUnitIdResidentRoute
+  AdminUnitsUnitIdIndexRoute: typeof AdminUnitsUnitIdIndexRoute
+}
+
+const AdminUnitsUnitIdRouteChildren: AdminUnitsUnitIdRouteChildren = {
+  AdminUnitsUnitIdEditRoute: AdminUnitsUnitIdEditRoute,
+  AdminUnitsUnitIdHistoryRoute: AdminUnitsUnitIdHistoryRouteWithChildren,
+  AdminUnitsUnitIdResidentRoute: AdminUnitsUnitIdResidentRoute,
+  AdminUnitsUnitIdIndexRoute: AdminUnitsUnitIdIndexRoute,
+}
+
+const AdminUnitsUnitIdRouteWithChildren =
+  AdminUnitsUnitIdRoute._addFileChildren(AdminUnitsUnitIdRouteChildren)
+
+interface AdminUnitsRouteChildren {
+  AdminUnitsUnitIdRoute: typeof AdminUnitsUnitIdRouteWithChildren
+  AdminUnitsNewRoute: typeof AdminUnitsNewRoute
+  AdminUnitsIndexRoute: typeof AdminUnitsIndexRoute
+}
+
+const AdminUnitsRouteChildren: AdminUnitsRouteChildren = {
+  AdminUnitsUnitIdRoute: AdminUnitsUnitIdRouteWithChildren,
+  AdminUnitsNewRoute: AdminUnitsNewRoute,
+  AdminUnitsIndexRoute: AdminUnitsIndexRoute,
+}
+
+const AdminUnitsRouteWithChildren = AdminUnitsRoute._addFileChildren(
+  AdminUnitsRouteChildren,
+)
+
 interface AdminRouteChildren {
   AdminAccountsRoute: typeof AdminAccountsRoute
   AdminReportsRoute: typeof AdminReportsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
-  AdminUnitsRoute: typeof AdminUnitsRoute
+  AdminUnitsRoute: typeof AdminUnitsRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
   AdminExamplesFormRoute: typeof AdminExamplesFormRoute
 }
@@ -323,7 +540,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAccountsRoute: AdminAccountsRoute,
   AdminReportsRoute: AdminReportsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
-  AdminUnitsRoute: AdminUnitsRoute,
+  AdminUnitsRoute: AdminUnitsRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
   AdminExamplesFormRoute: AdminExamplesFormRoute,
 }

@@ -599,7 +599,16 @@ export type UnitsControllerListParams = {
    * @maximum 100
    */
   pageSize?: number
+  /**
+   * Case-insensitive literal substring of unitNumber; trimmed, blank means no search
+   * @maxLength 40
+   */
+  q?: string
   isArchived?: UnitsControllerListIsArchived
+  /**
+   * Computed unit status; maintenance takes precedence over active resident occupancy
+   */
+  displayStatus?: UnitsControllerListDisplayStatus
 }
 
 export type UnitsControllerListIsArchived =
@@ -608,6 +617,15 @@ export type UnitsControllerListIsArchived =
 export const UnitsControllerListIsArchived = {
   true: 'true',
   false: 'false',
+} as const
+
+export type UnitsControllerListDisplayStatus =
+  (typeof UnitsControllerListDisplayStatus)[keyof typeof UnitsControllerListDisplayStatus]
+
+export const UnitsControllerListDisplayStatus = {
+  MAINTENANCE: 'MAINTENANCE',
+  OCCUPIED: 'OCCUPIED',
+  VACANT: 'VACANT',
 } as const
 
 export type UnitsControllerCreateBody = {

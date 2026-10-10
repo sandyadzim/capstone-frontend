@@ -1,3 +1,4 @@
+import { getErrorMessage } from '@/lib/api/error'
 import { useEffect, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,7 +18,6 @@ import { AuthLayout } from '../components/auth-layout'
 import { roleHome, safeRedirect } from '../auth-guards'
 import { loginSchema, type LoginValues } from '../auth-schema'
 import {
-  authErrorMessage,
   SessionVerificationError,
   sessionQueryOptions,
   signIn,
@@ -59,7 +59,7 @@ export function LoginPage({
       setVerification(cause instanceof SessionVerificationError)
       toast.add({
         title: 'Unable to sign in',
-        description: authErrorMessage(cause),
+        description: getErrorMessage(cause),
         type: 'error',
         priority: 'high',
       })

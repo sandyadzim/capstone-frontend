@@ -180,7 +180,7 @@ export function AdminNav({
                   <Link
                     to={to}
                     aria-label={label}
-                    activeOptions={{ exact: true }}
+                    activeOptions={{ exact: to !== '/admin/units' }}
                     activeProps={{
                       className: 'admin-nav-selected',
                       'aria-current': 'page',

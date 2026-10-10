@@ -1,6 +1,6 @@
 import { AxiosError, AxiosHeaders, CanceledError } from 'axios'
 import { describe, expect, it } from 'vitest'
-import { ApiError, normalizeApiError } from '@/lib/api/error'
+import { ApiError, getErrorMessage, normalizeApiError } from '@/lib/api/error'
 
 function httpError(data: unknown, status = 500) {
   const config = { headers: new AxiosHeaders() }
@@ -108,5 +108,32 @@ describe('API error normalization', () => {
     expect(normalizeApiError(value)).toEqual(
       new Error('An unexpected error occurred.'),
     )
+  })
+})
+
+describe('error display messages', () => {
+  it.each([400, 401, 403, 404, 409, 500, 503])(
+    'preserves the backend message for HTTP %s',
+    (status) => {
+      const error = normalizeApiError(
+        httpError(
+          {
+            statusCode: status,
+            code: 'REQUEST_ERROR',
+            message: 'Backend explanation',
+          },
+          status,
+        ),
+      )
+      expect(getErrorMessage(error)).toBe('Backend explanation')
+    },
+  )
+  it('preserves local errors and supplies a fallback when no message exists', () => {
+    expect(getErrorMessage(new Error('Cannot reach the API.'))).toBe(
+      'Cannot reach the API.',
+    )
+    for (const error of [undefined, null, {}, new Error(''), new Error('  ')]) {
+      expect(getErrorMessage(error)).toBe('Something went wrong. Try again.')
+    }
   })
 })

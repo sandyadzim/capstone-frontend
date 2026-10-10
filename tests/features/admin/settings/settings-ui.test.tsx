@@ -361,19 +361,15 @@ it('shows a submit failure toast, retains input, and allows retry', async () => 
   await screen.findByText('Property details saved')
 })
 it.each([
-  [404, 'NOT_FOUND', 'The configured property is unavailable.'],
-  [403, 'FORBIDDEN', 'You do not have permission'],
+  [404, 'NOT_FOUND', 'Property not found'],
+  [403, 'FORBIDDEN', 'Access to property denied'],
   [500, 'INTERNAL_ERROR', 'Service unavailable'],
 ])(
   'shows load failure %s and supports explicit retry',
   async (status, code, message) => {
     const adapter = apiClient.defaults.adapter as AxiosAdapter
     const fail = vi.fn<AxiosAdapter>(async () => {
-      throw new ApiError(
-        status === 500 ? 'Service unavailable' : 'Failed',
-        code,
-        status,
-      )
+      throw new ApiError(message, code, status)
     })
     apiClient.defaults.adapter = fail
     await show()

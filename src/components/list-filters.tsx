@@ -1,4 +1,12 @@
-import { Children, useId, useRef, type ReactNode } from 'react'
+import {
+  Children,
+  useEffect,
+  useEffectEvent,
+  useId,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react'
 import { Search, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -20,6 +28,7 @@ export function SearchFilter({
   maxLength,
   disabled = false,
   clearable = true,
+  debounceMs = 300,
 }: {
   label: string
   placeholder: string
@@ -28,9 +37,23 @@ export function SearchFilter({
   maxLength?: number
   disabled?: boolean
   clearable?: boolean
+  debounceMs?: number
 }) {
   const id = useId()
   const inputRef = useRef<HTMLInputElement>(null)
+  const [draft, setDraft] = useState(value)
+  const [previousValue, setPreviousValue] = useState(value)
+  const [composing, setComposing] = useState(false)
+  if (value !== previousValue) {
+    setPreviousValue(value)
+    setDraft(value)
+  }
+  const commit = useEffectEvent(onChange)
+  useEffect(() => {
+    if (!draft || draft === value || disabled || composing) return
+    const timer = setTimeout(() => commit(draft), debounceMs)
+    return () => clearTimeout(timer)
+  }, [draft, value, disabled, composing, debounceMs])
   return (
     <div className="min-w-0 space-y-2">
       <Label htmlFor={id}>{label}</Label>
@@ -44,13 +67,19 @@ export function SearchFilter({
           id={id}
           type="search"
           placeholder={placeholder}
-          value={value}
+          value={draft}
           maxLength={maxLength}
           disabled={disabled}
-          onChange={(event) => onChange(event.target.value)}
+          onChange={(event) => {
+            const next = event.target.value
+            setDraft(next)
+            if (!next) onChange('')
+          }}
+          onCompositionStart={() => setComposing(true)}
+          onCompositionEnd={() => setComposing(false)}
           className="min-h-11 pr-12 pl-9 [&::-webkit-search-cancel-button]:appearance-none"
         />
-        {clearable && value && (
+        {clearable && draft && (
           <Button
             type="button"
             variant="ghost"
@@ -59,6 +88,7 @@ export function SearchFilter({
             aria-label={`Clear ${label.toLowerCase()}`}
             disabled={disabled}
             onClick={() => {
+              setDraft('')
               onChange('')
               inputRef.current?.focus()
             }}

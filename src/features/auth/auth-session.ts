@@ -1,6 +1,5 @@
 import { queryOptions, type QueryClient } from '@tanstack/react-query'
 import { CanceledError } from 'axios'
-import { ApiError } from '@/lib/api/error'
 import { getSession, postLogin, postLogout } from './auth-api'
 import type { Actor, LoginValues } from './auth-schema'
 
@@ -184,20 +183,4 @@ export async function signOut(client: QueryClient): Promise<void> {
     state(client).expired = false
     client.setQueryData(sessionKey, null)
   })
-}
-
-export function authErrorMessage(error: unknown) {
-  if (error instanceof ApiError) {
-    if (error.statusCode === 401)
-      return 'Your login ID or password is incorrect.'
-    if (error.statusCode === 403)
-      return 'Sign in is unavailable from this address. Contact your administrator.'
-    if (error.statusCode === 400)
-      return 'Check your login ID and password, then try again.'
-    if (error.statusCode && error.statusCode >= 500)
-      return 'The service is temporarily unavailable. Try again.'
-  }
-  return error instanceof Error
-    ? error.message
-    : 'Something went wrong. Try again.'
 }

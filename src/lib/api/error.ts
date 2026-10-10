@@ -68,3 +68,9 @@ export function normalizeApiError(error: unknown): Error {
     error,
   )
 }
+
+export function getErrorMessage(error: unknown): string {
+  return error instanceof Error && error.message.trim()
+    ? error.message
+    : 'Something went wrong. Try again.'
+}

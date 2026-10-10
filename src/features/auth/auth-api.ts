@@ -4,6 +4,7 @@ import {
   authControllerLogout,
 } from '@/lib/api/generated/endpoints'
 import { ApiError } from '@/lib/api/error'
+import { parseApiResponse } from '@/lib/api/parse-response'
 import {
   actorSchema,
   loginSchema,
@@ -11,23 +12,10 @@ import {
   type LoginValues,
 } from './auth-schema'
 
-function parseActor(data: unknown, status: number): Actor {
-  const parsed = actorSchema.safeParse(data)
-  if (!parsed.success)
-    throw new ApiError(
-      'The API returned an unexpected account response. Try again.',
-      'INVALID_RESPONSE',
-      status,
-      undefined,
-      parsed.error,
-    )
-  return parsed.data
-}
-
 export async function getSession(signal?: AbortSignal): Promise<Actor | null> {
   try {
     const response = await authControllerGetCurrentActor({ signal })
-    return parseActor(response.data, response.status)
+    return parseApiResponse(actorSchema, response)
   } catch (error) {
     if (error instanceof ApiError && error.statusCode === 401) return null
     throw error
@@ -41,7 +29,7 @@ export async function postLogin(
   const response = await authControllerLogin(loginSchema.parse(values), {
     signal,
   })
-  return parseActor(response.data, response.status)
+  return parseApiResponse(actorSchema, response)
 }
 
 export async function postLogout(signal?: AbortSignal): Promise<void> {

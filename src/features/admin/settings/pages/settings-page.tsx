@@ -1,6 +1,6 @@
+import { getErrorMessage } from '@/lib/api/error'
 import { Button } from '@/components/ui/button'
 import { usePropertySettings } from '../hooks/use-property-settings'
-import { settingsErrorMessage } from '../settings-utils'
 import { PropertyDetailsForm } from '../components/property-details-form'
 import { PropertyLogoForm } from '../components/property-logo-form'
 import { SettingsLoading } from '../components/settings-loading'
@@ -24,7 +24,7 @@ export function SettingsPage() {
               className="mt-6 rounded-xl border p-6"
             >
               <p role="alert" className="text-sm leading-6 text-destructive">
-                {settingsErrorMessage(query.error)}
+                {getErrorMessage(query.error)}
               </p>
               <Button
                 variant="outline"

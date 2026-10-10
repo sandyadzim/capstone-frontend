@@ -176,7 +176,7 @@ export const accountsControllerDeactivate = (
 }
 
 /**
- * @summary List property units (Admin), sorted by unitNumber then id
+ * @summary List property units (Admin), newest first (createdAt DESC, id DESC)
  */
 export const unitsControllerList = (
   params?: UnitsControllerListParams,

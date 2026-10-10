@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
 import { useState } from 'react'
-import { render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import {
   ListFilters,
   SearchFilter,
@@ -132,4 +132,92 @@ it('disables editing and clearing while a filter is unavailable', () => {
   expect(screen.getByRole('combobox', { name: 'Status' })).toBeDisabled()
   for (const button of screen.getAllByRole('button'))
     expect(button).toBeDisabled()
+})
+
+it('keeps typing responsive and commits only after 300 ms without another keystroke', () => {
+  vi.useFakeTimers()
+  try {
+    const onChange = vi.fn()
+    render(
+      <SearchFilter
+        label="Search"
+        placeholder="Search"
+        value=""
+        onChange={onChange}
+      />,
+    )
+    const input = screen.getByRole('searchbox', { name: 'Search' })
+    fireEvent.change(input, { target: { value: 'A' } })
+    expect(onChange).not.toHaveBeenCalled()
+    expect(input).toHaveValue('A')
+    act(() => vi.advanceTimersByTime(200))
+    fireEvent.change(input, { target: { value: 'A-101' } })
+    act(() => vi.advanceTimersByTime(299))
+    expect(onChange).not.toHaveBeenCalled()
+    act(() => vi.advanceTimersByTime(1))
+    expect(onChange).toHaveBeenCalledExactlyOnceWith('A-101')
+  } finally {
+    vi.useRealTimers()
+  }
+})
+
+it('clears immediately and cancels a pending search on clear, external navigation, or unmount', () => {
+  vi.useFakeTimers()
+  try {
+    const onChange = vi.fn()
+    const field = (value: string) => (
+      <SearchFilter
+        label="Search"
+        placeholder="Search"
+        value={value}
+        onChange={onChange}
+      />
+    )
+    const { rerender, unmount } = render(field('saved'))
+    const input = screen.getByRole('searchbox', { name: 'Search' })
+    fireEvent.change(input, { target: { value: 'pending' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Clear search' }))
+    expect(onChange).toHaveBeenCalledExactlyOnceWith('')
+    expect(input).toHaveValue('')
+    expect(input).toHaveFocus()
+    act(() => vi.advanceTimersByTime(300))
+    expect(onChange).toHaveBeenCalledTimes(1)
+    onChange.mockClear()
+    fireEvent.change(input, { target: { value: 'another draft' } })
+    rerender(field('back navigation'))
+    expect(input).toHaveValue('back navigation')
+    act(() => vi.advanceTimersByTime(300))
+    expect(onChange).not.toHaveBeenCalled()
+    fireEvent.change(input, { target: { value: 'unfinished' } })
+    unmount()
+    act(() => vi.advanceTimersByTime(300))
+    expect(onChange).not.toHaveBeenCalled()
+  } finally {
+    vi.useRealTimers()
+  }
+})
+
+it('waits for composition to finish before debouncing the search', () => {
+  vi.useFakeTimers()
+  try {
+    const onChange = vi.fn()
+    render(
+      <SearchFilter
+        label="Search"
+        placeholder="Search"
+        value=""
+        onChange={onChange}
+      />,
+    )
+    const input = screen.getByRole('searchbox', { name: 'Search' })
+    fireEvent.compositionStart(input)
+    fireEvent.change(input, { target: { value: 'Unit' } })
+    act(() => vi.advanceTimersByTime(1000))
+    expect(onChange).not.toHaveBeenCalled()
+    fireEvent.compositionEnd(input)
+    act(() => vi.advanceTimersByTime(300))
+    expect(onChange).toHaveBeenCalledExactlyOnceWith('Unit')
+  } finally {
+    vi.useRealTimers()
+  }
 })

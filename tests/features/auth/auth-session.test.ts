@@ -4,7 +4,6 @@ import { createQueryClient } from '@/app/query-client'
 import { apiClient } from '@/lib/api/client'
 import { ApiError } from '@/lib/api/error'
 import {
-  authErrorMessage,
   expireSession,
   sessionExpired,
   sessionKey,
@@ -288,30 +287,6 @@ it('expires private query/mutation 401, but ignores public 401, forbidden, and a
   await pending
   expect(client.getQueryData(sessionKey)).toEqual(resident)
 })
-it.each([
-  [
-    new ApiError('Unauthorized', 'UNAUTHORIZED', 401),
-    'Your login ID or password is incorrect.',
-  ],
-  [
-    new ApiError('Forbidden', 'FORBIDDEN', 403),
-    'Sign in is unavailable from this address. Contact your administrator.',
-  ],
-  [
-    new ApiError('Validation', 'VALIDATION_ERROR', 400),
-    'Check your login ID and password, then try again.',
-  ],
-  [
-    new ApiError('Unavailable', 'HTTP_ERROR', 503),
-    'The service is temporarily unavailable. Try again.',
-  ],
-  [new ApiError('Timeout. Try again.', 'TIMEOUT'), 'Timeout. Try again.'],
-  [new Error('Unexpected response.'), 'Unexpected response.'],
-  [null, 'Something went wrong. Try again.'],
-])('provides actionable error copy', (error, message) => {
-  expect(authErrorMessage(error)).toBe(message)
-})
-
 it('ignores an old private query 401 while a new login is still being verified', async () => {
   client.setQueryData(sessionKey, admin)
   let rejectPrivate: ((error: unknown) => void) | undefined

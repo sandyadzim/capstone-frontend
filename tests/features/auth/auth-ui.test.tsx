@@ -111,7 +111,7 @@ it('validates before sending, supports password visibility and Enter, then retur
     password: ' password ',
   })
 })
-it('announces generic credential errors, clears password, without stealing focus', async () => {
+it('announces backend credential errors, clears password, without stealing focus', async () => {
   apiClient.defaults.adapter = async () => {
     throw new ApiError('Unknown identifier', 'UNAUTHORIZED', 401)
   }
@@ -120,7 +120,7 @@ it('announces generic credential errors, clears password, without stealing focus
   await credentials(user)
   await user.click(screen.getByRole('button', { name: 'Sign in' }))
   expect(
-    await screen.findByText('Your login ID or password is incorrect.', {
+    await screen.findByText('Unknown identifier', {
       selector: '[data-slot=toast-description]',
     }),
   ).toBeVisible()
@@ -130,7 +130,7 @@ it('announces generic credential errors, clears password, without stealing focus
   await user.keyboard('{Enter}')
   await waitFor(() =>
     expect(
-      screen.queryByText('Your login ID or password is incorrect.', {
+      screen.queryByText('Unknown identifier', {
         selector: '[data-slot=toast-description]',
       }),
     ).not.toBeInTheDocument(),

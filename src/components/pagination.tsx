@@ -16,14 +16,12 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-export type PaginationMeta = {
-  page: number
-  pageSize: number
-  total: number
-  totalPages: number
-}
-const pageSizes = [10, 20, 50, 100] as const
-const sizeOptions = pageSizes.map((size) => ({
+import {
+  paginationPageSizes,
+  type PaginationMeta,
+} from '@/lib/schemas/pagination'
+
+const sizeOptions = paginationPageSizes.map((size) => ({
   value: String(size),
   label: String(size),
 }))

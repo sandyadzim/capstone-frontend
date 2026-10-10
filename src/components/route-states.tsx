@@ -3,21 +3,21 @@ import {
   useRouter,
   type ErrorComponentProps,
 } from '@tanstack/react-router'
-import { LoadingIndicator } from './loading-indicator'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 
 export function RoutePending() {
   return (
     <div
       role="status"
-      className="flex min-h-64 flex-col items-center justify-center gap-5 p-6 text-center"
+      aria-busy="true"
+      className="w-full max-w-3xl space-y-5 p-6"
     >
-      <LoadingIndicator />
-      <div>
-        <p className="text-sm font-medium">Loading page…</p>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Preparing your workspace.
-        </p>
+      <span className="sr-only">Loading page…</span>
+      <div aria-hidden="true" className="space-y-5">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-4 w-3/4" />
+        <Skeleton className="h-64 w-full" />
       </div>
     </div>
   )
