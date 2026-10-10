@@ -16,6 +16,7 @@ import { ApiError } from '@/lib/api/error'
 import { sessionKey, sessionQueryOptions } from '@/features/auth/auth-session'
 import { toast } from '@/components/ui/toast'
 import type { Actor } from '@/features/auth/auth-schema'
+import { property } from '../admin/settings/fixtures'
 
 const admin: Actor = {
   id: '00000000-0000-4000-8000-000000000001',
@@ -53,7 +54,7 @@ async function show(path = '/login', actor: Actor | null | undefined = null) {
 }
 function responseAdapter(actor = admin) {
   const adapter = vi.fn<AxiosAdapter>(async (config) => ({
-    data: actor,
+    data: config.url === '/property' ? property : actor,
     status: config.url === '/auth/logout' ? 204 : 200,
     statusText: 'OK',
     headers: {},
@@ -168,12 +169,14 @@ it('disables duplicate submission during login and does not render the portal un
     finish?.()
   })
   await waitFor(() => expect(resolveCheck).toBeDefined())
-  expect(screen.queryByText('Admin workspace')).not.toBeInTheDocument()
+  expect(
+    screen.queryByRole('heading', { name: 'Dashboard' }),
+  ).not.toBeInTheDocument()
   expect(pending).toBeDisabled()
   await act(async () => {
     resolveCheck?.()
   })
-  await screen.findByText('Admin workspace')
+  await screen.findByRole('heading', { name: 'Dashboard' })
 })
 it('offers a session-only retry when login succeeds but /me is temporarily unreachable', async () => {
   let first = true
@@ -194,12 +197,12 @@ it('offers a session-only retry when login succeeds but /me is temporarily unrea
     { selector: '[data-slot=toast-description]' },
   )
   await user.click(screen.getByRole('button', { name: 'Check session again' }))
-  await screen.findByText('Admin workspace')
-  expect(adapter.mock.calls.map(([config]) => config.url)).toEqual([
-    '/auth/login',
-    '/auth/me',
-    '/auth/me',
-  ])
+  await screen.findByRole('heading', { name: 'Dashboard' })
+  expect(
+    adapter.mock.calls
+      .map(([config]) => config.url)
+      .filter((url) => url?.startsWith('/auth/')),
+  ).toEqual(['/auth/login', '/auth/me', '/auth/me'])
 })
 it('redirects guests with the original path/query/hash and existing sessions to their home', async () => {
   const router = await show('/technician/examples/form?from=notification#form')
@@ -238,11 +241,19 @@ it('keeps forbidden portal content hidden and returns to the correct portal', as
   ).not.toBeInTheDocument()
   expect(router.state.location.pathname).toBe('/technician')
   await user.click(screen.getByRole('link', { name: 'Go to your portal' }))
-  await screen.findByText('Admin workspace')
+  await screen.findByRole('heading', { name: 'Dashboard' })
 })
 it('preserves the session on logout failure, then retries and sends the user to login', async () => {
   const adapter = responseAdapter()
-  adapter.mockRejectedValueOnce(new ApiError('Offline', 'NETWORK_ERROR'))
+  const respond = adapter.getMockImplementation()!
+  let failLogout = true
+  adapter.mockImplementation(async (config) => {
+    if (config.url === '/auth/logout' && failLogout) {
+      failLogout = false
+      throw new ApiError('Offline', 'NETWORK_ERROR')
+    }
+    return respond(config)
+  })
   const user = userEvent.setup()
   const router = await show('/admin', admin)
   await user.click(
@@ -298,7 +309,7 @@ it('immediately hides the portal on private 401 and shows the expiration reason 
 })
 it('blocks the portal on session-check network failure and recovers without treating it as logout', async () => {
   await show('/admin', admin)
-  await screen.findByText('Admin workspace')
+  await screen.findByRole('heading', { name: 'Dashboard' })
   apiClient.defaults.adapter = async () => {
     throw new ApiError('Offline', 'NETWORK_ERROR')
   }
@@ -308,12 +319,14 @@ it('blocks the portal on session-check network failure and recovers without trea
       .catch(() => undefined)
   })
   await screen.findByRole('heading', { name: 'Unable to check your session' })
-  expect(screen.queryByText('Admin workspace')).not.toBeInTheDocument()
+  expect(
+    screen.queryByRole('heading', { name: 'Dashboard' }),
+  ).not.toBeInTheDocument()
   expect(client.getQueryData(sessionKey)).toEqual(admin)
   responseAdapter()
   const user = userEvent.setup()
   await user.click(screen.getByRole('button', { name: 'Try again' }))
-  await screen.findByText('Admin workspace')
+  await screen.findByRole('heading', { name: 'Dashboard' })
 })
 it('shows an initial session-check failure with explicit retry and redirects an existing session off login', async () => {
   const adapter = responseAdapter()
@@ -337,7 +350,7 @@ it('shows an initial session-check failure with explicit retry and redirects an 
   await userEvent
     .setup()
     .click(screen.getByRole('button', { name: 'Try again' }))
-  await screen.findByText('Admin workspace')
+  await screen.findByRole('heading', { name: 'Dashboard' })
 })
 
 it('recovers an initial guard failure when focus rechecking finds a valid session', async () => {
@@ -362,8 +375,10 @@ it('recovers an initial guard failure when focus rechecking finds a valid sessio
     focusManager.setFocused(false)
     focusManager.setFocused(true)
   })
-  await screen.findByText('Admin workspace')
-  expect(adapter).toHaveBeenCalledTimes(2)
+  await screen.findByRole('heading', { name: 'Dashboard' })
+  expect(
+    adapter.mock.calls.filter(([config]) => config.url === '/auth/me'),
+  ).toHaveLength(2)
   focusManager.setFocused(undefined)
 })
 

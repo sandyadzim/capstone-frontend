@@ -15,7 +15,6 @@ export function useSignOut() {
         description: 'Unable to sign out. Check your connection and try again.',
         type: 'error',
         priority: 'high',
-        timeout: 10000,
       })
     },
     onSuccess: async () => {

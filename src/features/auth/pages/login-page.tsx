@@ -62,7 +62,6 @@ export function LoginPage({
         description: authErrorMessage(cause),
         type: 'error',
         priority: 'high',
-        timeout: 10000,
       })
       form.resetField('password')
     },
@@ -78,7 +77,6 @@ export function LoginPage({
         title: 'Session expired',
         description: 'Your session has expired. Sign in again.',
         type: 'warning',
-        timeout: 10000,
       })
     }
   }, [expired])

@@ -1,13 +1,13 @@
 import { ProtectedPortal } from '@/features/auth/components/protected-portal'
 import { AccountMenu } from '@/features/auth/components/account-menu'
 import { useState } from 'react'
-import { Link, Outlet } from '@tanstack/react-router'
-import { Menu } from 'lucide-react'
-import { Brand } from '@/components/brand'
-import { PortalNav } from '@/components/portal-nav'
+import { Outlet, useRouterState } from '@tanstack/react-router'
+import { Menu, PanelLeft } from 'lucide-react'
+import { AdminSidebar } from '@/features/admin/components/admin-sidebar'
+import { useAdminUiStore } from '@/features/admin/stores/admin-ui-store'
+import { adminPageTitle } from '@/features/admin/admin-navigation'
 import { ThemeMenu } from '@/components/theme-menu'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import {
   Sheet,
   SheetContent,
@@ -17,46 +17,28 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 
-function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
-  return (
-    <div className="flex h-full flex-col p-5">
-      <Link
-        to="/admin"
-        aria-label="Admin home"
-        onClick={onNavigate}
-        className="w-fit rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
-      >
-        <Brand />
-      </Link>
-      <div className="mt-10">
-        <PortalNav portal="admin" onNavigate={onNavigate} />
-      </div>
-      <p className="mt-auto pt-8 text-xs text-muted-foreground">
-        Property management
-      </p>
-    </div>
-  )
-}
-
 export function AdminLayout() {
   const [open, setOpen] = useState(false)
+  const collapsed = useAdminUiStore((state) => state.collapsed)
+  const toggleSidebar = useAdminUiStore((state) => state.toggleSidebar)
+  const location = useRouterState({ select: (state) => state.location })
 
   return (
     <ProtectedPortal role="ADMIN">
       {(actor) => (
-        <div className="min-h-svh">
+        <div className="admin-shell min-h-svh" data-collapsed={collapsed}>
           <a href="#main-content" className="skip-link">
             Skip to content
           </a>
           <aside
             aria-label="Admin sidebar"
-            className="fixed inset-y-0 left-0 hidden w-60 border-r bg-sidebar md:block"
+            className="admin-sidebar fixed inset-y-0 left-0 z-20 hidden border-r border-sidebar-border bg-sidebar text-sidebar-foreground md:block"
           >
-            <Sidebar />
+            <AdminSidebar collapsed={collapsed} />
           </aside>
-          <div className="md:pl-60">
-            <header className="flex min-h-18 items-center justify-between gap-3 border-b px-5 md:px-8">
-              <div className="flex items-center gap-3">
+          <div className="admin-body">
+            <header className="admin-header fixed inset-x-0 top-0 z-20 flex h-[calc(4rem+env(safe-area-inset-top))] items-center justify-between gap-2 border-b bg-card px-4 pt-[env(safe-area-inset-top)] md:px-6">
+              <div className="flex min-w-0 items-center gap-2">
                 <Sheet open={open} onOpenChange={setOpen}>
                   <SheetTrigger
                     render={
@@ -70,20 +52,40 @@ export function AdminLayout() {
                   >
                     <Menu aria-hidden="true" />
                   </SheetTrigger>
-                  <SheetContent side="left" className="w-72 bg-sidebar">
+                  <SheetContent
+                    side="left"
+                    className="w-72 bg-sidebar text-sidebar-foreground [&>button]:text-sidebar-foreground [&>button:hover]:bg-sidebar-accent"
+                  >
                     <SheetHeader className="sr-only">
                       <SheetTitle>Admin navigation</SheetTitle>
                       <SheetDescription>
                         Navigate the admin workspace.
                       </SheetDescription>
                     </SheetHeader>
-                    <Sidebar onNavigate={() => setOpen(false)} />
+                    <AdminSidebar onNavigate={() => setOpen(false)} />
                   </SheetContent>
                 </Sheet>
-                <span className="text-sm font-medium">Admin workspace</span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="hidden size-11 md:inline-flex"
+                  aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                  aria-pressed={collapsed}
+                  onClick={toggleSidebar}
+                >
+                  <PanelLeft aria-hidden="true" />
+                </Button>
+                <span
+                  className="truncate text-sm font-medium"
+                  title={adminPageTitle(
+                    location.pathname,
+                    location.search.role,
+                  )}
+                >
+                  {adminPageTitle(location.pathname, location.search.role)}
+                </span>
               </div>
-              <div className="flex items-center gap-3">
-                <Badge variant="outline">Starter</Badge>
+              <div className="flex shrink-0 items-center gap-1 md:gap-3">
                 <ThemeMenu />
                 <AccountMenu actor={actor} />
               </div>
@@ -91,7 +93,7 @@ export function AdminLayout() {
             <main
               id="main-content"
               tabIndex={-1}
-              className="mx-auto max-w-5xl px-5 py-8 outline-none md:px-8 md:py-12"
+              className="w-full max-w-5xl scroll-mt-[calc(5rem+env(safe-area-inset-top))] px-4 pt-[calc(5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))] outline-none md:px-6 md:pb-8 [&_:is(input,textarea,button,a)]:scroll-mt-[calc(5rem+env(safe-area-inset-top))]"
             >
               <Outlet />
             </main>

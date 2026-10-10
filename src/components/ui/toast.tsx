@@ -142,7 +142,7 @@ function ToastIcon({ type }: { type: string | undefined }) {
   let icon: React.ReactNode = null
 
   if (type === 'success') {
-    icon = <CircleCheckIcon aria-hidden="true" />
+    icon = <CircleCheckIcon className="text-success" aria-hidden="true" />
   }
 
   if (type === 'info') {
@@ -196,10 +196,11 @@ function ToastList() {
 function Toaster({
   children,
   toastManager = toast,
+  timeout = 4000,
   ...props
 }: ToastPrimitive.Provider.Props) {
   return (
-    <ToastProvider toastManager={toastManager} {...props}>
+    <ToastProvider toastManager={toastManager} timeout={timeout} {...props}>
       {children}
       <ToastPortal>
         <ToastViewport>

@@ -9,6 +9,8 @@
   --font-sans:
     ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
+  --color-success: var(--success);
+  --color-sidebar-muted-foreground: var(--sidebar-muted-foreground);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -76,14 +78,19 @@
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: var(--primary);
-  --sidebar-primary-foreground: var(--primary-foreground);
-  --sidebar-accent: var(--accent);
-  --sidebar-accent-foreground: var(--accent-foreground);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: var(--ring);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --success: var(--primary);
+  --admin-canvas: oklch(0.975 0.003 155);
+  --admin-muted-foreground: oklch(0.52 0 0);
+  --sidebar: oklch(0.3 0.045 155);
+  --sidebar-foreground: oklch(0.97 0.012 155);
+  --sidebar-muted-foreground: oklch(0.82 0.025 155);
+  --sidebar-primary: oklch(0.94 0.04 155);
+  --sidebar-primary-foreground: var(--primary-hover);
+  --sidebar-accent: oklch(0.37 0.045 155);
+  --sidebar-accent-foreground: var(--sidebar-foreground);
+  --sidebar-border: oklch(0.42 0.03 155);
+  --sidebar-ring: var(--sidebar-primary);
 }
 
 .dark {
@@ -111,14 +118,17 @@
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
+  --admin-canvas: oklch(0.17 0.006 155);
+  --admin-muted-foreground: oklch(0.708 0 0);
+  --sidebar: oklch(0.23 0.028 155);
+  --sidebar-foreground: oklch(0.97 0.012 155);
+  --sidebar-muted-foreground: oklch(0.79 0.025 155);
   --sidebar-primary: var(--primary);
   --sidebar-primary-foreground: var(--primary-foreground);
-  --sidebar-accent: var(--accent);
-  --sidebar-accent-foreground: var(--accent-foreground);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: var(--ring);
+  --sidebar-accent: oklch(0.32 0.035 155);
+  --sidebar-accent-foreground: var(--sidebar-foreground);
+  --sidebar-border: oklch(0.36 0.025 155);
+  --sidebar-ring: var(--primary);
 }
 
 @layer base {
@@ -193,4 +203,116 @@
 .auth-shell {
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+.admin-shell {
+  --muted-foreground: var(--admin-muted-foreground);
+  background: var(--admin-canvas);
+}
+
+.admin-brand {
+  height: calc(4rem + env(safe-area-inset-top));
+  padding-top: env(safe-area-inset-top);
+}
+
+.admin-brand[data-has-logo='true'] {
+  height: calc(6rem + env(safe-area-inset-top));
+}
+
+.loading-track {
+  animation: loading-travel 1.4s linear infinite;
+}
+
+@keyframes loading-travel {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-track {
+    animation: none;
+    transform: translateX(100%);
+  }
+}
+
+.admin-nav-link {
+  color: var(--sidebar-muted-foreground);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+}
+
+.admin-nav-link:is(:hover, [aria-expanded='true']) {
+  background: var(--sidebar-accent);
+  color: var(--sidebar-accent-foreground);
+}
+
+.admin-nav-link.admin-nav-selected {
+  background: var(--sidebar-primary);
+  color: var(--sidebar-primary-foreground);
+}
+
+.admin-nav-chevron {
+  transition: transform 200ms var(--ease-out);
+}
+
+.admin-nav-label {
+  position: absolute;
+  left: 2.5rem;
+  white-space: nowrap;
+  transition:
+    opacity 150ms var(--ease-out),
+    transform 200ms var(--ease-out);
+}
+
+.admin-submenu {
+  height: var(--collapsible-panel-height);
+  overflow: hidden;
+  transition:
+    height 200ms var(--ease-out),
+    opacity 200ms var(--ease-out);
+}
+
+.admin-submenu[data-starting-style],
+.admin-submenu[data-ending-style] {
+  height: 0;
+  opacity: 0;
+}
+
+@media (min-width: 768px) {
+  .admin-shell {
+    --admin-sidebar-width: 15rem;
+  }
+  .admin-shell[data-collapsed='true'] {
+    --admin-sidebar-width: 4.5rem;
+  }
+  .admin-shell[data-collapsed='true']
+    .admin-sidebar
+    .admin-brand[data-has-logo='true'] {
+    height: calc(4rem + env(safe-area-inset-top));
+  }
+  .admin-sidebar {
+    width: var(--admin-sidebar-width);
+    overflow-x: clip;
+    transition: width 200ms var(--ease-out);
+  }
+  .admin-sidebar .admin-brand {
+    transition: height 200ms var(--ease-out);
+  }
+  .admin-shell[data-collapsed='true'] .admin-sidebar .admin-nav-label {
+    opacity: 0;
+    transform: translateX(-0.25rem);
+  }
+  .admin-body {
+    padding-left: var(--admin-sidebar-width);
+    transition: padding-left 200ms var(--ease-out);
+  }
+  .admin-header {
+    left: var(--admin-sidebar-width);
+    transition: left 200ms var(--ease-out);
+  }
 }

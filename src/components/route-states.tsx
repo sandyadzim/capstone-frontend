@@ -3,20 +3,22 @@ import {
   useRouter,
   type ErrorComponentProps,
 } from '@tanstack/react-router'
-import { LoaderCircle } from 'lucide-react'
+import { LoadingIndicator } from './loading-indicator'
 import { Button } from '@/components/ui/button'
 
 export function RoutePending() {
   return (
     <div
       role="status"
-      className="flex min-h-48 items-center justify-center gap-3 p-6 text-sm text-muted-foreground"
+      className="flex min-h-64 flex-col items-center justify-center gap-5 p-6 text-center"
     >
-      <LoaderCircle
-        aria-hidden="true"
-        className="size-4 animate-spin motion-reduce:animate-none"
-      />{' '}
-      Loading page…
+      <LoadingIndicator />
+      <div>
+        <p className="text-sm font-medium">Loading page…</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Preparing your workspace.
+        </p>
+      </div>
     </div>
   )
 }
