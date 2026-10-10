@@ -23,6 +23,7 @@ export default defineConfig({
         'src/lib/api/*.ts',
         'src/lib/env.ts',
         'src/app/theme.ts',
+        'src/app/query-client.ts',
         'src/stores/*.ts',
         'src/features/**/*.{ts,tsx}',
       ],

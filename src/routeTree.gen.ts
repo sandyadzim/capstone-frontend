@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResidentRouteImport } from './routes/_resident'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as TechnicianRouteImport } from './routes/technician'
 import { Route as ResidentIndexRouteImport } from './routes/_resident.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -26,6 +27,11 @@ const ResidentRoute = ResidentRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TechnicianRoute = TechnicianRouteImport.update({
@@ -67,6 +73,7 @@ const TechnicianExamplesFormRoute = TechnicianExamplesFormRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof ResidentIndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
   '/technician': typeof TechnicianRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/technician/': typeof TechnicianIndexRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/technician/examples/form': typeof TechnicianExamplesFormRoute
 }
 export interface FileRoutesByTo {
+  '/login': typeof LoginRoute
   '/': typeof ResidentIndexRoute
   '/admin': typeof AdminIndexRoute
   '/technician': typeof TechnicianIndexRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_resident': typeof ResidentRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
   '/technician': typeof TechnicianRouteWithChildren
   '/_resident/': typeof ResidentIndexRoute
   '/admin/': typeof AdminIndexRoute
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/login'
     | '/technician'
     | '/admin/'
     | '/technician/'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/technician/examples/form'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/login'
     | '/'
     | '/admin'
     | '/technician'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_resident'
     | '/admin'
+    | '/login'
     | '/technician'
     | '/_resident/'
     | '/admin/'
@@ -129,6 +141,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   ResidentRoute: typeof ResidentRouteWithChildren
   AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
   TechnicianRoute: typeof TechnicianRouteWithChildren
 }
 
@@ -146,6 +159,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/technician': {
@@ -243,6 +263,7 @@ const TechnicianRouteWithChildren = TechnicianRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   ResidentRoute: ResidentRouteWithChildren,
   AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
   TechnicianRoute: TechnicianRouteWithChildren,
 }
 export const routeTree = rootRouteImport
