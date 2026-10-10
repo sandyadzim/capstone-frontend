@@ -13,10 +13,8 @@ import {
   UnitReadState,
   UnitUnavailable,
 } from '../components/unit-page'
-import {
-  usePageCorrection,
-  useUnitNavigation,
-} from '../hooks/use-unit-navigation'
+import { usePageCorrection } from '@/hooks/use-page-correction'
+import { useUnitNavigation } from '../hooks/use-unit-navigation'
 import { useUnit, historyQueryOptions, unitsKey } from '../unit-queries'
 import type { HistoryItem } from '../unit-schema'
 import { formatDate, formatIdr } from '@/lib/format'

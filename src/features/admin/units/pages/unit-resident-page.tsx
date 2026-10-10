@@ -21,10 +21,8 @@ import {
   UnitReadState,
   UnitUnavailable,
 } from '../components/unit-page'
-import {
-  useUnitNavigation,
-  usePageCorrection,
-} from '../hooks/use-unit-navigation'
+import { usePageCorrection } from '@/hooks/use-page-correction'
+import { useUnitNavigation } from '../hooks/use-unit-navigation'
 import { useUnitMutations } from '../hooks/use-unit-mutations'
 import { useUnit, residentsQueryOptions, unitsKey } from '../unit-queries'
 import { residentPlacementSchema, type ResidentAccount } from '../unit-schema'

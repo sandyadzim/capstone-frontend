@@ -18,10 +18,8 @@ import {
 import { UnitRowActions } from '../components/unit-row-actions'
 import { UnitMobileRecord } from '../components/unit-mobile-record'
 import { unitsQueryOptions, unitsKey } from '../unit-queries'
-import {
-  usePageCorrection,
-  useUnitNavigation,
-} from '../hooks/use-unit-navigation'
+import { usePageCorrection } from '@/hooks/use-page-correction'
+import { useUnitNavigation } from '../hooks/use-unit-navigation'
 import { unitDisplayStatusSchema, type Unit } from '../unit-schema'
 
 export function UnitsPage() {
