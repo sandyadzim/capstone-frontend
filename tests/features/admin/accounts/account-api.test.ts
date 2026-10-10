@@ -1,10 +1,64 @@
 import { CanceledError, type AxiosAdapter } from 'axios'
 import { afterEach, expect, it, vi } from 'vitest'
-import { listAccounts } from '@/features/admin/accounts/account-api'
+import {
+  createAccount,
+  listAccounts,
+} from '@/features/admin/accounts/account-api'
 import { apiClient } from '@/lib/api/client'
 import { account, accountPage } from './fixtures'
 
 const original = apiClient.defaults.adapter
+
+it('creates through the generated client with a normalized payload, credentials and signal', async () => {
+  const adapter = respond({
+    ...account,
+    activeUnit: null,
+    password: 'must be stripped',
+  })
+  const signal = new AbortController().signal
+  const values = {
+    name: ' Alex ',
+    loginIdentifier: ' USER-ALEX ',
+    password: '  password12  ',
+    role: 'RESIDENT' as const,
+    isActive: false,
+  }
+  const extendedValues = {
+    ...values,
+    confirmPassword: values.password,
+    unitId: account.activeUnit?.id,
+  }
+  const response = await createAccount(extendedValues, signal)
+  expect(response).toEqual({ ...account, activeUnit: null })
+  const config = adapter.mock.calls[0][0]
+  expect(config).toMatchObject({
+    url: '/accounts',
+    method: 'post',
+    withCredentials: true,
+    signal,
+  })
+  expect(JSON.parse(config.data)).toEqual({
+    ...values,
+    name: 'Alex',
+    loginIdentifier: 'user-alex',
+  })
+})
+
+it('does not request invalid creation values and rejects malformed success bodies', async () => {
+  const adapter = respond({ id: 'invalid' })
+  const values = {
+    name: 'Alex',
+    loginIdentifier: 'alex',
+    password: 'password1234',
+    role: 'ADMIN' as const,
+    isActive: true,
+  }
+  await expect(createAccount({ ...values, password: 'bad' })).rejects.toThrow()
+  expect(adapter).not.toHaveBeenCalled()
+  await expect(createAccount(values)).rejects.toMatchObject({
+    code: 'INVALID_RESPONSE',
+  })
+})
 afterEach(() => {
   apiClient.defaults.adapter = original
 })

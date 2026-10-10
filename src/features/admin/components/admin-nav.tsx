@@ -47,11 +47,13 @@ const pages = [
 
 function AccountsNav({
   active,
+  isListPage,
   role,
   collapsed,
   onNavigate,
 }: {
   active: boolean
+  isListPage: boolean
   role?: string
   collapsed: boolean
   onNavigate?: () => void
@@ -96,7 +98,7 @@ function AccountsNav({
                   to="/admin/accounts"
                   search={{ role: item.role }}
                   aria-current={
-                    active && role === item.role ? 'page' : undefined
+                    isListPage && role === item.role ? 'page' : undefined
                   }
                   onClick={onNavigate}
                 />
@@ -136,7 +138,9 @@ function AccountsNav({
               to="/admin/accounts"
               search={{ role: item.role }}
               onClick={onNavigate}
-              aria-current={active && item.role === role ? 'page' : undefined}
+              aria-current={
+                isListPage && item.role === role ? 'page' : undefined
+              }
               className={cn(
                 linkClass,
                 active && item.role === role && 'admin-nav-selected',
@@ -159,7 +163,9 @@ export function AdminNav({
   onNavigate?: () => void
 }) {
   const location = useRouterState({ select: (state) => state.location })
-  const active = location.pathname === '/admin/accounts'
+  const active =
+    location.pathname === '/admin/accounts' ||
+    location.pathname.startsWith('/admin/accounts/')
   return (
     <TooltipProvider delay={300}>
       <nav aria-label="Admin navigation" className="space-y-1">
@@ -169,6 +175,7 @@ export function AdminNav({
               <AccountsNav
                 key={active ? 'accounts' : 'other'}
                 active={active}
+                isListPage={location.pathname === '/admin/accounts'}
                 role={location.search.role}
                 collapsed={collapsed}
                 onNavigate={onNavigate}

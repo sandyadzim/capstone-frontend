@@ -126,7 +126,7 @@ it.each([
   ['TECHNICIAN', 'Technicians', ['Name', 'Login ID', 'Status']],
   ['ADMIN', 'Administrators', ['Name', 'Login ID', 'Status']],
 ] as const)(
-  'loads the %s view with matching desktop and mobile fields and no account actions',
+  'loads the %s view with matching desktop and mobile fields and a creation link',
   async (role, title, headers) => {
     await show(role ? `/admin/accounts?role=${role}` : '/admin/accounts')
     const table = await screen.findByRole('table', { name: title })
@@ -150,7 +150,10 @@ it.each([
     }
     expect(within(table).queryByRole('link')).not.toBeInTheDocument()
     expect(
-      screen.queryByRole('button', { name: /create|edit|deactivate/i }),
+      screen.getByRole('link', { name: 'Create account' }),
+    ).toHaveAttribute('href', expect.stringContaining('/admin/accounts/new'))
+    expect(
+      screen.queryByRole('button', { name: /edit|deactivate/i }),
     ).not.toBeInTheDocument()
   },
 )

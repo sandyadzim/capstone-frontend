@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import { getRouteApi, useNavigate } from '@tanstack/react-router'
+import { getRouteApi, Link, useNavigate } from '@tanstack/react-router'
+import { Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { DataTable, type DataColumn } from '@/components/data-table'
 import {
@@ -29,7 +31,7 @@ function accountUnit(account: Account) {
 
 export function AccountsPage() {
   const search = getRouteApi('/admin/accounts').useSearch()
-  const navigate = useNavigate({ from: '/admin/accounts' })
+  const navigate = useNavigate({ from: '/admin/accounts/' })
   const { role, q, isActive, page, pageSize } = search
   const title = role ? accountRoles[role] : 'All accounts'
   const query = useQuery(
@@ -81,7 +83,17 @@ export function AccountsPage() {
 
   return (
     <div className="min-w-0">
-      <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
+        <Button
+          nativeButton={false}
+          role="link"
+          render={<Link to="/admin/accounts/new" search={search} />}
+          className="min-h-11 px-4"
+        >
+          <Plus aria-hidden="true" /> Create account
+        </Button>
+      </div>
       <p className="mt-2 text-sm leading-6 text-muted-foreground">
         Browse accounts and their access status.
       </p>

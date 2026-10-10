@@ -21,6 +21,8 @@ import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminUnitsRouteImport } from './routes/admin.units'
 import { Route as TechnicianIndexRouteImport } from './routes/technician.index'
 import { Route as ResidentExamplesFormRouteImport } from './routes/_resident.examples.form'
+import { Route as AdminAccountsIndexRouteImport } from './routes/admin.accounts.index'
+import { Route as AdminAccountsNewRouteImport } from './routes/admin.accounts.new'
 import { Route as AdminExamplesFormRouteImport } from './routes/admin.examples.form'
 import { Route as AdminUnitsIndexRouteImport } from './routes/admin.units.index'
 import { Route as AdminUnitsUnitIdRouteImport } from './routes/admin.units.$unitId'
@@ -92,6 +94,16 @@ const ResidentExamplesFormRoute = ResidentExamplesFormRouteImport.update({
   path: '/examples/form',
   getParentRoute: () => ResidentRoute,
 } as any)
+const AdminAccountsIndexRoute = AdminAccountsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminAccountsRoute,
+} as any)
+const AdminAccountsNewRoute = AdminAccountsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AdminAccountsRoute,
+} as any)
 const AdminExamplesFormRoute = AdminExamplesFormRouteImport.update({
   id: '/examples/form',
   path: '/examples/form',
@@ -156,17 +168,19 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/technician': typeof TechnicianRouteWithChildren
-  '/admin/accounts': typeof AdminAccountsRoute
+  '/admin/accounts': typeof AdminAccountsRouteWithChildren
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/units': typeof AdminUnitsRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/technician/': typeof TechnicianIndexRoute
   '/examples/form': typeof ResidentExamplesFormRoute
+  '/admin/accounts/new': typeof AdminAccountsNewRoute
   '/admin/examples/form': typeof AdminExamplesFormRoute
   '/admin/units/$unitId': typeof AdminUnitsUnitIdRouteWithChildren
   '/admin/units/new': typeof AdminUnitsNewRoute
   '/technician/examples/form': typeof TechnicianExamplesFormRoute
+  '/admin/accounts/': typeof AdminAccountsIndexRoute
   '/admin/units/': typeof AdminUnitsIndexRoute
   '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
   '/admin/units/$unitId/history': typeof AdminUnitsUnitIdHistoryRouteWithChildren
@@ -177,16 +191,17 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
-  '/admin/accounts': typeof AdminAccountsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/': typeof ResidentIndexRoute
   '/admin': typeof AdminIndexRoute
   '/technician': typeof TechnicianIndexRoute
   '/examples/form': typeof ResidentExamplesFormRoute
+  '/admin/accounts/new': typeof AdminAccountsNewRoute
   '/admin/examples/form': typeof AdminExamplesFormRoute
   '/admin/units/new': typeof AdminUnitsNewRoute
   '/technician/examples/form': typeof TechnicianExamplesFormRoute
+  '/admin/accounts': typeof AdminAccountsIndexRoute
   '/admin/units': typeof AdminUnitsIndexRoute
   '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
   '/admin/units/$unitId/resident': typeof AdminUnitsUnitIdResidentRoute
@@ -200,7 +215,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/technician': typeof TechnicianRouteWithChildren
-  '/admin/accounts': typeof AdminAccountsRoute
+  '/admin/accounts': typeof AdminAccountsRouteWithChildren
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/units': typeof AdminUnitsRouteWithChildren
@@ -208,10 +223,12 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/technician/': typeof TechnicianIndexRoute
   '/_resident/examples/form': typeof ResidentExamplesFormRoute
+  '/admin/accounts/new': typeof AdminAccountsNewRoute
   '/admin/examples/form': typeof AdminExamplesFormRoute
   '/admin/units/$unitId': typeof AdminUnitsUnitIdRouteWithChildren
   '/admin/units/new': typeof AdminUnitsNewRoute
   '/technician/examples/form': typeof TechnicianExamplesFormRoute
+  '/admin/accounts/': typeof AdminAccountsIndexRoute
   '/admin/units/': typeof AdminUnitsIndexRoute
   '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
   '/admin/units/$unitId/history': typeof AdminUnitsUnitIdHistoryRouteWithChildren
@@ -234,10 +251,12 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/technician/'
     | '/examples/form'
+    | '/admin/accounts/new'
     | '/admin/examples/form'
     | '/admin/units/$unitId'
     | '/admin/units/new'
     | '/technician/examples/form'
+    | '/admin/accounts/'
     | '/admin/units/'
     | '/admin/units/$unitId/edit'
     | '/admin/units/$unitId/history'
@@ -248,16 +267,17 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
-    | '/admin/accounts'
     | '/admin/reports'
     | '/admin/settings'
     | '/'
     | '/admin'
     | '/technician'
     | '/examples/form'
+    | '/admin/accounts/new'
     | '/admin/examples/form'
     | '/admin/units/new'
     | '/technician/examples/form'
+    | '/admin/accounts'
     | '/admin/units'
     | '/admin/units/$unitId/edit'
     | '/admin/units/$unitId/resident'
@@ -278,10 +298,12 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/technician/'
     | '/_resident/examples/form'
+    | '/admin/accounts/new'
     | '/admin/examples/form'
     | '/admin/units/$unitId'
     | '/admin/units/new'
     | '/technician/examples/form'
+    | '/admin/accounts/'
     | '/admin/units/'
     | '/admin/units/$unitId/edit'
     | '/admin/units/$unitId/history'
@@ -384,6 +406,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResidentExamplesFormRouteImport
       parentRoute: typeof ResidentRoute
     }
+    '/admin/accounts/': {
+      id: '/admin/accounts/'
+      path: '/'
+      fullPath: '/admin/accounts/'
+      preLoaderRoute: typeof AdminAccountsIndexRouteImport
+      parentRoute: typeof AdminAccountsRoute
+    }
+    '/admin/accounts/new': {
+      id: '/admin/accounts/new'
+      path: '/new'
+      fullPath: '/admin/accounts/new'
+      preLoaderRoute: typeof AdminAccountsNewRouteImport
+      parentRoute: typeof AdminAccountsRoute
+    }
     '/admin/examples/form': {
       id: '/admin/examples/form'
       path: '/examples/form'
@@ -478,6 +514,20 @@ const ResidentRouteWithChildren = ResidentRoute._addFileChildren(
   ResidentRouteChildren,
 )
 
+interface AdminAccountsRouteChildren {
+  AdminAccountsNewRoute: typeof AdminAccountsNewRoute
+  AdminAccountsIndexRoute: typeof AdminAccountsIndexRoute
+}
+
+const AdminAccountsRouteChildren: AdminAccountsRouteChildren = {
+  AdminAccountsNewRoute: AdminAccountsNewRoute,
+  AdminAccountsIndexRoute: AdminAccountsIndexRoute,
+}
+
+const AdminAccountsRouteWithChildren = AdminAccountsRoute._addFileChildren(
+  AdminAccountsRouteChildren,
+)
+
 interface AdminUnitsUnitIdHistoryRouteChildren {
   AdminUnitsUnitIdHistoryReportIdRoute: typeof AdminUnitsUnitIdHistoryReportIdRoute
   AdminUnitsUnitIdHistoryIndexRoute: typeof AdminUnitsUnitIdHistoryIndexRoute
@@ -528,7 +578,7 @@ const AdminUnitsRouteWithChildren = AdminUnitsRoute._addFileChildren(
 )
 
 interface AdminRouteChildren {
-  AdminAccountsRoute: typeof AdminAccountsRoute
+  AdminAccountsRoute: typeof AdminAccountsRouteWithChildren
   AdminReportsRoute: typeof AdminReportsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminUnitsRoute: typeof AdminUnitsRouteWithChildren
@@ -537,7 +587,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
-  AdminAccountsRoute: AdminAccountsRoute,
+  AdminAccountsRoute: AdminAccountsRouteWithChildren,
   AdminReportsRoute: AdminReportsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminUnitsRoute: AdminUnitsRouteWithChildren,

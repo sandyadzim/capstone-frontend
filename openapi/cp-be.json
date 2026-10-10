@@ -284,7 +284,7 @@
           }
         },
         "security": [{ "cookie": [] }],
-        "summary": "List accounts with name/login search, role and active-status filters",
+        "summary": "List accounts newest first with name/login search, role and active-status filters",
         "tags": ["Accounts"]
       },
       "post": {
@@ -305,8 +305,8 @@
                   "loginIdentifier": { "type": "string" },
                   "password": {
                     "type": "string",
-                    "minLength": 12,
-                    "maxLength": 1024
+                    "minLength": 4,
+                    "maxLength": 30
                   },
                   "role": {
                     "type": "string",
@@ -491,8 +491,8 @@
                   "loginIdentifier": { "type": "string" },
                   "password": {
                     "type": "string",
-                    "minLength": 12,
-                    "maxLength": 1024
+                    "minLength": 4,
+                    "maxLength": 30
                   },
                   "role": {
                     "type": "string",

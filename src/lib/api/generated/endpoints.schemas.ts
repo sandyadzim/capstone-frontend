@@ -559,8 +559,8 @@ export type AccountsControllerCreateBody = {
   name: string
   loginIdentifier: string
   /**
-   * @minLength 12
-   * @maxLength 1024
+   * @minLength 4
+   * @maxLength 30
    */
   password: string
   role: AccountsControllerCreateBodyRole
@@ -585,8 +585,8 @@ export type AccountsControllerUpdateBody = {
   name?: string
   loginIdentifier?: string
   /**
-   * @minLength 12
-   * @maxLength 1024
+   * @minLength 4
+   * @maxLength 30
    */
   password?: string
   role?: AccountsControllerUpdateBodyRole

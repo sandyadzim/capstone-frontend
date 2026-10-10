@@ -7,6 +7,7 @@ export const accountRoles = {
 } as const
 
 export function adminPageTitle(pathname: string, role?: string) {
+  if (pathname === '/admin/accounts/new') return 'Create account'
   if (pathname === '/admin/accounts') {
     const label = accountRoles[role as keyof typeof accountRoles]
     return `Accounts / ${label ?? 'All accounts'}`

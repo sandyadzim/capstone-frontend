@@ -100,7 +100,7 @@ export const authControllerLogout = (
 }
 
 /**
- * @summary List accounts with name/login search, role and active-status filters
+ * @summary List accounts newest first with name/login search, role and active-status filters
  */
 export const accountsControllerList = (
   params?: AccountsControllerListParams,

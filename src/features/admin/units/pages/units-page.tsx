@@ -1,6 +1,7 @@
 import { getErrorMessage } from '@/lib/api/error'
 import { Link } from '@tanstack/react-router'
 import { useQuery, useIsMutating } from '@tanstack/react-query'
+import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { DataTable, type DataColumn } from '@/components/data-table'
@@ -94,6 +95,7 @@ export function UnitsPage() {
           role="link"
           render={<Link to="/admin/units/new" search={search} />}
         >
+          <Plus aria-hidden="true" />
           Create unit
         </Button>
       </div>
