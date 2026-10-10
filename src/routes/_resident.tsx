@@ -1,5 +1,5 @@
-import { requirePortal } from '@/features/auth/routing'
-import { AuthRouteError } from '@/features/auth/portal-session'
+import { requirePortal } from '@/features/auth/auth-guards'
+import { AuthRouteError } from '@/features/auth/components/session-feedback'
 import { createFileRoute } from '@tanstack/react-router'
 import { ResidentLayout } from '@/layouts/mobile-layout'
 

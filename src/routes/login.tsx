@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { LoginPage } from '@/features/auth/login-page'
-import { AuthRouteError } from '@/features/auth/portal-session'
-import { loginSearch, requireGuest } from '@/features/auth/routing'
+import { LoginPage } from '@/features/auth/pages/login-page'
+import { AuthRouteError } from '@/features/auth/components/session-feedback'
+import { loginSearch, requireGuest } from '@/features/auth/auth-guards'
 
 export const Route = createFileRoute('/login')({
   validateSearch: loginSearch,

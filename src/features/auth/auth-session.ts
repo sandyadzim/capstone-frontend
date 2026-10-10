@@ -1,8 +1,8 @@
 import { queryOptions, type QueryClient } from '@tanstack/react-query'
 import { CanceledError } from 'axios'
 import { ApiError } from '@/lib/api/error'
-import { getSession, postLogin, postLogout } from './api'
-import type { Actor, LoginValues } from './schema'
+import { getSession, postLogin, postLogout } from './auth-api'
+import type { Actor, LoginValues } from './auth-schema'
 
 export const sessionKey = ['auth', 'session'] as const
 

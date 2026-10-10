@@ -13,17 +13,17 @@ import {
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field'
-import { AuthShell } from './auth-shell'
-import { roleHome, safeRedirect } from './routing'
-import { loginSchema, type LoginValues } from './schema'
+import { AuthLayout } from '../components/auth-layout'
+import { roleHome, safeRedirect } from '../auth-guards'
+import { loginSchema, type LoginValues } from '../auth-schema'
 import {
   authErrorMessage,
   SessionVerificationError,
   sessionQueryOptions,
   signIn,
   verifyLogin,
-} from './session'
-import { SessionUnavailable } from './portal-session'
+} from '../auth-session'
+import { SessionUnavailable } from '../components/session-feedback'
 
 export function LoginPage({
   redirect,
@@ -101,7 +101,7 @@ export function LoginPage({
       />
     )
   return (
-    <AuthShell>
+    <AuthLayout>
       <h1 className="text-3xl font-semibold leading-tight tracking-tight">
         Sign in
       </h1>
@@ -209,6 +209,6 @@ export function LoginPage({
           {login.isPending ? 'Signing in…' : 'Sign in'}
         </Button>
       </form>
-    </AuthShell>
+    </AuthLayout>
   )
 }

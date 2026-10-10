@@ -1,5 +1,5 @@
-import { PortalSession } from '@/features/auth/portal-session'
-import { AccountMenu } from '@/features/auth/account-menu'
+import { ProtectedPortal } from '@/features/auth/components/protected-portal'
+import { AccountMenu } from '@/features/auth/components/account-menu'
 import { Link, Outlet } from '@tanstack/react-router'
 import { Brand } from '@/components/brand'
 import { PortalNav } from '@/components/portal-nav'
@@ -15,7 +15,7 @@ export function MobileLayout({
   const config = portals[portal]
 
   return (
-    <PortalSession role={portal === 'resident' ? 'RESIDENT' : 'TECHNICIAN'}>
+    <ProtectedPortal role={portal === 'resident' ? 'RESIDENT' : 'TECHNICIAN'}>
       {(actor) => (
         <div className="mobile-shell mx-auto flex min-h-svh w-full max-w-lg flex-col border-x border-border bg-background">
           <a href="#main-content" className="skip-link">
@@ -47,7 +47,7 @@ export function MobileLayout({
           </footer>
         </div>
       )}
-    </PortalSession>
+    </ProtectedPortal>
   )
 }
 

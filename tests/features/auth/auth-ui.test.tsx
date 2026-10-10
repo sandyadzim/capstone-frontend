@@ -13,9 +13,9 @@ import { createQueryClient } from '@/app/query-client'
 import { routeTree } from '@/routeTree.gen'
 import { apiClient } from '@/lib/api/client'
 import { ApiError } from '@/lib/api/error'
-import { sessionKey, sessionQueryOptions } from '@/features/auth/session'
+import { sessionKey, sessionQueryOptions } from '@/features/auth/auth-session'
 import { toast } from '@/components/ui/toast'
-import type { Actor } from '@/features/auth/schema'
+import type { Actor } from '@/features/auth/auth-schema'
 
 const admin: Actor = {
   id: '00000000-0000-4000-8000-000000000001',

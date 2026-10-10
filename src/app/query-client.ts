@@ -1,6 +1,6 @@
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query'
 import { ApiError } from '@/lib/api/error'
-import { expireSession, sessionGeneration } from '@/features/auth/session'
+import { expireSession, sessionGeneration } from '@/features/auth/auth-session'
 
 export function createQueryClient() {
   const queryGenerations = new WeakMap<object, number>()

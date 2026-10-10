@@ -6,9 +6,9 @@ import {
   safeRedirect,
   loginSearch,
   PortalAccessError,
-} from '@/features/auth/routing'
-import { sessionKey } from '@/features/auth/session'
-import type { Actor } from '@/features/auth/schema'
+} from '@/features/auth/auth-guards'
+import { sessionKey } from '@/features/auth/auth-session'
+import type { Actor } from '@/features/auth/auth-schema'
 
 const clients: ReturnType<typeof createQueryClient>[] = []
 afterEach(() => {

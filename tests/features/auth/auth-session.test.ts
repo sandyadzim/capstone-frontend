@@ -12,8 +12,8 @@ import {
   signIn,
   signOut,
   verifyLogin,
-} from '@/features/auth/session'
-import type { Actor } from '@/features/auth/schema'
+} from '@/features/auth/auth-session'
+import type { Actor } from '@/features/auth/auth-schema'
 
 const admin: Actor = {
   id: '00000000-0000-4000-8000-000000000001',

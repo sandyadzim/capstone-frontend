@@ -9,7 +9,7 @@ import {
   loginSchema,
   type Actor,
   type LoginValues,
-} from './schema'
+} from './auth-schema'
 
 function parseActor(data: unknown, status: number): Actor {
   const parsed = actorSchema.safeParse(data)

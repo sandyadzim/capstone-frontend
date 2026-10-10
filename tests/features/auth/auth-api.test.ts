@@ -2,8 +2,8 @@ import { afterEach, expect, it, vi } from 'vitest'
 import { CanceledError, type AxiosAdapter } from 'axios'
 import { apiClient } from '@/lib/api/client'
 import { ApiError } from '@/lib/api/error'
-import { getSession, postLogin, postLogout } from '@/features/auth/api'
-import { loginSchema, type Actor } from '@/features/auth/schema'
+import { getSession, postLogin, postLogout } from '@/features/auth/auth-api'
+import { loginSchema, type Actor } from '@/features/auth/auth-schema'
 
 const actor: Actor = {
   id: '00000000-0000-4000-8000-000000000001',

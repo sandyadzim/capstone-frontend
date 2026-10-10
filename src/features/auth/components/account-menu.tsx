@@ -10,8 +10,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import type { Actor } from './schema'
-import { useSignOut } from './use-sign-out'
+import type { Actor } from '../auth-schema'
+import { useSignOut } from '../hooks/use-sign-out'
 
 export function AccountMenu({ actor }: { actor: Actor }) {
   const [open, setOpen] = useState(false)

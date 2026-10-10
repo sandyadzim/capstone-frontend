@@ -1,5 +1,5 @@
-import { PortalSession } from '@/features/auth/portal-session'
-import { AccountMenu } from '@/features/auth/account-menu'
+import { ProtectedPortal } from '@/features/auth/components/protected-portal'
+import { AccountMenu } from '@/features/auth/components/account-menu'
 import { useState } from 'react'
 import { Link, Outlet } from '@tanstack/react-router'
 import { Menu } from 'lucide-react'
@@ -42,7 +42,7 @@ export function AdminLayout() {
   const [open, setOpen] = useState(false)
 
   return (
-    <PortalSession role="ADMIN">
+    <ProtectedPortal role="ADMIN">
       {(actor) => (
         <div className="min-h-svh">
           <a href="#main-content" className="skip-link">
@@ -98,6 +98,6 @@ export function AdminLayout() {
           </div>
         </div>
       )}
-    </PortalSession>
+    </ProtectedPortal>
   )
 }

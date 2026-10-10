@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
 import { toast } from '@/components/ui/toast'
-import { signOut } from './session'
+import { signOut } from '../auth-session'
 
 export function useSignOut() {
   const client = useQueryClient()

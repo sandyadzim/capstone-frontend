@@ -1,7 +1,7 @@
 import { redirect } from '@tanstack/react-router'
 import type { QueryClient } from '@tanstack/react-query'
-import type { Actor } from './schema'
-import { sessionExpired, sessionQueryOptions } from './session'
+import type { Actor } from './auth-schema'
+import { sessionExpired, sessionQueryOptions } from './auth-session'
 
 export const roleHome = {
   ADMIN: '/admin',

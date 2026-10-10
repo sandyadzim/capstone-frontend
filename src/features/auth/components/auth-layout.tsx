@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { Brand } from '@/components/brand'
 import { ThemeMenu } from '@/components/theme-menu'
 
-export function AuthShell({ children }: { children: ReactNode }) {
+export function AuthLayout({ children }: { children: ReactNode }) {
   return (
     <div className="auth-shell flex min-h-svh flex-col bg-background">
       <a href="#main-content" className="skip-link">
