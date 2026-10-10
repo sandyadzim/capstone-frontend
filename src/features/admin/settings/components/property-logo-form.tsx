@@ -189,21 +189,7 @@ export function PropertyLogoForm({
         </div>
         {error && <FieldError id="property-logo-error">{error}</FieldError>}
       </Field>
-      <div className="mt-6 flex flex-wrap gap-3">
-        <Button
-          disabled={busy || !selection}
-          className="min-h-11 px-4"
-          aria-busy={uploading}
-          onClick={uploadLogo}
-        >
-          {uploading && (
-            <LoaderCircle
-              aria-hidden="true"
-              className="animate-spin motion-reduce:animate-none"
-            />
-          )}
-          {uploading ? 'Uploading…' : logoUrl ? 'Replace logo' : 'Upload logo'}
-        </Button>
+      <div className="mt-6 flex flex-wrap justify-end gap-3">
         {selection && (
           <Button
             variant="outline"
@@ -228,6 +214,20 @@ export function PropertyLogoForm({
             />
           )}
           {removing ? 'Removing…' : 'Remove logo'}
+        </Button>
+        <Button
+          disabled={busy || !selection}
+          className="min-h-11 px-4"
+          aria-busy={uploading}
+          onClick={uploadLogo}
+        >
+          {uploading && (
+            <LoaderCircle
+              aria-hidden="true"
+              className="animate-spin motion-reduce:animate-none"
+            />
+          )}
+          {uploading ? 'Uploading…' : logoUrl ? 'Replace logo' : 'Upload logo'}
         </Button>
       </div>
     </div>

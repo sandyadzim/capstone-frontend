@@ -90,20 +90,22 @@ export function PropertyDetailsForm({
           )}
         </Field>
       </FieldGroup>
-      <Button
-        type="submit"
-        disabled={busy}
-        aria-busy={saving}
-        className="mt-6 min-h-11 px-4"
-      >
-        {saving && (
-          <LoaderCircle
-            aria-hidden="true"
-            className="animate-spin motion-reduce:animate-none"
-          />
-        )}
-        {saving ? 'Saving…' : 'Save changes'}
-      </Button>
+      <div className="mt-6 flex justify-end">
+        <Button
+          type="submit"
+          disabled={busy}
+          aria-busy={saving}
+          className="min-h-11 px-4"
+        >
+          {saving && (
+            <LoaderCircle
+              aria-hidden="true"
+              className="animate-spin motion-reduce:animate-none"
+            />
+          )}
+          {saving ? 'Saving…' : 'Save changes'}
+        </Button>
+      </div>
     </form>
   )
 }
