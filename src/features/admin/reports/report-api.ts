@@ -4,6 +4,7 @@ import {
   reportsControllerGet,
   reportsControllerVerify,
   reportsControllerReject,
+  reportsControllerAssign,
   attachmentsControllerUploadDamagePhoto,
 } from '@/lib/api/generated/endpoints'
 import type { ReportsControllerListParams } from '@/lib/api/generated/endpoints.schemas'
@@ -19,6 +20,8 @@ import {
   reportRejectSchema,
   type ReportVerify,
   type ReportReject,
+  reportAssignSchema,
+  type ReportAssign,
 } from './report-schema'
 import { z } from 'zod'
 import { damagePhotoError } from './report-utils'
@@ -64,6 +67,20 @@ export async function rejectReport(
   return parseReport(
     reportId,
     await reportsControllerReject(reportId, reportRejectSchema.parse(values), {
+      signal,
+    }),
+  )
+}
+
+export async function assignReport(
+  id: string,
+  values: ReportAssign,
+  signal?: AbortSignal,
+) {
+  const reportId = z.uuid().parse(id).toLowerCase()
+  return parseReport(
+    reportId,
+    await reportsControllerAssign(reportId, reportAssignSchema.parse(values), {
       signal,
     }),
   )

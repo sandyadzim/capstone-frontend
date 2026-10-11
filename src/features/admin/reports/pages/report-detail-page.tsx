@@ -15,6 +15,7 @@ import {
 import { ApiError, getErrorMessage } from '@/lib/api/error'
 import { reportDetailQueryOptions, reportsKey } from '../report-queries'
 import { ReportDetailSections } from '../components/report-detail-sections'
+import { ReportAssignmentAction } from '../components/report-assignment-action'
 import { ReportReviewActions } from '../components/report-review-actions'
 
 export function ReportDetailPage() {
@@ -26,9 +27,13 @@ export function ReportDetailPage() {
     useIsMutating({
       mutationKey: [...reportsKey, 'review', reportId.toLowerCase()],
     }) > 0
+  const assigning =
+    useIsMutating({
+      mutationKey: [...reportsKey, 'assign', reportId.toLowerCase()],
+    }) > 0
   const query = useQuery({
     ...reportDetailQueryOptions(reportId),
-    enabled: valid && !reviewing,
+    enabled: valid && !reviewing && !assigning,
   })
   const missing =
     query.error instanceof ApiError && query.error.statusCode === 404
@@ -132,11 +137,18 @@ export function ReportDetailPage() {
                 <ReportDetailSections
                   report={report}
                   informationActions={
-                    <ReportReviewActions
-                      report={report}
-                      disabled={query.isFetching || !!query.error}
-                      headingRef={headingRef}
-                    />
+                    <>
+                      <ReportReviewActions
+                        report={report}
+                        disabled={query.isFetching || !!query.error}
+                        headingRef={headingRef}
+                      />
+                      <ReportAssignmentAction
+                        report={report}
+                        disabled={query.isFetching || !!query.error}
+                        headingRef={headingRef}
+                      />
+                    </>
                   }
                 />
               </>

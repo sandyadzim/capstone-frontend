@@ -29,12 +29,28 @@ export const reportCategorySchema = z.enum([
 ])
 export const reportPrioritySchema = z.enum(['LOW', 'MEDIUM', 'HIGH'])
 
-const reviewNoteSchema = z.preprocess(
+const optionalReportNoteSchema = z.preprocess(
   (value) => (typeof value === 'string' && !value.trim() ? undefined : value),
   z.string().trim().min(1).optional(),
 )
+export const reportAssignSchema = z
+  .object({
+    technicianUserId: z.uuid('Choose a technician.').toLowerCase(),
+    note: optionalReportNoteSchema,
+  })
+  .strict()
+export const reportAssignmentFormSchema = z.object({
+  technicianUserId: z.uuid('Choose a technician.'),
+  note: z.string(),
+})
+export type ReportAssign = z.output<typeof reportAssignSchema>
+export type ReportAssignmentForm = z.input<typeof reportAssignmentFormSchema>
+
 export const reportVerifySchema = z
-  .object({ finalPriority: reportPrioritySchema, reviewNote: reviewNoteSchema })
+  .object({
+    finalPriority: reportPrioritySchema,
+    reviewNote: optionalReportNoteSchema,
+  })
   .strict()
 export const reportRejectSchema = reportVerifySchema.extend({
   rejectionReason: z.string().trim().min(1, 'Enter a rejection reason.'),

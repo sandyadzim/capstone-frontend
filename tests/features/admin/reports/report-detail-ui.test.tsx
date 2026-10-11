@@ -112,9 +112,12 @@ it.each(reportStatusSchema.options)(
     ).not.toBeInTheDocument()
     expect(
       screen.queryByRole('button', {
-        name: /assign|close report|upload/i,
+        name: /close report|upload/i,
       }),
     ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Assign technician' }) !== null,
+    ).toBe(status === 'VERIFIED')
     expect(screen.queryByRole('button', { name: 'Verify' }) !== null).toBe(
       status === 'REPORTED',
     )
