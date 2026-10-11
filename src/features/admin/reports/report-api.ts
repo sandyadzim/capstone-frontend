@@ -2,6 +2,8 @@ import {
   reportsControllerList,
   reportsControllerCreate,
   reportsControllerGet,
+  reportsControllerVerify,
+  reportsControllerReject,
   attachmentsControllerUploadDamagePhoto,
 } from '@/lib/api/generated/endpoints'
 import type { ReportsControllerListParams } from '@/lib/api/generated/endpoints.schemas'
@@ -13,24 +15,58 @@ import {
   reportPhotoSchema,
   reportDetailSchema,
   type ReportCreate,
+  reportVerifySchema,
+  reportRejectSchema,
+  type ReportVerify,
+  type ReportReject,
 } from './report-schema'
 import { z } from 'zod'
 import { damagePhotoError } from './report-utils'
 import { ApiError } from '@/lib/api/error'
+import type { AxiosResponse } from 'axios'
 
-export async function getReport(id: string, signal?: AbortSignal) {
-  const reportId = z.uuid().parse(id).toLowerCase()
-  const report = parseApiResponse(
-    reportDetailSchema,
-    await reportsControllerGet(reportId, { signal }),
-  )
-  if (report.id.toLowerCase() !== reportId)
+function parseReport(id: string, response: AxiosResponse) {
+  const report = parseApiResponse(reportDetailSchema, response)
+  if (report.id.toLowerCase() !== id.toLowerCase())
     throw new ApiError(
       'The server returned a different report.',
       'INVALID_RESPONSE',
       200,
     )
   return report
+}
+
+export async function getReport(id: string, signal?: AbortSignal) {
+  const reportId = z.uuid().parse(id).toLowerCase()
+  return parseReport(reportId, await reportsControllerGet(reportId, { signal }))
+}
+
+export async function verifyReport(
+  id: string,
+  values: ReportVerify,
+  signal?: AbortSignal,
+) {
+  const reportId = z.uuid().parse(id).toLowerCase()
+  return parseReport(
+    reportId,
+    await reportsControllerVerify(reportId, reportVerifySchema.parse(values), {
+      signal,
+    }),
+  )
+}
+
+export async function rejectReport(
+  id: string,
+  values: ReportReject,
+  signal?: AbortSignal,
+) {
+  const reportId = z.uuid().parse(id).toLowerCase()
+  return parseReport(
+    reportId,
+    await reportsControllerReject(reportId, reportRejectSchema.parse(values), {
+      signal,
+    }),
+  )
 }
 
 export async function listReports(

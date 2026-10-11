@@ -84,7 +84,7 @@ async function show(path = `/admin/reports/${reportDetail.id}`) {
 const section = (name: string) => screen.getByRole('region', { name })
 
 it.each(reportStatusSchema.options)(
-  'directly loads %s with nullable details and no workflow controls',
+  'directly loads %s with nullable details and status-appropriate review controls',
   async (status) => {
     report.status = status
     await show()
@@ -112,9 +112,15 @@ it.each(reportStatusSchema.options)(
     ).not.toBeInTheDocument()
     expect(
       screen.queryByRole('button', {
-        name: /verify|reject|assign|close report|upload/i,
+        name: /assign|close report|upload/i,
       }),
     ).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Verify' }) !== null).toBe(
+      status === 'REPORTED',
+    )
+    expect(screen.queryByRole('button', { name: 'Reject' }) !== null).toBe(
+      status === 'REPORTED',
+    )
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
       'Report details',
     )

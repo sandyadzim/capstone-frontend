@@ -30,7 +30,13 @@ function Information({ rows }: { rows: [string, ReactNode][] }) {
   )
 }
 
-export function ReportDetailSections({ report }: { report: ReportDetail }) {
+export function ReportDetailSections({
+  report,
+  informationActions,
+}: {
+  report: ReportDetail
+  informationActions?: ReactNode
+}) {
   const assignment = report.assignment
   const result = report.maintenanceResult
   const costs = report.costItems ?? []
@@ -68,6 +74,7 @@ export function ReportDetailSections({ report }: { report: ReportDetail }) {
             ['Reported by', report.reportedBy?.name],
           ]}
         />
+        {informationActions}
       </Section>
       <Section title="Damage photos">
         {report.damagePhotos.length ? (

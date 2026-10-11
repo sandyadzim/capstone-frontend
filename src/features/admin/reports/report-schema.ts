@@ -29,6 +29,30 @@ export const reportCategorySchema = z.enum([
 ])
 export const reportPrioritySchema = z.enum(['LOW', 'MEDIUM', 'HIGH'])
 
+const reviewNoteSchema = z.preprocess(
+  (value) => (typeof value === 'string' && !value.trim() ? undefined : value),
+  z.string().trim().min(1).optional(),
+)
+export const reportVerifySchema = z
+  .object({ finalPriority: reportPrioritySchema, reviewNote: reviewNoteSchema })
+  .strict()
+export const reportRejectSchema = reportVerifySchema.extend({
+  rejectionReason: z.string().trim().min(1, 'Enter a rejection reason.'),
+})
+export const reportReviewFormSchema = z.object({
+  finalPriority: reportPrioritySchema
+    .optional()
+    .refine((value) => value !== undefined, 'Choose a final priority.'),
+  reviewNote: z.string(),
+  rejectionReason: z.string(),
+})
+export const reportRejectFormSchema = reportReviewFormSchema.extend({
+  rejectionReason: z.string().trim().min(1, 'Enter a rejection reason.'),
+})
+export type ReportVerify = z.output<typeof reportVerifySchema>
+export type ReportReject = z.output<typeof reportRejectSchema>
+export type ReportReviewForm = z.input<typeof reportRejectFormSchema>
+
 export const reportListItemSchema = z.object({
   id: z.uuid(),
   reportNumber: z.string().min(1),

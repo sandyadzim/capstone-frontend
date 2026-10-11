@@ -1,5 +1,6 @@
 import { getRouteApi, Link, useParams } from '@tanstack/react-router'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useIsMutating } from '@tanstack/react-query'
+import { useRef } from 'react'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -12,16 +13,22 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { ApiError, getErrorMessage } from '@/lib/api/error'
-import { reportDetailQueryOptions } from '../report-queries'
+import { reportDetailQueryOptions, reportsKey } from '../report-queries'
 import { ReportDetailSections } from '../components/report-detail-sections'
+import { ReportReviewActions } from '../components/report-review-actions'
 
 export function ReportDetailPage() {
   const { reportId } = useParams({ from: '/admin/reports/$reportId' })
   const search = getRouteApi('/admin/reports').useSearch()
   const valid = z.uuid().safeParse(reportId).success
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  const reviewing =
+    useIsMutating({
+      mutationKey: [...reportsKey, 'review', reportId.toLowerCase()],
+    }) > 0
   const query = useQuery({
     ...reportDetailQueryOptions(reportId),
-    enabled: valid,
+    enabled: valid && !reviewing,
   })
   const missing =
     query.error instanceof ApiError && query.error.statusCode === 404
@@ -50,7 +57,11 @@ export function ReportDetailPage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <h1 className="mt-2 text-3xl font-semibold tracking-tight">
+      <h1
+        ref={headingRef}
+        tabIndex={-1}
+        className="mt-2 text-3xl font-semibold tracking-tight outline-none"
+      >
         Report details
       </h1>
       <p className="mt-2 text-sm leading-6 text-muted-foreground">
@@ -118,7 +129,16 @@ export function ReportDetailPage() {
                     Updating report…
                   </p>
                 )}
-                <ReportDetailSections report={report} />
+                <ReportDetailSections
+                  report={report}
+                  informationActions={
+                    <ReportReviewActions
+                      report={report}
+                      disabled={query.isFetching || !!query.error}
+                      headingRef={headingRef}
+                    />
+                  }
+                />
               </>
             )}
           </>
