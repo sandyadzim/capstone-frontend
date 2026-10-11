@@ -96,6 +96,7 @@ function AccountsNav({
               render={
                 <Link
                   to="/admin/accounts"
+                  activeOptions={{ exact: true, explicitUndefined: true }}
                   search={{ role: item.role }}
                   aria-current={
                     isListPage && role === item.role ? 'page' : undefined
@@ -136,6 +137,7 @@ function AccountsNav({
             <Link
               key={item.label}
               to="/admin/accounts"
+              activeOptions={{ exact: true, explicitUndefined: true }}
               search={{ role: item.role }}
               onClick={onNavigate}
               aria-current={

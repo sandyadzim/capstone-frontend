@@ -135,7 +135,7 @@ it.each([
       within(table)
         .getAllByRole('columnheader')
         .map((header) => header.textContent),
-    ).toEqual(headers)
+    ).toEqual([...headers, 'Actions'])
     expect(requests.at(-1)?.params).toMatchObject({
       role,
       page: 1,
@@ -148,7 +148,7 @@ it.each([
         [...record.querySelectorAll('dt')].map((label) => label.textContent),
       ).toEqual(headers)
     }
-    expect(within(table).queryByRole('link')).not.toBeInTheDocument()
+    expect(within(table).getAllByRole('link').length).toBeGreaterThan(0)
     expect(
       screen.getByRole('link', { name: 'Create account' }),
     ).toHaveAttribute('href', expect.stringContaining('/admin/accounts/new'))

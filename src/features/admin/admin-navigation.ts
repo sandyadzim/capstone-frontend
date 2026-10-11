@@ -8,6 +8,8 @@ export const accountRoles = {
 
 export function adminPageTitle(pathname: string, role?: string) {
   if (pathname === '/admin/accounts/new') return 'Create account'
+  if (pathname.startsWith('/admin/accounts/'))
+    return pathname.endsWith('/edit') ? 'Edit account' : 'Account details'
   if (pathname === '/admin/accounts') {
     const label = accountRoles[role as keyof typeof accountRoles]
     return `Accounts / ${label ?? 'All accounts'}`

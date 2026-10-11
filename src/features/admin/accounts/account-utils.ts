@@ -1,6 +1,25 @@
 import { z } from 'zod'
 import { ApiError } from '@/lib/api/error'
 import { accountFormSchema } from './account-schema'
+import type { Account, AccountEdit, AccountPatch } from './account-schema'
+
+export const accountRoleLabels = {
+  ADMIN: 'Administrator',
+  RESIDENT: 'Resident',
+  TECHNICIAN: 'Technician',
+}
+
+export function changedAccountFields(
+  account: Account,
+  values: AccountEdit,
+): AccountPatch {
+  const patch: AccountPatch = {}
+  if (account.name !== values.name) patch.name = values.name
+  if (account.loginIdentifier !== values.loginIdentifier)
+    patch.loginIdentifier = values.loginIdentifier
+  if (account.role !== values.role) patch.role = values.role
+  return patch
+}
 
 const fieldIssueSchema = z.object({
   path: z.tuple([accountFormSchema.keyof()]),

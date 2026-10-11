@@ -49,11 +49,19 @@ async function clearPrivateData(client: QueryClient) {
 }
 
 export async function expireSession(client: QueryClient) {
+  if (client.getQueryData(sessionKey) === null && !state(client).busy) return
+  await clearSession(client, true)
+}
+
+export async function clearRevokedSession(client: QueryClient) {
+  await clearSession(client, false)
+}
+
+async function clearSession(client: QueryClient, expired: boolean) {
   const current = state(client)
-  if (client.getQueryData(sessionKey) === null && !current.busy) return
   current.generation++
   current.controller?.abort()
-  current.expired = true
+  current.expired = expired
   // Hide private content immediately, before waiting for cancellation.
   void client.cancelQueries({ queryKey: sessionKey })
   client.setQueryData(sessionKey, null)

@@ -15,13 +15,9 @@ import { getErrorMessage } from '@/lib/api/error'
 import { accountRoles } from '../../admin-navigation'
 import { AccountStatusBadge } from '../components/account-status-badge'
 import { accountsQueryOptions } from '../account-queries'
+import { AccountRowActions } from '../components/account-row-actions'
+import { accountRoleLabels } from '../account-utils'
 import type { Account, AccountsSearch } from '../account-schema'
-
-const roleLabels = {
-  ADMIN: 'Administrator',
-  RESIDENT: 'Resident',
-  TECHNICIAN: 'Technician',
-}
 
 function accountUnit(account: Account) {
   return account.role === 'RESIDENT'
@@ -59,7 +55,16 @@ export function AccountsPage() {
     {
       id: 'name',
       header: 'Name',
-      cell: (account) => <span className="font-medium">{account.name}</span>,
+      cell: (account) => (
+        <Link
+          to="/admin/accounts/$accountId"
+          params={{ accountId: account.id }}
+          search={search}
+          className="inline-flex min-h-11 items-center font-medium text-primary hover:underline focus-visible:outline-2 focus-visible:outline-ring wrap-anywhere"
+        >
+          {account.name}
+        </Link>
+      ),
     },
     {
       id: 'login',
@@ -71,7 +76,7 @@ export function AccountsPage() {
     columns.push({
       id: 'role',
       header: 'Role',
-      cell: (account) => roleLabels[account.role],
+      cell: (account) => accountRoleLabels[account.role],
     })
   columns.push({
     id: 'status',
@@ -80,6 +85,12 @@ export function AccountsPage() {
   })
   if (!role || role === 'RESIDENT')
     columns.push({ id: 'unit', header: 'Unit', cell: accountUnit })
+  columns.push({
+    id: 'actions',
+    header: 'Actions',
+    sticky: 'right',
+    cell: (account) => <AccountRowActions account={account} search={search} />,
+  })
 
   return (
     <div className="min-w-0">
@@ -141,19 +152,36 @@ export function AccountsPage() {
           rows={query.data?.data ?? []}
           rowId={(account) => account.id}
           mobileRecord={(account) => (
-            <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
-              {columns.map((column) => (
-                <div
-                  key={column.id}
-                  className={`${column.id === 'name' || column.id === 'login' ? 'col-span-2 ' : ''}min-w-0`}
-                >
-                  <dt className="text-xs text-muted-foreground">
-                    {column.header}
-                  </dt>
-                  <dd className="mt-1 wrap-anywhere">{column.cell(account)}</dd>
+            <>
+              <div className="flex items-start justify-between gap-3">
+                <dl className="min-w-0 flex-1">
+                  <dt className="text-xs text-muted-foreground">Name</dt>
+                  <dd>{columns[0].cell(account)}</dd>
+                </dl>
+                <div className="shrink-0">
+                  <AccountRowActions account={account} search={search} />
                 </div>
-              ))}
-            </dl>
+              </div>
+              <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+                {columns
+                  .filter(
+                    (column) => column.id !== 'name' && column.id !== 'actions',
+                  )
+                  .map((column) => (
+                    <div
+                      key={column.id}
+                      className={`${column.id === 'login' ? 'col-span-2 ' : ''}min-w-0`}
+                    >
+                      <dt className="text-xs text-muted-foreground">
+                        {column.header}
+                      </dt>
+                      <dd className="mt-1 wrap-anywhere">
+                        {column.cell(account)}
+                      </dd>
+                    </div>
+                  ))}
+              </dl>
+            </>
           )}
           loading={query.isPending}
           updating={query.isFetching && !query.isPending}

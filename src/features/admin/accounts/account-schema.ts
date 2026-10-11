@@ -64,6 +64,34 @@ export const accountFormSchema = accountCreateSchema
 export type AccountCreate = z.output<typeof accountCreateSchema>
 export type AccountFormValues = z.output<typeof accountFormSchema>
 
+export const accountEditSchema = accountCreateSchema.pick({
+  name: true,
+  loginIdentifier: true,
+  role: true,
+})
+
+export const accountPatchSchema = accountCreateSchema
+  .partial()
+  .strict()
+  .refine(
+    (values) => Object.values(values).some((value) => value !== undefined),
+    {
+      message: 'Provide at least one field to update.',
+    },
+  )
+
+export const accountPasswordSchema = accountCreateSchema
+  .pick({ password: true })
+  .extend({ confirmPassword: accountFormSchema.shape.confirmPassword })
+  .refine((values) => values.password === values.confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'Passwords must match.',
+  })
+
+export type AccountEdit = z.output<typeof accountEditSchema>
+export type AccountPatch = z.output<typeof accountPatchSchema>
+export type AccountPassword = z.output<typeof accountPasswordSchema>
+
 export const accountsSearchSchema = z.object({
   role: accountRoleSchema.optional().catch(undefined),
   q: z.preprocess(
