@@ -1,12 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { AdminPlaceholder } from '@/features/admin/components/admin-placeholder'
+import { ReportsPage } from '@/features/admin/reports/pages/reports-page'
+import { reportsSearchSchema } from '@/features/admin/reports/report-schema'
 
 export const Route = createFileRoute('/admin/reports')({
+  validateSearch: reportsSearchSchema,
   head: () => ({ meta: [{ title: 'Reports · Admin · Property' }] }),
-  component: () => (
-    <AdminPlaceholder
-      title="Reports"
-      description="Review maintenance reports, assign technicians, and close completed work."
-    />
-  ),
+  component: ReportsPage,
 })
