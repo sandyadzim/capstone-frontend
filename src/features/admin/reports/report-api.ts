@@ -5,6 +5,7 @@ import {
   reportsControllerVerify,
   reportsControllerReject,
   reportsControllerAssign,
+  maintenanceExecutionControllerClose,
   attachmentsControllerUploadDamagePhoto,
 } from '@/lib/api/generated/endpoints'
 import type { ReportsControllerListParams } from '@/lib/api/generated/endpoints.schemas'
@@ -84,6 +85,21 @@ export async function assignReport(
       signal,
     }),
   )
+}
+
+export async function closeReport(id: string, signal?: AbortSignal) {
+  const reportId = z.uuid().parse(id).toLowerCase()
+  const report = parseReport(
+    reportId,
+    await maintenanceExecutionControllerClose(reportId, undefined, { signal }),
+  )
+  if (report.status !== 'CLOSED' || !report.closedAt)
+    throw new ApiError(
+      'The server did not confirm the report closure.',
+      'INVALID_RESPONSE',
+      200,
+    )
+  return report
 }
 
 export async function listReports(

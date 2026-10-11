@@ -16,6 +16,7 @@ import { ApiError, getErrorMessage } from '@/lib/api/error'
 import { reportDetailQueryOptions, reportsKey } from '../report-queries'
 import { ReportDetailSections } from '../components/report-detail-sections'
 import { ReportAssignmentAction } from '../components/report-assignment-action'
+import { ReportCloseAction } from '../components/report-close-action'
 import { ReportReviewActions } from '../components/report-review-actions'
 
 export function ReportDetailPage() {
@@ -31,9 +32,13 @@ export function ReportDetailPage() {
     useIsMutating({
       mutationKey: [...reportsKey, 'assign', reportId.toLowerCase()],
     }) > 0
+  const closing =
+    useIsMutating({
+      mutationKey: [...reportsKey, 'close', reportId.toLowerCase()],
+    }) > 0
   const query = useQuery({
     ...reportDetailQueryOptions(reportId),
-    enabled: valid && !reviewing && !assigning,
+    enabled: valid && !reviewing && !assigning && !closing,
   })
   const missing =
     query.error instanceof ApiError && query.error.statusCode === 404
@@ -144,6 +149,12 @@ export function ReportDetailPage() {
                         headingRef={headingRef}
                       />
                       <ReportAssignmentAction
+                        report={report}
+                        disabled={query.isFetching || !!query.error}
+                        headingRef={headingRef}
+                      />
+                      <ReportCloseAction
+                        key={report.id}
                         report={report}
                         disabled={query.isFetching || !!query.error}
                         headingRef={headingRef}
