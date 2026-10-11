@@ -127,6 +127,7 @@ it('loads a read-only list with every field on desktop and mobile and Jakarta da
     'Priority',
     'Status',
     'Reported Date',
+    'Actions',
   ]
   expect(
     within(table)
@@ -148,7 +149,14 @@ it('loads a read-only list with every field on desktop and mobile and Jakarta da
     expect(
       [...row.querySelectorAll('dt')].map((node) => node.textContent),
     ).toEqual(headers)
-  expect(within(table).queryByRole('link')).not.toBeInTheDocument()
+  expect(within(table).getAllByRole('link', { name: /^RPT-/ })).toHaveLength(7)
+  expect(within(mobile).getAllByRole('link', { name: /^RPT-/ })).toHaveLength(7)
+  expect(
+    within(table).getAllByRole('button', { name: /^Actions for/ }),
+  ).toHaveLength(7)
+  expect(
+    within(mobile).getAllByRole('button', { name: /^Actions for/ }),
+  ).toHaveLength(7)
   expect(screen.getByRole('link', { name: 'Create report' })).toHaveAttribute(
     'href',
     '/admin/reports/new',

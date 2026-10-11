@@ -1,6 +1,7 @@
 import {
   reportsControllerList,
   reportsControllerCreate,
+  reportsControllerGet,
   attachmentsControllerUploadDamagePhoto,
 } from '@/lib/api/generated/endpoints'
 import type { ReportsControllerListParams } from '@/lib/api/generated/endpoints.schemas'
@@ -10,10 +11,27 @@ import {
   reportCreateSchema,
   createdReportSchema,
   reportPhotoSchema,
+  reportDetailSchema,
   type ReportCreate,
 } from './report-schema'
 import { z } from 'zod'
 import { damagePhotoError } from './report-utils'
+import { ApiError } from '@/lib/api/error'
+
+export async function getReport(id: string, signal?: AbortSignal) {
+  const reportId = z.uuid().parse(id).toLowerCase()
+  const report = parseApiResponse(
+    reportDetailSchema,
+    await reportsControllerGet(reportId, { signal }),
+  )
+  if (report.id.toLowerCase() !== reportId)
+    throw new ApiError(
+      'The server returned a different report.',
+      'INVALID_RESPONSE',
+      200,
+    )
+  return report
+}
 
 export async function listReports(
   params: ReportsControllerListParams,

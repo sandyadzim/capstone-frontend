@@ -18,6 +18,7 @@ export function adminPageTitle(pathname: string, role?: string) {
   if (pathname === '/admin/reports/new') return 'Create report'
   if (pathname === '/admin/reports' || pathname === '/admin/reports/')
     return 'Reports'
+  if (pathname.startsWith('/admin/reports/')) return 'Report details'
   if (pathname === '/admin/units/new') return 'Create Unit'
   if (pathname.startsWith('/admin/units/')) {
     if (pathname.endsWith('/edit')) return 'Edit Unit'

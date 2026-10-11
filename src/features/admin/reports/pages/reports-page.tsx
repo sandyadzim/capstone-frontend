@@ -11,6 +11,7 @@ import {
   SelectFilter,
 } from '@/components/list-filters'
 import { Pagination } from '@/components/pagination'
+import { ReportRowActions } from '../components/report-row-actions'
 import { usePageCorrection } from '@/hooks/use-page-correction'
 import { getErrorMessage } from '@/lib/api/error'
 import { formatDate } from '@/lib/format'
@@ -33,8 +34,21 @@ import {
   type ReportsSearch,
 } from '../report-schema'
 
-const columns: DataColumn<ReportListItem>[] = [
-  { id: 'number', header: 'Report ID', cell: (report) => report.reportNumber },
+const reportColumns = (search: ReportsSearch): DataColumn<ReportListItem>[] => [
+  {
+    id: 'number',
+    header: 'Report ID',
+    cell: (report) => (
+      <Link
+        to="/admin/reports/$reportId"
+        params={{ reportId: report.id }}
+        search={search}
+        className="inline-flex min-h-11 items-center text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-ring"
+      >
+        {report.reportNumber}
+      </Link>
+    ),
+  },
   {
     id: 'title',
     header: 'Report Title',
@@ -73,10 +87,17 @@ const columns: DataColumn<ReportListItem>[] = [
     header: 'Reported Date',
     cell: (report) => formatDate(report.reportedAt),
   },
+  {
+    id: 'actions',
+    header: 'Actions',
+    sticky: 'right',
+    cell: (report) => <ReportRowActions report={report} search={search} />,
+  },
 ]
 
 export function ReportsPage() {
   const search = getRouteApi('/admin/reports').useSearch()
+  const columns = reportColumns(search)
   const navigate = useNavigate({ from: '/admin/reports' })
   const { q, status, category, priority, dateFrom, dateTo, page, pageSize } =
     search
@@ -211,7 +232,7 @@ export function ReportsPage() {
                   {columns.map((column) => (
                     <div
                       key={column.id}
-                      className={`${column.id === 'number' || column.id === 'title' || column.id === 'reported' ? 'col-span-2 ' : ''}min-w-0`}
+                      className={`${column.id === 'number' || column.id === 'title' || column.id === 'reported' || column.id === 'actions' ? 'col-span-2 ' : ''}min-w-0`}
                     >
                       <dt className="text-xs text-muted-foreground">
                         {column.header}

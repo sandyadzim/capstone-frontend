@@ -1,5 +1,9 @@
 import { z } from 'zod'
-import { calendarDateSchema, timestampSchema } from '@/lib/schemas/common'
+import {
+  calendarDateSchema,
+  moneySchema,
+  timestampSchema,
+} from '@/lib/schemas/common'
 import {
   paginatedResponseSchema,
   pageSearchSchema,
@@ -82,6 +86,60 @@ export type ReportCreate = z.output<typeof reportCreateSchema>
 export type ReportFormValues = z.input<typeof reportFormSchema>
 export type CreatedReport = z.output<typeof createdReportSchema>
 export type ReportPhoto = z.output<typeof reportPhotoSchema>
+
+const reportPersonSchema = z.object({ id: z.uuid(), name: z.string().min(1) })
+export const reportDetailSchema = reportListItemSchema.extend({
+  description: z.string(),
+  rejectionReason: z.string().nullable(),
+  reviewNote: z.string().nullable().optional(),
+  reportedBy: reportPersonSchema.nullable().optional(),
+  createdBy: reportPersonSchema.nullable().optional(),
+  reviewedBy: reportPersonSchema.nullable().optional(),
+  closedBy: reportPersonSchema.nullable().optional(),
+  closedAt: timestampSchema.nullable(),
+  createdAt: timestampSchema,
+  updatedAt: timestampSchema,
+  assignment: z
+    .object({
+      id: z.uuid(),
+      technician: reportPersonSchema.nullable(),
+      assignedBy: reportPersonSchema.nullable().optional(),
+      assignedAt: timestampSchema,
+      estimatedArrivalAt: timestampSchema.nullable(),
+      note: z.string().nullable(),
+    })
+    .nullable(),
+  damagePhotos: z.array(reportPhotoSchema).max(5),
+  repairPhotos: z.array(reportPhotoSchema).max(5),
+  receipt: reportPhotoSchema.nullable(),
+  maintenanceResult: z
+    .object({
+      id: z.uuid(),
+      inspectionResult: z.string(),
+      problemFound: z.string(),
+      repairAction: z.string(),
+      additionalNotes: z.string().nullable(),
+      createdAt: timestampSchema,
+      updatedAt: timestampSchema,
+    })
+    .nullable(),
+  totalCost: moneySchema,
+  costItems: z
+    .array(
+      z.object({
+        id: z.uuid(),
+        type: z.enum(['SERVICE', 'MATERIAL']),
+        description: z.string(),
+        quantity: z.string().regex(/^\d+(?:\.\d+)?$/),
+        unitPrice: moneySchema,
+        subtotal: moneySchema,
+        createdAt: timestampSchema,
+        updatedAt: timestampSchema,
+      }),
+    )
+    .optional(),
+})
+export type ReportDetail = z.output<typeof reportDetailSchema>
 
 export const reportsSearchSchema = z.object({
   q: z.preprocess(

@@ -26,6 +26,7 @@ import { Route as AdminAccountsAccountIdRouteImport } from './routes/admin.accou
 import { Route as AdminAccountsNewRouteImport } from './routes/admin.accounts.new'
 import { Route as AdminExamplesFormRouteImport } from './routes/admin.examples.form'
 import { Route as AdminReportsIndexRouteImport } from './routes/admin.reports.index'
+import { Route as AdminReportsReportIdRouteImport } from './routes/admin.reports.$reportId'
 import { Route as AdminReportsNewRouteImport } from './routes/admin.reports.new'
 import { Route as AdminUnitsIndexRouteImport } from './routes/admin.units.index'
 import { Route as AdminUnitsUnitIdRouteImport } from './routes/admin.units.$unitId'
@@ -124,6 +125,11 @@ const AdminReportsIndexRoute = AdminReportsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminReportsRoute,
 } as any)
+const AdminReportsReportIdRoute = AdminReportsReportIdRouteImport.update({
+  id: '/$reportId',
+  path: '/$reportId',
+  getParentRoute: () => AdminReportsRoute,
+} as any)
 const AdminReportsNewRoute = AdminReportsNewRouteImport.update({
   id: '/new',
   path: '/new',
@@ -210,6 +216,7 @@ export interface FileRoutesByFullPath {
   '/admin/accounts/$accountId': typeof AdminAccountsAccountIdRouteWithChildren
   '/admin/accounts/new': typeof AdminAccountsNewRoute
   '/admin/examples/form': typeof AdminExamplesFormRoute
+  '/admin/reports/$reportId': typeof AdminReportsReportIdRoute
   '/admin/reports/new': typeof AdminReportsNewRoute
   '/admin/units/$unitId': typeof AdminUnitsUnitIdRouteWithChildren
   '/admin/units/new': typeof AdminUnitsNewRoute
@@ -235,6 +242,7 @@ export interface FileRoutesByTo {
   '/examples/form': typeof ResidentExamplesFormRoute
   '/admin/accounts/new': typeof AdminAccountsNewRoute
   '/admin/examples/form': typeof AdminExamplesFormRoute
+  '/admin/reports/$reportId': typeof AdminReportsReportIdRoute
   '/admin/reports/new': typeof AdminReportsNewRoute
   '/admin/units/new': typeof AdminUnitsNewRoute
   '/technician/examples/form': typeof TechnicianExamplesFormRoute
@@ -266,6 +274,7 @@ export interface FileRoutesById {
   '/admin/accounts/$accountId': typeof AdminAccountsAccountIdRouteWithChildren
   '/admin/accounts/new': typeof AdminAccountsNewRoute
   '/admin/examples/form': typeof AdminExamplesFormRoute
+  '/admin/reports/$reportId': typeof AdminReportsReportIdRoute
   '/admin/reports/new': typeof AdminReportsNewRoute
   '/admin/units/$unitId': typeof AdminUnitsUnitIdRouteWithChildren
   '/admin/units/new': typeof AdminUnitsNewRoute
@@ -299,6 +308,7 @@ export interface FileRouteTypes {
     | '/admin/accounts/$accountId'
     | '/admin/accounts/new'
     | '/admin/examples/form'
+    | '/admin/reports/$reportId'
     | '/admin/reports/new'
     | '/admin/units/$unitId'
     | '/admin/units/new'
@@ -324,6 +334,7 @@ export interface FileRouteTypes {
     | '/examples/form'
     | '/admin/accounts/new'
     | '/admin/examples/form'
+    | '/admin/reports/$reportId'
     | '/admin/reports/new'
     | '/admin/units/new'
     | '/technician/examples/form'
@@ -354,6 +365,7 @@ export interface FileRouteTypes {
     | '/admin/accounts/$accountId'
     | '/admin/accounts/new'
     | '/admin/examples/form'
+    | '/admin/reports/$reportId'
     | '/admin/reports/new'
     | '/admin/units/$unitId'
     | '/admin/units/new'
@@ -499,6 +511,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminReportsIndexRouteImport
       parentRoute: typeof AdminReportsRoute
     }
+    '/admin/reports/$reportId': {
+      id: '/admin/reports/$reportId'
+      path: '/$reportId'
+      fullPath: '/admin/reports/$reportId'
+      preLoaderRoute: typeof AdminReportsReportIdRouteImport
+      parentRoute: typeof AdminReportsRoute
+    }
     '/admin/reports/new': {
       id: '/admin/reports/new'
       path: '/new'
@@ -640,11 +659,13 @@ const AdminAccountsRouteWithChildren = AdminAccountsRoute._addFileChildren(
 )
 
 interface AdminReportsRouteChildren {
+  AdminReportsReportIdRoute: typeof AdminReportsReportIdRoute
   AdminReportsNewRoute: typeof AdminReportsNewRoute
   AdminReportsIndexRoute: typeof AdminReportsIndexRoute
 }
 
 const AdminReportsRouteChildren: AdminReportsRouteChildren = {
+  AdminReportsReportIdRoute: AdminReportsReportIdRoute,
   AdminReportsNewRoute: AdminReportsNewRoute,
   AdminReportsIndexRoute: AdminReportsIndexRoute,
 }

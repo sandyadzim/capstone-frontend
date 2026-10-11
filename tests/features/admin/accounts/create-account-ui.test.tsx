@@ -158,6 +158,7 @@ it('clears a required Role error on selection while focus remains in the field',
   expect(await screen.findByText('Select a role.')).toBeInTheDocument()
   const user = userEvent.setup()
   await user.click(role)
+  await screen.findByRole('option', { name: 'Resident' })
   await user.keyboard('{ArrowDown}{Enter}')
   await waitFor(() =>
     expect(screen.queryByText('Select a role.')).not.toBeInTheDocument(),
