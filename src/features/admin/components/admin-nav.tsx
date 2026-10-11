@@ -189,7 +189,10 @@ export function AdminNav({
                   <Link
                     to={to}
                     aria-label={label}
-                    activeOptions={{ exact: to !== '/admin/units' }}
+                    activeOptions={{
+                      exact: to !== '/admin/units' && to !== '/admin/reports',
+                      includeSearch: false,
+                    }}
                     activeProps={{
                       className: 'admin-nav-selected',
                       'aria-current': 'page',

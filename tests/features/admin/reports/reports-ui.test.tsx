@@ -149,11 +149,12 @@ it('loads a read-only list with every field on desktop and mobile and Jakarta da
       [...row.querySelectorAll('dt')].map((node) => node.textContent),
     ).toEqual(headers)
   expect(within(table).queryByRole('link')).not.toBeInTheDocument()
+  expect(screen.getByRole('link', { name: 'Create report' })).toHaveAttribute(
+    'href',
+    '/admin/reports/new',
+  )
   expect(
-    screen.queryByRole('link', { name: /create|view/i }),
-  ).not.toBeInTheDocument()
-  expect(
-    screen.queryByRole('button', { name: /create|view/i }),
+    screen.queryByRole('button', { name: /view/i }),
   ).not.toBeInTheDocument()
   expect(requests[0].params).toMatchObject({ page: 1, pageSize: 20 })
   expect(
@@ -187,7 +188,7 @@ it('debounces and trims search, matches report numbers, and clears without losin
     pageSize: 10,
   })
   await user.click(screen.getByRole('button', { name: 'Clear search' }))
-  await waitFor(() => expect(router.state.location.search.q).toBe(''))
+  await waitFor(() => expect(router.state.location.search.q).toBeUndefined())
   expect(input).toHaveFocus()
   expect(router.state.location.search.category).toBe('AC')
 })
@@ -314,7 +315,7 @@ it('preserves URL filters across pagination and history and resets page when pag
   await act(async () => {
     router.history.back()
   })
-  await waitFor(() => expect(router.state.location.search.page).toBe(1))
+  await waitFor(() => expect(router.state.location.search.page).toBeUndefined())
   await act(async () => {
     router.history.forward()
   })
@@ -326,10 +327,14 @@ it('preserves URL filters across pagination and history and resets page when pag
   await user.click(await screen.findByRole('option', { name: '20' }))
   await waitFor(() =>
     expect(router.state.location.search).toMatchObject({
-      page: 1,
-      pageSize: 20,
+      q: 'cooling',
+      category: 'AC',
+      priority: 'MEDIUM',
+      dateFrom: '2026-10-02',
     }),
   )
+  expect(router.state.location.search.page).toBeUndefined()
+  expect(router.state.location.search.pageSize).toBeUndefined()
   await waitFor(() =>
     expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled(),
   )
@@ -338,7 +343,6 @@ it('preserves URL filters across pagination and history and resets page when pag
   await user.click(screen.getByRole('button', { name: 'Clear priority' }))
   await waitFor(() =>
     expect(router.state.location.search).toMatchObject({
-      page: 1,
       category: 'AC',
       q: 'cooling',
     }),
@@ -354,7 +358,7 @@ it.each([0, 25])(
     }))
     const router = await show('/admin/reports?page=99&pageSize=10')
     await waitFor(() =>
-      expect(router.state.location.search.page).toBe(total ? 3 : 1),
+      expect(router.state.location.search.page).toBe(total ? 3 : undefined),
     )
     await waitFor(() =>
       expect(requests.at(-1)?.params.page).toBe(total ? 3 : 1),

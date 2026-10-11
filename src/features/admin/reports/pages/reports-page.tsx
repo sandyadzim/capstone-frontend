@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
-import { getRouteApi, useNavigate } from '@tanstack/react-router'
+import { getRouteApi, Link, useNavigate } from '@tanstack/react-router'
+import { Plus } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { DataTable, type DataColumn } from '@/components/data-table'
 import { DateRangeFilter } from '@/components/date-range-filter'
+import { Button } from '@/components/ui/button'
 import {
   ListFilters,
   SearchFilter,
@@ -107,10 +109,22 @@ export function ReportsPage() {
 
   return (
     <div className="min-w-0">
-      <h1 className="text-3xl font-semibold tracking-tight">Reports</h1>
-      <p className="mt-2 text-sm leading-6 text-muted-foreground">
-        Browse maintenance reports and track their status.
-      </p>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight">Reports</h1>
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            Browse maintenance reports and track their status.
+          </p>
+        </div>
+        <Button
+          nativeButton={false}
+          role="link"
+          className="min-h-11 px-4"
+          render={<Link to="/admin/reports/new" search={search} />}
+        >
+          <Plus aria-hidden="true" /> Create report
+        </Button>
+      </div>
       <Card className="mt-6 gap-0 py-0">
         <ListFilters
           search={

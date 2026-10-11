@@ -42,6 +42,47 @@ export const reportListItemSchema = z.object({
 })
 export const reportListSchema = paginatedResponseSchema(reportListItemSchema)
 
+export const reportCreateSchema = z
+  .object({
+    unitId: z.uuid('Choose a unit.').toLowerCase(),
+    title: z
+      .string()
+      .trim()
+      .min(1, 'Enter a title.')
+      .max(160, 'Keep the title to 160 characters or fewer.'),
+    description: z.string().trim().min(1, 'Enter a description.'),
+    category: reportCategorySchema,
+    priority: reportPrioritySchema,
+  })
+  .strict()
+
+export const reportFormSchema = reportCreateSchema.extend({
+  category: reportCategorySchema
+    .optional()
+    .refine((value) => value !== undefined, 'Choose a category.'),
+  priority: reportPrioritySchema
+    .optional()
+    .refine((value) => value !== undefined, 'Choose a priority.'),
+})
+
+export const reportPhotoSchema = z.object({
+  id: z.uuid(),
+  fileUrl: z.url().refine((url) => /^https?:\/\//i.test(url)),
+  createdAt: timestampSchema,
+})
+
+// Validate the creation/recovery fields this page consumes, rather than coupling
+// creation to the later assignment, costs, and work-result screens.
+export const createdReportSchema = reportListItemSchema.extend({
+  description: z.string().min(1),
+  damagePhotos: z.array(reportPhotoSchema).max(5),
+})
+
+export type ReportCreate = z.output<typeof reportCreateSchema>
+export type ReportFormValues = z.input<typeof reportFormSchema>
+export type CreatedReport = z.output<typeof createdReportSchema>
+export type ReportPhoto = z.output<typeof reportPhotoSchema>
+
 export const reportsSearchSchema = z.object({
   q: z.preprocess(
     (value) =>

@@ -25,6 +25,8 @@ import { Route as AdminAccountsIndexRouteImport } from './routes/admin.accounts.
 import { Route as AdminAccountsAccountIdRouteImport } from './routes/admin.accounts.$accountId'
 import { Route as AdminAccountsNewRouteImport } from './routes/admin.accounts.new'
 import { Route as AdminExamplesFormRouteImport } from './routes/admin.examples.form'
+import { Route as AdminReportsIndexRouteImport } from './routes/admin.reports.index'
+import { Route as AdminReportsNewRouteImport } from './routes/admin.reports.new'
 import { Route as AdminUnitsIndexRouteImport } from './routes/admin.units.index'
 import { Route as AdminUnitsUnitIdRouteImport } from './routes/admin.units.$unitId'
 import { Route as AdminUnitsNewRouteImport } from './routes/admin.units.new'
@@ -117,6 +119,16 @@ const AdminExamplesFormRoute = AdminExamplesFormRouteImport.update({
   path: '/examples/form',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminReportsIndexRoute = AdminReportsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminReportsRoute,
+} as any)
+const AdminReportsNewRoute = AdminReportsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AdminReportsRoute,
+} as any)
 const AdminUnitsIndexRoute = AdminUnitsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -189,7 +201,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/technician': typeof TechnicianRouteWithChildren
   '/admin/accounts': typeof AdminAccountsRouteWithChildren
-  '/admin/reports': typeof AdminReportsRoute
+  '/admin/reports': typeof AdminReportsRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/units': typeof AdminUnitsRouteWithChildren
   '/admin/': typeof AdminIndexRoute
@@ -198,10 +210,12 @@ export interface FileRoutesByFullPath {
   '/admin/accounts/$accountId': typeof AdminAccountsAccountIdRouteWithChildren
   '/admin/accounts/new': typeof AdminAccountsNewRoute
   '/admin/examples/form': typeof AdminExamplesFormRoute
+  '/admin/reports/new': typeof AdminReportsNewRoute
   '/admin/units/$unitId': typeof AdminUnitsUnitIdRouteWithChildren
   '/admin/units/new': typeof AdminUnitsNewRoute
   '/technician/examples/form': typeof TechnicianExamplesFormRoute
   '/admin/accounts/': typeof AdminAccountsIndexRoute
+  '/admin/reports/': typeof AdminReportsIndexRoute
   '/admin/units/': typeof AdminUnitsIndexRoute
   '/admin/accounts/$accountId/edit': typeof AdminAccountsAccountIdEditRoute
   '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
@@ -214,7 +228,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
-  '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/': typeof ResidentIndexRoute
   '/admin': typeof AdminIndexRoute
@@ -222,9 +235,11 @@ export interface FileRoutesByTo {
   '/examples/form': typeof ResidentExamplesFormRoute
   '/admin/accounts/new': typeof AdminAccountsNewRoute
   '/admin/examples/form': typeof AdminExamplesFormRoute
+  '/admin/reports/new': typeof AdminReportsNewRoute
   '/admin/units/new': typeof AdminUnitsNewRoute
   '/technician/examples/form': typeof TechnicianExamplesFormRoute
   '/admin/accounts': typeof AdminAccountsIndexRoute
+  '/admin/reports': typeof AdminReportsIndexRoute
   '/admin/units': typeof AdminUnitsIndexRoute
   '/admin/accounts/$accountId/edit': typeof AdminAccountsAccountIdEditRoute
   '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
@@ -241,7 +256,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/technician': typeof TechnicianRouteWithChildren
   '/admin/accounts': typeof AdminAccountsRouteWithChildren
-  '/admin/reports': typeof AdminReportsRoute
+  '/admin/reports': typeof AdminReportsRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/units': typeof AdminUnitsRouteWithChildren
   '/_resident/': typeof ResidentIndexRoute
@@ -251,10 +266,12 @@ export interface FileRoutesById {
   '/admin/accounts/$accountId': typeof AdminAccountsAccountIdRouteWithChildren
   '/admin/accounts/new': typeof AdminAccountsNewRoute
   '/admin/examples/form': typeof AdminExamplesFormRoute
+  '/admin/reports/new': typeof AdminReportsNewRoute
   '/admin/units/$unitId': typeof AdminUnitsUnitIdRouteWithChildren
   '/admin/units/new': typeof AdminUnitsNewRoute
   '/technician/examples/form': typeof TechnicianExamplesFormRoute
   '/admin/accounts/': typeof AdminAccountsIndexRoute
+  '/admin/reports/': typeof AdminReportsIndexRoute
   '/admin/units/': typeof AdminUnitsIndexRoute
   '/admin/accounts/$accountId/edit': typeof AdminAccountsAccountIdEditRoute
   '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
@@ -282,10 +299,12 @@ export interface FileRouteTypes {
     | '/admin/accounts/$accountId'
     | '/admin/accounts/new'
     | '/admin/examples/form'
+    | '/admin/reports/new'
     | '/admin/units/$unitId'
     | '/admin/units/new'
     | '/technician/examples/form'
     | '/admin/accounts/'
+    | '/admin/reports/'
     | '/admin/units/'
     | '/admin/accounts/$accountId/edit'
     | '/admin/units/$unitId/edit'
@@ -298,7 +317,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
-    | '/admin/reports'
     | '/admin/settings'
     | '/'
     | '/admin'
@@ -306,9 +324,11 @@ export interface FileRouteTypes {
     | '/examples/form'
     | '/admin/accounts/new'
     | '/admin/examples/form'
+    | '/admin/reports/new'
     | '/admin/units/new'
     | '/technician/examples/form'
     | '/admin/accounts'
+    | '/admin/reports'
     | '/admin/units'
     | '/admin/accounts/$accountId/edit'
     | '/admin/units/$unitId/edit'
@@ -334,10 +354,12 @@ export interface FileRouteTypes {
     | '/admin/accounts/$accountId'
     | '/admin/accounts/new'
     | '/admin/examples/form'
+    | '/admin/reports/new'
     | '/admin/units/$unitId'
     | '/admin/units/new'
     | '/technician/examples/form'
     | '/admin/accounts/'
+    | '/admin/reports/'
     | '/admin/units/'
     | '/admin/accounts/$accountId/edit'
     | '/admin/units/$unitId/edit'
@@ -469,6 +491,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/examples/form'
       preLoaderRoute: typeof AdminExamplesFormRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/admin/reports/': {
+      id: '/admin/reports/'
+      path: '/'
+      fullPath: '/admin/reports/'
+      preLoaderRoute: typeof AdminReportsIndexRouteImport
+      parentRoute: typeof AdminReportsRoute
+    }
+    '/admin/reports/new': {
+      id: '/admin/reports/new'
+      path: '/new'
+      fullPath: '/admin/reports/new'
+      preLoaderRoute: typeof AdminReportsNewRouteImport
+      parentRoute: typeof AdminReportsRoute
     }
     '/admin/units/': {
       id: '/admin/units/'
@@ -603,6 +639,20 @@ const AdminAccountsRouteWithChildren = AdminAccountsRoute._addFileChildren(
   AdminAccountsRouteChildren,
 )
 
+interface AdminReportsRouteChildren {
+  AdminReportsNewRoute: typeof AdminReportsNewRoute
+  AdminReportsIndexRoute: typeof AdminReportsIndexRoute
+}
+
+const AdminReportsRouteChildren: AdminReportsRouteChildren = {
+  AdminReportsNewRoute: AdminReportsNewRoute,
+  AdminReportsIndexRoute: AdminReportsIndexRoute,
+}
+
+const AdminReportsRouteWithChildren = AdminReportsRoute._addFileChildren(
+  AdminReportsRouteChildren,
+)
+
 interface AdminUnitsUnitIdHistoryRouteChildren {
   AdminUnitsUnitIdHistoryReportIdRoute: typeof AdminUnitsUnitIdHistoryReportIdRoute
   AdminUnitsUnitIdHistoryIndexRoute: typeof AdminUnitsUnitIdHistoryIndexRoute
@@ -654,7 +704,7 @@ const AdminUnitsRouteWithChildren = AdminUnitsRoute._addFileChildren(
 
 interface AdminRouteChildren {
   AdminAccountsRoute: typeof AdminAccountsRouteWithChildren
-  AdminReportsRoute: typeof AdminReportsRoute
+  AdminReportsRoute: typeof AdminReportsRouteWithChildren
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminUnitsRoute: typeof AdminUnitsRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
@@ -663,7 +713,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAccountsRoute: AdminAccountsRouteWithChildren,
-  AdminReportsRoute: AdminReportsRoute,
+  AdminReportsRoute: AdminReportsRouteWithChildren,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminUnitsRoute: AdminUnitsRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
