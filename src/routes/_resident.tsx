@@ -1,7 +1,7 @@
 import { requirePortal } from '@/features/auth/auth-guards'
 import { AuthRouteError } from '@/features/auth/components/session-feedback'
 import { createFileRoute } from '@tanstack/react-router'
-import { ResidentLayout } from '@/layouts/mobile-layout'
+import { ResidentLayout } from '@/layouts/resident-layout'
 
 export const Route = createFileRoute('/_resident')({
   beforeLoad: ({ context, location }) =>

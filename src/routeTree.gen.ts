@@ -14,6 +14,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as TechnicianRouteImport } from './routes/technician'
 import { Route as ResidentIndexRouteImport } from './routes/_resident.index'
+import { Route as ResidentProfileRouteImport } from './routes/_resident.profile'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminAccountsRouteImport } from './routes/admin.accounts'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
@@ -63,6 +64,11 @@ const TechnicianRoute = TechnicianRouteImport.update({
 const ResidentIndexRoute = ResidentIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => ResidentRoute,
+} as any)
+const ResidentProfileRoute = ResidentProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => ResidentRoute,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -206,6 +212,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/technician': typeof TechnicianRouteWithChildren
+  '/profile': typeof ResidentProfileRoute
   '/admin/accounts': typeof AdminAccountsRouteWithChildren
   '/admin/reports': typeof AdminReportsRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
@@ -235,6 +242,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
+  '/profile': typeof ResidentProfileRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/': typeof ResidentIndexRoute
   '/admin': typeof AdminIndexRoute
@@ -263,6 +271,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/technician': typeof TechnicianRouteWithChildren
+  '/_resident/profile': typeof ResidentProfileRoute
   '/admin/accounts': typeof AdminAccountsRouteWithChildren
   '/admin/reports': typeof AdminReportsRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
@@ -298,6 +307,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/technician'
+    | '/profile'
     | '/admin/accounts'
     | '/admin/reports'
     | '/admin/settings'
@@ -327,6 +337,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
+    | '/profile'
     | '/admin/settings'
     | '/'
     | '/admin'
@@ -354,6 +365,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/technician'
+    | '/_resident/profile'
     | '/admin/accounts'
     | '/admin/reports'
     | '/admin/settings'
@@ -425,6 +437,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof ResidentIndexRouteImport
+      parentRoute: typeof ResidentRoute
+    }
+    '/_resident/profile': {
+      id: '/_resident/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ResidentProfileRouteImport
       parentRoute: typeof ResidentRoute
     }
     '/admin/': {
@@ -613,11 +632,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface ResidentRouteChildren {
+  ResidentProfileRoute: typeof ResidentProfileRoute
   ResidentIndexRoute: typeof ResidentIndexRoute
   ResidentExamplesFormRoute: typeof ResidentExamplesFormRoute
 }
 
 const ResidentRouteChildren: ResidentRouteChildren = {
+  ResidentProfileRoute: ResidentProfileRoute,
   ResidentIndexRoute: ResidentIndexRoute,
   ResidentExamplesFormRoute: ResidentExamplesFormRoute,
 }

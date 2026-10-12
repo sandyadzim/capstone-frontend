@@ -51,9 +51,6 @@ export function MobileLayout({
   )
 }
 
-export function ResidentLayout() {
-  return <MobileLayout portal="resident" />
-}
 export function TechnicianLayout() {
   return <MobileLayout portal="technician" />
 }

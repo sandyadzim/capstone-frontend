@@ -36,6 +36,7 @@ import type {
   ReportsControllerListParams,
   ReportsControllerRejectBody,
   ReportsControllerVerifyBody,
+  ResidentUnitResponseDto,
   UnitListResponseDto,
   UnitResponseDto,
   UnitsControllerCreateBody,
@@ -279,6 +280,18 @@ export const unitsControllerRelease = (
 ) => {
   return apiRequest<UnitResponseDto>(
     { url: `/api/units/${id}/resident`, method: 'DELETE' },
+    options,
+  )
+}
+
+/**
+ * @summary Read the current Resident unit, or null when unassigned
+ */
+export const residentUnitControllerGet = (
+  options?: SecondParameter<typeof apiRequest<ResidentUnitResponseDto>>,
+) => {
+  return apiRequest<ResidentUnitResponseDto>(
+    { url: `/api/resident/unit`, method: 'GET' },
     options,
   )
 }
@@ -669,6 +682,9 @@ export type UnitsControllerPlaceResult = NonNullable<
 >
 export type UnitsControllerReleaseResult = NonNullable<
   Awaited<ReturnType<typeof unitsControllerRelease>>
+>
+export type ResidentUnitControllerGetResult = NonNullable<
+  Awaited<ReturnType<typeof residentUnitControllerGet>>
 >
 export type PropertyControllerGetResult = NonNullable<
   Awaited<ReturnType<typeof propertyControllerGet>>

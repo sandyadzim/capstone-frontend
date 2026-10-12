@@ -230,6 +230,30 @@
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+/* Keep focused controls clear of the pinned profile header and navigation. */
+html:has(.resident-profile) {
+  scroll-padding-top: calc(5rem + env(safe-area-inset-top));
+  scroll-padding-bottom: calc(7rem + env(safe-area-inset-bottom));
+}
+
+.resident-information {
+  display: grid;
+  gap: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+}
+
+.resident-information dt {
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.resident-information dd {
+  margin: 0.25rem 0 0;
+  overflow-wrap: anywhere;
+}
+
 .admin-shell {
   --muted-foreground: var(--admin-muted-foreground);
   background: var(--admin-canvas);

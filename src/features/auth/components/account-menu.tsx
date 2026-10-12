@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { ReactNode } from 'react'
 import { LogOut, UserRound } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -12,8 +13,17 @@ import {
 } from '@/components/ui/dropdown-menu'
 import type { Actor } from '../auth-schema'
 import { useSignOut } from '../hooks/use-sign-out'
+import { cn } from '@/lib/utils'
 
-export function AccountMenu({ actor }: { actor: Actor }) {
+export function AccountMenu({
+  actor,
+  trigger,
+  className,
+}: {
+  actor: Actor
+  trigger?: ReactNode
+  className?: string
+}) {
   const [open, setOpen] = useState(false)
   const logout = useSignOut()
   return (
@@ -23,12 +33,12 @@ export function AccountMenu({ actor }: { actor: Actor }) {
           <Button
             variant="ghost"
             size="icon"
-            className="size-11"
+            className={cn('size-11', className)}
             aria-label={`Account menu for ${actor.name}`}
           />
         }
       >
-        <UserRound aria-hidden="true" />
+        {trigger ?? <UserRound aria-hidden="true" />}
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"

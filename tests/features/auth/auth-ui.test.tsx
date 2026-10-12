@@ -5,7 +5,7 @@ import {
   createRouter,
   RouterProvider,
 } from '@tanstack/react-router'
-import { act, render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { type AxiosAdapter, type AxiosResponse } from 'axios'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
@@ -220,14 +220,32 @@ it.each(['ADMIN', 'TECHNICIAN', 'RESIDENT'] as const)(
     ]
     const user = userEvent.setup()
     await show(path, actor)
+    if (role === 'RESIDENT') {
+      await user.click(
+        await screen.findByRole('link', {
+          name: `Open profile for ${actor.name}`,
+        }),
+      )
+      expect(
+        await screen.findByRole('heading', { name: 'Your profile' }),
+      ).toBeVisible()
+      expect(screen.getByText(actor.loginIdentifier)).toBeVisible()
+      expect(screen.getByRole('button', { name: 'Sign out' })).toBeVisible()
+      return
+    }
     await user.click(
       await screen.findByRole('button', {
         name: `Account menu for ${actor.name}`,
       }),
     )
-    expect(await screen.findByText(actor.name)).toBeVisible()
-    expect(screen.getByText(role.toLowerCase(), { exact: true })).toBeVisible()
-    expect(screen.getByRole('menuitem', { name: 'Sign out' })).toBeVisible()
+    const menu = await screen.findByRole('menu')
+    expect(within(menu).getByText(actor.name)).toBeVisible()
+    expect(
+      within(menu).getByText(role.toLowerCase(), { exact: true }),
+    ).toBeVisible()
+    expect(
+      within(menu).getByRole('menuitem', { name: 'Sign out' }),
+    ).toBeVisible()
   },
 )
 it('keeps forbidden portal content hidden and returns to the correct portal', async () => {

@@ -1271,6 +1271,67 @@
         "tags": ["Units"]
       }
     },
+    "/api/resident/unit": {
+      "get": {
+        "operationId": "ResidentUnitController_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResidentUnitResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
+              }
+            }
+          }
+        },
+        "security": [{ "cookie": [] }],
+        "summary": "Read the current Resident unit, or null when unassigned",
+        "tags": ["Units"]
+      }
+    },
     "/api/property": {
       "get": {
         "operationId": "PropertyController_get",
@@ -3232,6 +3293,26 @@
           "meta": { "$ref": "#/components/schemas/UnitPaginationMetaDto" }
         },
         "required": ["data", "meta"]
+      },
+      "ResidentUnitDetailsDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "unitNumber": { "type": "string", "maxLength": 40 },
+          "floor": { "type": "integer", "minimum": -32768, "maximum": 32767 }
+        },
+        "required": ["id", "unitNumber", "floor"]
+      },
+      "ResidentUnitResponseDto": {
+        "type": "object",
+        "properties": {
+          "unit": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [{ "$ref": "#/components/schemas/ResidentUnitDetailsDto" }]
+          }
+        },
+        "required": ["unit"]
       },
       "PropertyResponseDto": {
         "type": "object",

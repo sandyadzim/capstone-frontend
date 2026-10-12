@@ -50,9 +50,6 @@ export function PortalHome({ portal }: { portal: PortalId }) {
   )
 }
 
-export function ResidentHome() {
-  return <PortalHome portal="resident" />
-}
 export function AdminHome() {
   return <PortalHome portal="admin" />
 }

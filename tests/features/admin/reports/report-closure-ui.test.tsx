@@ -154,7 +154,7 @@ it('closes with no costs or repair photos, updates audits, retains filters and f
   const source = router.state.location.search
   const { user, dialog } = await open()
   expect(within(dialog).queryByRole('textbox')).not.toBeInTheDocument()
-  expect(within(dialog).getByRole('heading')).toHaveFocus()
+  await waitFor(() => expect(within(dialog).getByRole('heading')).toHaveFocus())
   expect(writes()).toHaveLength(0)
   await user.click(within(dialog).getByRole('button', { name: 'Close report' }))
   await waitFor(() =>

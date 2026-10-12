@@ -162,6 +162,22 @@ export interface UnitListResponseDto {
   meta: UnitPaginationMetaDto
 }
 
+export interface ResidentUnitDetailsDto {
+  id: string
+  /** @maxLength 40 */
+  unitNumber: string
+  /**
+   * @minimum -32768
+   * @maximum 32767
+   */
+  floor: number
+}
+
+export interface ResidentUnitResponseDto {
+  /** @nullable */
+  unit: ResidentUnitDetailsDto | null
+}
+
 export interface PropertyResponseDto {
   id: string
   /** @maxLength 160 */
