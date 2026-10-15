@@ -1510,6 +1510,13 @@
             }
           },
           {
+            "name": "ongoingOnly",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "boolean", "default": false },
+            "description": "Include only REPORTED, VERIFIED, ASSIGNED, IN_PROGRESS, and COMPLETED reports. Other filters still apply."
+          },
+          {
             "name": "category",
             "required": false,
             "in": "query",

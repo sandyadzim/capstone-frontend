@@ -63,6 +63,16 @@ beforeEach(() => {
       await holdUnit
       if (unitError) throw unitError
       data = { unit }
+    } else if (config.url === '/reports' && config.method === 'get') {
+      data = {
+        data: [],
+        meta: {
+          page: 1,
+          pageSize: 10,
+          total: 0,
+          totalPages: 0,
+        },
+      }
     } else if (config.url === '/reports' && config.method === 'post') {
       await holdCreate
       if (createError) throw createError
@@ -178,13 +188,12 @@ it.each(['unassigned', 'loading', 'error'])(
     if (state === 'error')
       unitError = new ApiError('Unavailable', 'HTTP_ERROR', 503)
     await show()
-    const trigger = await screen.findByRole('button', {
-      name: 'Report',
-    })
+    await screen.findByRole('navigation', { name: 'Resident navigation' })
     if (state === 'unassigned') await screen.findByText('Let’s get you settled')
     if (state === 'error') await screen.findByRole('alert')
-    expect(trigger).toBeDisabled()
-    await userEvent.click(trigger)
+    expect(
+      screen.queryByRole('button', { name: 'Report' }),
+    ).not.toBeInTheDocument()
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     expect(creates()).toHaveLength(0)
   },
@@ -208,7 +217,7 @@ it('validates all required fields, focuses the first error, and catches trimmed 
   expect(creates()).toHaveLength(0)
 })
 
-it('submits only the assigned unit and trimmed fields, then confirms without report-list reads', async () => {
+it('submits only the assigned unit and trimmed fields, then confirms and refreshes the homepage list', async () => {
   await show()
   await open()
   await fill()
@@ -231,9 +240,9 @@ it('submits only the assigned unit and trimmed fields, then confirms without rep
   expect(
     within(confirmation).getByText('Your report is awaiting admin review.'),
   ).toBeVisible()
-  expect(requests.some((r) => r.url === '/reports' && r.method === 'get')).toBe(
-    false,
-  )
+  expect(
+    requests.filter((r) => r.url === '/reports' && r.method === 'get').length,
+  ).toBeGreaterThanOrEqual(2)
   await waitFor(() =>
     expect(
       screen.getByRole('heading', { name: 'Report created successfully' }),

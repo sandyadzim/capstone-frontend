@@ -35,6 +35,7 @@ export function ResidentReportProvider({
     <ResidentReportContext
       value={{
         canReport,
+        hasUnit: !!unit.data?.unit,
         openReport: (button) => {
           if (!canReport || open || busy) return
           trigger.current = button

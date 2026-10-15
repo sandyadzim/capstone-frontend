@@ -2,6 +2,7 @@ import { createContext, useContext } from 'react'
 
 export const ResidentReportContext = createContext<{
   canReport: boolean
+  hasUnit: boolean
   openReport: (trigger: HTMLButtonElement) => void
 } | null>(null)
 

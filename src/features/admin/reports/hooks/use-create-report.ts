@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { isCancel } from 'axios'
 import { sessionGeneration } from '@/features/auth/auth-session'
 import { unitsKey } from '@/features/admin/units/unit-queries'
+import { residentReportsKey } from '@/features/resident/resident-queries'
 import { getErrorMessage } from '@/lib/api/error'
 import { createReport, uploadDamagePhoto } from '../report-api'
 import { reportsKey } from '../report-queries'
@@ -30,7 +31,11 @@ export function useCreateReport() {
       values: ReportCreate
       signal: AbortSignal
     }) => createReport(values, signal),
-    onMutate: () => client.cancelQueries({ queryKey: reportsKey }),
+    onMutate: () =>
+      Promise.all([
+        client.cancelQueries({ queryKey: reportsKey }),
+        client.cancelQueries({ queryKey: residentReportsKey }),
+      ]),
   })
   const uploadMutation = useMutation({
     mutationKey: [...reportsKey, 'upload-damage-photo'],
@@ -68,6 +73,7 @@ export function useCreateReport() {
       setReport(created)
       await Promise.all([
         client.invalidateQueries({ queryKey: reportsKey }),
+        client.invalidateQueries({ queryKey: residentReportsKey }),
         client.invalidateQueries({ queryKey: unitsKey }),
       ])
       for (const [index, file] of files.entries()) {

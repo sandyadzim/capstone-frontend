@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Building2, ClipboardList } from 'lucide-react'
+import { Building2 } from 'lucide-react'
 import { sessionQueryOptions } from '@/features/auth/auth-session'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { InformationLoading, ReadError } from './resident-information'
+import { ResidentOngoingReports } from './resident-ongoing-reports'
 import {
   residentPropertyQueryOptions,
   residentUnitQueryOptions,
@@ -71,7 +72,7 @@ export function ResidentHome() {
     .toUpperCase()
 
   return (
-    <div className="resident-home">
+    <div className="resident-home min-h-[calc(100svh-5rem-env(safe-area-inset-bottom))] bg-background">
       <header className="bg-sidebar px-6 pt-[calc(1.25rem+env(safe-area-inset-top))] pb-8 text-sidebar-foreground">
         <div className="mb-8 flex items-center justify-between gap-4">
           {property.isPending ? (
@@ -129,7 +130,7 @@ export function ResidentHome() {
 
       <section
         aria-labelledby="resident-home-heading"
-        className="px-6 pt-10 pb-8"
+        className="px-5 pt-6 pb-8"
       >
         {unit.isPending ? (
           <>
@@ -157,7 +158,7 @@ export function ResidentHome() {
               assigned to a unit.
             </p>
           </div>
-        ) : placement ? (
+        ) : placement && !unit.isError ? (
           <>
             <h2
               id="resident-home-heading"
@@ -168,15 +169,11 @@ export function ResidentHome() {
             <p className="mt-3 text-sm leading-6 text-muted-foreground">
               Maintenance updates for your unit.
             </p>
-            <div className="mx-auto max-w-64 py-12 text-center">
-              <div className="mx-auto mb-5 flex size-16 items-center justify-center rounded-2xl border bg-muted/40 text-muted-foreground">
-                <ClipboardList aria-hidden="true" className="size-7" />
-              </div>
-              <h3 className="text-base font-medium">No reports to show</h3>
-              <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                Your maintenance requests and repair updates will appear here.
-              </p>
-            </div>
+            <ResidentOngoingReports
+              key={placement.id}
+              actorId={actor.id}
+              unitId={placement.id}
+            />
           </>
         ) : (
           <h2 id="resident-home-heading" className="text-base font-semibold">

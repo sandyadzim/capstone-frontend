@@ -710,6 +710,10 @@ export type ReportsControllerListParams = {
    */
   q?: string
   status?: ReportsControllerListStatus
+  /**
+   * Include only REPORTED, VERIFIED, ASSIGNED, IN_PROGRESS, and COMPLETED reports. Other filters still apply.
+   */
+  ongoingOnly?: boolean
   category?: ReportsControllerListCategory
   /**
    * Matches final priority, or proposed priority when the report has not been reviewed.

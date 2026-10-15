@@ -83,6 +83,11 @@ beforeEach(() => {
       await holdProperty
       if (propertyError) throw propertyError
       data = property
+    } else if (config.url === '/reports') {
+      data = {
+        data: [],
+        meta: { page: 1, pageSize: 10, total: 0, totalPages: 0 },
+      }
     } else throw new Error(`Unexpected request ${config.url}`)
     return { data, status: 200, statusText: 'OK', headers: {}, config }
   }
@@ -152,7 +157,7 @@ it('keeps the Concierge home focused and links the avatar to the live profile', 
   expect(screen.queryByText(property.address)).not.toBeInTheDocument()
   expect(screen.queryByText(/coming soon/i)).not.toBeInTheDocument()
   expect(
-    screen.getByRole('heading', { name: 'No reports to show' }),
+    await screen.findByRole('heading', { name: 'No ongoing reports' }),
   ).toBeVisible()
   expect(
     within(navigation).getByRole('button', { name: 'Report' }),
@@ -168,11 +173,7 @@ it('keeps the Concierge home focused and links the avatar to the live profile', 
   expect(within(section('Your unit')).getByText('A-204')).toBeVisible()
   expect(within(section('Property')).getByText(property.address)).toBeVisible()
   expect(requests.filter((url) => url === '/resident/unit')).toHaveLength(1)
-  expect(
-    requests.some(
-      (url) => url.includes('/reports') || url.includes('/accounts'),
-    ),
-  ).toBe(false)
+  expect(requests.some((url) => url.includes('/accounts'))).toBe(false)
   await user.click(screen.getByRole('link', { name: 'Back to home' }))
   expect(
     await screen.findByRole('heading', { name: /Welcome home/ }),
