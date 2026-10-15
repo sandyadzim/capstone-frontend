@@ -127,8 +127,8 @@ it('keeps the Concierge home focused and links the avatar to the live profile', 
     screen.getByRole('heading', { name: 'Your ongoing reports' }),
   ).toBeVisible()
   expect(
-    screen.getByRole('button', { name: 'Report a problem' }),
-  ).toBeDisabled()
+    screen.queryByRole('button', { name: 'Report a problem' }),
+  ).not.toBeInTheDocument()
   const navigation = screen.getByRole('navigation', {
     name: 'Resident navigation',
   })
@@ -139,7 +139,7 @@ it('keeps the Concierge home focused and links the avatar to the live profile', 
     within(navigation).getByRole('button', {
       name: 'Report',
     }),
-  ).toBeDisabled()
+  ).toBeEnabled()
   expect(
     within(navigation).getByRole('button', { name: 'Reports' }),
   ).toBeDisabled()

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { ArrowRight, Building2, ClipboardList, Plus } from 'lucide-react'
+import { Building2, ClipboardList } from 'lucide-react'
 import { sessionQueryOptions } from '@/features/auth/auth-session'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -125,18 +125,6 @@ export function ResidentHome() {
             <p>Unit information unavailable</p>
           )}
         </div>
-        {placement && (
-          <Button
-            disabled
-            className="mt-6 h-13 w-full justify-between bg-sidebar-primary px-4 text-sidebar-primary-foreground disabled:opacity-100"
-          >
-            <span className="flex items-center gap-3">
-              <Plus aria-hidden="true" className="size-5" />
-              Report a problem
-            </span>
-            <ArrowRight aria-hidden="true" className="size-5" />
-          </Button>
-        )}
       </header>
 
       <section
