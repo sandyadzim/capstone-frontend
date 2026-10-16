@@ -37,6 +37,7 @@ import { Route as AdminUnitsIndexRouteImport } from './routes/admin.units.index'
 import { Route as AdminUnitsUnitIdRouteImport } from './routes/admin.units.$unitId'
 import { Route as AdminUnitsNewRouteImport } from './routes/admin.units.new'
 import { Route as TechnicianExamplesFormRouteImport } from './routes/technician.examples.form'
+import { Route as TechnicianTasksReportIdRouteImport } from './routes/technician.tasks.$reportId'
 import { Route as AdminAccountsAccountIdIndexRouteImport } from './routes/admin.accounts.$accountId.index'
 import { Route as AdminAccountsAccountIdEditRouteImport } from './routes/admin.accounts.$accountId.edit'
 import { Route as AdminUnitsUnitIdIndexRouteImport } from './routes/admin.units.$unitId.index'
@@ -185,6 +186,11 @@ const TechnicianExamplesFormRoute = TechnicianExamplesFormRouteImport.update({
   path: '/examples/form',
   getParentRoute: () => TechnicianRoute,
 } as any)
+const TechnicianTasksReportIdRoute = TechnicianTasksReportIdRouteImport.update({
+  id: '/tasks/$reportId',
+  path: '/tasks/$reportId',
+  getParentRoute: () => TechnicianRoute,
+} as any)
 const AdminAccountsAccountIdIndexRoute =
   AdminAccountsAccountIdIndexRouteImport.update({
     id: '/',
@@ -255,6 +261,7 @@ export interface FileRoutesByFullPath {
   '/admin/units/$unitId': typeof AdminUnitsUnitIdRouteWithChildren
   '/admin/units/new': typeof AdminUnitsNewRoute
   '/technician/examples/form': typeof TechnicianExamplesFormRoute
+  '/technician/tasks/$reportId': typeof TechnicianTasksReportIdRoute
   '/reports/': typeof ResidentReportsIndexRoute
   '/admin/accounts/': typeof AdminAccountsIndexRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
@@ -284,6 +291,7 @@ export interface FileRoutesByTo {
   '/admin/reports/new': typeof AdminReportsNewRoute
   '/admin/units/new': typeof AdminUnitsNewRoute
   '/technician/examples/form': typeof TechnicianExamplesFormRoute
+  '/technician/tasks/$reportId': typeof TechnicianTasksReportIdRoute
   '/reports': typeof ResidentReportsIndexRoute
   '/admin/accounts': typeof AdminAccountsIndexRoute
   '/admin/reports': typeof AdminReportsIndexRoute
@@ -322,6 +330,7 @@ export interface FileRoutesById {
   '/admin/units/$unitId': typeof AdminUnitsUnitIdRouteWithChildren
   '/admin/units/new': typeof AdminUnitsNewRoute
   '/technician/examples/form': typeof TechnicianExamplesFormRoute
+  '/technician/tasks/$reportId': typeof TechnicianTasksReportIdRoute
   '/_resident/reports/': typeof ResidentReportsIndexRoute
   '/admin/accounts/': typeof AdminAccountsIndexRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
@@ -361,6 +370,7 @@ export interface FileRouteTypes {
     | '/admin/units/$unitId'
     | '/admin/units/new'
     | '/technician/examples/form'
+    | '/technician/tasks/$reportId'
     | '/reports/'
     | '/admin/accounts/'
     | '/admin/reports/'
@@ -390,6 +400,7 @@ export interface FileRouteTypes {
     | '/admin/reports/new'
     | '/admin/units/new'
     | '/technician/examples/form'
+    | '/technician/tasks/$reportId'
     | '/reports'
     | '/admin/accounts'
     | '/admin/reports'
@@ -427,6 +438,7 @@ export interface FileRouteTypes {
     | '/admin/units/$unitId'
     | '/admin/units/new'
     | '/technician/examples/form'
+    | '/technician/tasks/$reportId'
     | '/_resident/reports/'
     | '/admin/accounts/'
     | '/admin/reports/'
@@ -646,6 +658,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TechnicianExamplesFormRouteImport
       parentRoute: typeof TechnicianRoute
     }
+    '/technician/tasks/$reportId': {
+      id: '/technician/tasks/$reportId'
+      path: '/tasks/$reportId'
+      fullPath: '/technician/tasks/$reportId'
+      preLoaderRoute: typeof TechnicianTasksReportIdRouteImport
+      parentRoute: typeof TechnicianRoute
+    }
     '/admin/accounts/$accountId/': {
       id: '/admin/accounts/$accountId/'
       path: '/'
@@ -858,12 +877,14 @@ interface TechnicianRouteChildren {
   TechnicianProfileRoute: typeof TechnicianProfileRoute
   TechnicianIndexRoute: typeof TechnicianIndexRoute
   TechnicianExamplesFormRoute: typeof TechnicianExamplesFormRoute
+  TechnicianTasksReportIdRoute: typeof TechnicianTasksReportIdRoute
 }
 
 const TechnicianRouteChildren: TechnicianRouteChildren = {
   TechnicianProfileRoute: TechnicianProfileRoute,
   TechnicianIndexRoute: TechnicianIndexRoute,
   TechnicianExamplesFormRoute: TechnicianExamplesFormRoute,
+  TechnicianTasksReportIdRoute: TechnicianTasksReportIdRoute,
 }
 
 const TechnicianRouteWithChildren = TechnicianRoute._addFileChildren(

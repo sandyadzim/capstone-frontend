@@ -249,9 +249,10 @@
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* Keep focused controls clear of the pinned profile header and navigation. */
+/* Keep focused controls clear of pinned portal headers and navigation. */
 html:has(.resident-profile),
-html:has(.technician-profile) {
+html:has(.technician-profile),
+html:has(.technician-task-detail) {
   scroll-padding-top: calc(5rem + env(safe-area-inset-top));
   scroll-padding-bottom: calc(7rem + env(safe-area-inset-bottom));
 }

@@ -14,6 +14,7 @@ import {
 import type { ReportListItem } from '@/features/admin/reports/report-schema'
 import { residentReportStatusStyles } from '@/features/resident/resident-report-status'
 import { formatDate } from '@/lib/format'
+import { Link } from '@tanstack/react-router'
 
 const categoryIcons = {
   AC: AirVent,
@@ -28,7 +29,12 @@ export function TechnicianTaskCard({ report }: { report: ReportListItem }) {
   const Icon = categoryIcons[report.category]
   return (
     <li className="min-w-0 overflow-hidden rounded-2xl border border-border/60 bg-card shadow-[0_2px_3px_#00000003,0_5px_14px_#00000004]">
-      <article>
+      <Link
+        to="/technician/tasks/$reportId"
+        params={{ reportId: report.id }}
+        aria-label={`View task: ${report.title}`}
+        className="block rounded-2xl focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring"
+      >
         <div className="px-4.5 pt-4.5 pb-5">
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
@@ -69,7 +75,7 @@ export function TechnicianTaskCard({ report }: { report: ReportListItem }) {
             </time>
           </span>
         </div>
-      </article>
+      </Link>
     </li>
   )
 }

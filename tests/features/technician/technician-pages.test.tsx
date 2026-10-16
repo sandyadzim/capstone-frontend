@@ -190,7 +190,7 @@ it('sends the exact credentialed cancellable ongoing request and needs no reside
   })
 })
 
-it('shows categories, unit/floor, actual statuses, Jakarta dates and priority fallback on read-only summaries', async () => {
+it('shows categories, unit/floor, actual statuses, Jakarta dates and priority fallback on linked summaries', async () => {
   reports = reportPage(
     [
       assignedReport,
@@ -235,7 +235,11 @@ it('shows categories, unit/floor, actual statuses, Jakarta dates and priority fa
     'dateTime',
     report.reportedAt,
   )
-  expect(within(list).queryByRole('link')).not.toBeInTheDocument()
+  expect(within(list).getAllByRole('link')).toHaveLength(3)
+  expect(within(items[0]).getByRole('link')).toHaveAttribute(
+    'href',
+    `/technician/tasks/${report.id}`,
+  )
   expect(within(list).queryByRole('button')).not.toBeInTheDocument()
 })
 
