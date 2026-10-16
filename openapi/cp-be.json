@@ -225,6 +225,13 @@
             }
           },
           {
+            "name": "unassignedOnly",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string", "enum": ["true", "false"] },
+            "description": "Only Resident accounts with no unit assignment, applied before pagination"
+          },
+          {
             "name": "isActive",
             "required": false,
             "in": "query",
@@ -1124,7 +1131,8 @@
                     "type": "string",
                     "format": "uuid",
                     "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                  }
+                  },
+                  "unassignedOnly": { "type": "boolean" }
                 },
                 "required": ["residentUserId"],
                 "additionalProperties": false

@@ -45,7 +45,6 @@ import { Route as AdminAccountsAccountIdEditRouteImport } from './routes/admin.a
 import { Route as AdminUnitsUnitIdIndexRouteImport } from './routes/admin.units.$unitId.index'
 import { Route as AdminUnitsUnitIdEditRouteImport } from './routes/admin.units.$unitId.edit'
 import { Route as AdminUnitsUnitIdHistoryRouteImport } from './routes/admin.units.$unitId.history'
-import { Route as AdminUnitsUnitIdResidentRouteImport } from './routes/admin.units.$unitId.resident'
 import { Route as TechnicianTasksReportIdCompleteRouteImport } from './routes/technician.tasks.$reportId_.complete'
 import { Route as AdminUnitsUnitIdHistoryIndexRouteImport } from './routes/admin.units.$unitId.history.index'
 import { Route as AdminUnitsUnitIdHistoryReportIdRouteImport } from './routes/admin.units.$unitId.history.$reportId'
@@ -231,12 +230,6 @@ const AdminUnitsUnitIdHistoryRoute = AdminUnitsUnitIdHistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => AdminUnitsUnitIdRoute,
 } as any)
-const AdminUnitsUnitIdResidentRoute =
-  AdminUnitsUnitIdResidentRouteImport.update({
-    id: '/resident',
-    path: '/resident',
-    getParentRoute: () => AdminUnitsUnitIdRoute,
-  } as any)
 const TechnicianTasksReportIdCompleteRoute =
   TechnicianTasksReportIdCompleteRouteImport.update({
     id: '/$reportId_/complete',
@@ -290,7 +283,6 @@ export interface FileRoutesByFullPath {
   '/admin/accounts/$accountId/edit': typeof AdminAccountsAccountIdEditRoute
   '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
   '/admin/units/$unitId/history': typeof AdminUnitsUnitIdHistoryRouteWithChildren
-  '/admin/units/$unitId/resident': typeof AdminUnitsUnitIdResidentRoute
   '/technician/tasks/$reportId/complete': typeof TechnicianTasksReportIdCompleteRoute
   '/admin/accounts/$accountId/': typeof AdminAccountsAccountIdIndexRoute
   '/admin/units/$unitId/': typeof AdminUnitsUnitIdIndexRoute
@@ -321,7 +313,6 @@ export interface FileRoutesByTo {
   '/technician/tasks': typeof TechnicianTasksIndexRoute
   '/admin/accounts/$accountId/edit': typeof AdminAccountsAccountIdEditRoute
   '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
-  '/admin/units/$unitId/resident': typeof AdminUnitsUnitIdResidentRoute
   '/technician/tasks/$reportId/complete': typeof TechnicianTasksReportIdCompleteRoute
   '/admin/accounts/$accountId': typeof AdminAccountsAccountIdIndexRoute
   '/admin/units/$unitId': typeof AdminUnitsUnitIdIndexRoute
@@ -364,7 +355,6 @@ export interface FileRoutesById {
   '/admin/accounts/$accountId/edit': typeof AdminAccountsAccountIdEditRoute
   '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
   '/admin/units/$unitId/history': typeof AdminUnitsUnitIdHistoryRouteWithChildren
-  '/admin/units/$unitId/resident': typeof AdminUnitsUnitIdResidentRoute
   '/technician/tasks/$reportId_/complete': typeof TechnicianTasksReportIdCompleteRoute
   '/admin/accounts/$accountId/': typeof AdminAccountsAccountIdIndexRoute
   '/admin/units/$unitId/': typeof AdminUnitsUnitIdIndexRoute
@@ -407,7 +397,6 @@ export interface FileRouteTypes {
     | '/admin/accounts/$accountId/edit'
     | '/admin/units/$unitId/edit'
     | '/admin/units/$unitId/history'
-    | '/admin/units/$unitId/resident'
     | '/technician/tasks/$reportId/complete'
     | '/admin/accounts/$accountId/'
     | '/admin/units/$unitId/'
@@ -438,7 +427,6 @@ export interface FileRouteTypes {
     | '/technician/tasks'
     | '/admin/accounts/$accountId/edit'
     | '/admin/units/$unitId/edit'
-    | '/admin/units/$unitId/resident'
     | '/technician/tasks/$reportId/complete'
     | '/admin/accounts/$accountId'
     | '/admin/units/$unitId'
@@ -480,7 +468,6 @@ export interface FileRouteTypes {
     | '/admin/accounts/$accountId/edit'
     | '/admin/units/$unitId/edit'
     | '/admin/units/$unitId/history'
-    | '/admin/units/$unitId/resident'
     | '/technician/tasks/$reportId_/complete'
     | '/admin/accounts/$accountId/'
     | '/admin/units/$unitId/'
@@ -749,13 +736,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUnitsUnitIdHistoryRouteImport
       parentRoute: typeof AdminUnitsUnitIdRoute
     }
-    '/admin/units/$unitId/resident': {
-      id: '/admin/units/$unitId/resident'
-      path: '/resident'
-      fullPath: '/admin/units/$unitId/resident'
-      preLoaderRoute: typeof AdminUnitsUnitIdResidentRouteImport
-      parentRoute: typeof AdminUnitsUnitIdRoute
-    }
     '/technician/tasks/$reportId_/complete': {
       id: '/technician/tasks/$reportId_/complete'
       path: '/$reportId/complete'
@@ -879,14 +859,12 @@ const AdminUnitsUnitIdHistoryRouteWithChildren =
 interface AdminUnitsUnitIdRouteChildren {
   AdminUnitsUnitIdEditRoute: typeof AdminUnitsUnitIdEditRoute
   AdminUnitsUnitIdHistoryRoute: typeof AdminUnitsUnitIdHistoryRouteWithChildren
-  AdminUnitsUnitIdResidentRoute: typeof AdminUnitsUnitIdResidentRoute
   AdminUnitsUnitIdIndexRoute: typeof AdminUnitsUnitIdIndexRoute
 }
 
 const AdminUnitsUnitIdRouteChildren: AdminUnitsUnitIdRouteChildren = {
   AdminUnitsUnitIdEditRoute: AdminUnitsUnitIdEditRoute,
   AdminUnitsUnitIdHistoryRoute: AdminUnitsUnitIdHistoryRouteWithChildren,
-  AdminUnitsUnitIdResidentRoute: AdminUnitsUnitIdResidentRoute,
   AdminUnitsUnitIdIndexRoute: AdminUnitsUnitIdIndexRoute,
 }
 

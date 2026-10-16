@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Ellipsis, Eye, Pencil, UserPlus } from 'lucide-react'
+import { Ellipsis, Eye, Pencil } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -63,20 +63,6 @@ export function UnitRowActions({
             >
               <Pencil aria-hidden="true" /> Edit
             </DropdownMenuItem>
-            {!unit.activeResident && (
-              <DropdownMenuItem
-                className="min-h-11 gap-3 px-3"
-                render={
-                  <Link
-                    to="/admin/units/$unitId/resident"
-                    params={{ unitId: unit.id }}
-                    search={search}
-                  />
-                }
-              >
-                <UserPlus aria-hidden="true" /> Place resident
-              </DropdownMenuItem>
-            )}
           </>
         )}
       </DropdownMenuContent>

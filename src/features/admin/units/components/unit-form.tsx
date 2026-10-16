@@ -170,7 +170,7 @@ export function UnitForm({
               className="size-4 animate-spin motion-reduce:animate-none"
             />
           )}
-          {busy ? 'Saving…' : unit ? 'Save changes' : 'Create unit'}
+          {busy ? 'Loading…' : unit ? 'Save changes' : 'Create unit'}
         </Button>
       </div>
     </form>

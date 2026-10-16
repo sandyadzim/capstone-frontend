@@ -83,6 +83,7 @@ it('uses validated generated calls for each write, with only writable fields', a
   expect(JSON.parse(adapter.mock.calls[1][0].data)).toEqual({ floor: 0 })
   expect(JSON.parse(adapter.mock.calls[2][0].data)).toEqual({
     residentUserId: resident.id,
+    unassignedOnly: true,
   })
   for (const [config] of adapter.mock.calls) expect(config.signal).toBe(signal)
 })
@@ -96,6 +97,7 @@ it('filters resident options on the server and validates placement identity', as
     pageSize: 10,
     role: 'RESIDENT',
     isActive: 'true',
+    unassignedOnly: 'true',
   })
   respond(pageData([{ ...resident, role: 'ADMIN' }]))
   await expect(listResidents({ page: 1, pageSize: 20 })).rejects.toMatchObject({

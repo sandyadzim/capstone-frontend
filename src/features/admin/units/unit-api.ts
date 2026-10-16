@@ -103,7 +103,10 @@ export async function placeResident(
     unitSchema,
     await unitsControllerPlace(
       z.uuid().parse(id),
-      residentPlacementSchema.parse({ residentUserId }),
+      {
+        ...residentPlacementSchema.parse({ residentUserId }),
+        unassignedOnly: true,
+      },
       { signal },
     ),
   )
@@ -124,13 +127,13 @@ export async function archiveUnit(id: string, signal?: AbortSignal) {
 }
 
 export async function listResidents(
-  params: { page: number; pageSize: number },
+  params: { page: number; pageSize: number; q?: string },
   signal?: AbortSignal,
 ) {
   return parseApiResponse(
     residentListSchema,
     await accountsControllerList(
-      { ...params, role: 'RESIDENT', isActive: 'true' },
+      { ...params, role: 'RESIDENT', isActive: 'true', unassignedOnly: 'true' },
       { signal },
     ),
   )

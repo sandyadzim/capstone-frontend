@@ -75,14 +75,12 @@ it('normalizes invalid URL values and keeps independent pagination', () => {
       page: '0',
       pageSize: '999',
       isArchived: 'yes',
-      residentPage: '2',
       historyPage: '3',
     }),
   ).toMatchObject({
     page: 1,
     pageSize: 20,
     isArchived: false,
-    residentPage: 2,
     historyPage: 3,
   })
   expect(unitsSearchSchema.parse({ page: '9007199254740991' }).page).toBe(1)

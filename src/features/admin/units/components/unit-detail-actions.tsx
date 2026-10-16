@@ -1,13 +1,6 @@
-import type { Ref } from 'react'
+import type { ReactNode, Ref } from 'react'
 import { Link } from '@tanstack/react-router'
-import {
-  Archive,
-  ChevronDown,
-  History,
-  Pencil,
-  UserMinus,
-  UserPlus,
-} from 'lucide-react'
+import { Archive, ChevronDown, History, Pencil, UserMinus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -25,6 +18,7 @@ export function UnitDetailActions({
   confirmationOpen,
   triggerRef,
   onConfirm,
+  placementAction,
 }: {
   unit: Unit
   search: UnitsSearch
@@ -32,6 +26,7 @@ export function UnitDetailActions({
   confirmationOpen: boolean
   triggerRef: Ref<HTMLButtonElement>
   onConfirm: (action: 'release' | 'archive') => void
+  placementAction?: ReactNode
 }) {
   return (
     <div className="mt-6 flex flex-wrap justify-end gap-2 border-t pt-4">
@@ -54,6 +49,7 @@ export function UnitDetailActions({
       ) : (
         <>
           <Button
+            variant="outline"
             className="min-h-11 px-4"
             nativeButton={false}
             role="link"
@@ -88,20 +84,6 @@ export function UnitDetailActions({
               aria-label="Unit actions"
               finalFocus={!confirmationOpen}
             >
-              {!unit.activeResident && (
-                <DropdownMenuItem
-                  className="min-h-11 gap-3 px-3"
-                  render={
-                    <Link
-                      to="/admin/units/$unitId/resident"
-                      params={{ unitId: unit.id }}
-                      search={search}
-                    />
-                  }
-                >
-                  <UserPlus aria-hidden="true" /> Place resident
-                </DropdownMenuItem>
-              )}
               <DropdownMenuItem
                 className="min-h-11 gap-3 px-3"
                 render={
@@ -132,6 +114,7 @@ export function UnitDetailActions({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          {placementAction}
         </>
       )}
     </div>

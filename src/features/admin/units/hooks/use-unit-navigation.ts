@@ -2,10 +2,7 @@ import { getRouteApi, useNavigate } from '@tanstack/react-router'
 import type { UnitsSearch } from '../unit-schema'
 
 export function useUnitNavigation(
-  from:
-    | '/admin/units/'
-    | '/admin/units/$unitId/resident'
-    | '/admin/units/$unitId/history' = '/admin/units/',
+  from: '/admin/units/' | '/admin/units/$unitId/history' = '/admin/units/',
 ) {
   const search = getRouteApi('/admin/units').useSearch()
   const navigate = useNavigate({ from })

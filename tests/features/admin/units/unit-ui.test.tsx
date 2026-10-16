@@ -6,7 +6,14 @@ import {
   createRouter,
   RouterProvider,
 } from '@tanstack/react-router'
-import { act, render, screen, waitFor, within } from '@testing-library/react'
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import { apiClient } from '@/lib/api/client'
@@ -45,7 +52,7 @@ beforeEach(() => {
   useAdminUiStore.setState({ collapsed: false })
   client = createQueryClient()
   units = [{ ...unit }]
-  residents = [{ ...resident }]
+  residents = [{ ...resident, activeUnit: null }]
   writes = []
   writeError = undefined
   readError = undefined
@@ -106,14 +113,22 @@ beforeEach(() => {
       const page = Number(config.params?.page ?? 1)
       const size = Number(config.params?.pageSize ?? 20)
       if (path.startsWith('/reports/')) data = reportDetail
-      else if (path === '/accounts')
+      else if (path === '/accounts') {
+        const filtered = residents.filter(
+          (resident) =>
+            (!config.params?.unassignedOnly || !resident.activeUnit) &&
+            (!config.params?.q ||
+              resident.name
+                .toLowerCase()
+                .includes(config.params.q.toLowerCase())),
+        )
         data = pageData(
-          residents.slice((page - 1) * size, page * size),
+          filtered.slice((page - 1) * size, page * size),
           page,
           size,
-          residents.length,
+          filtered.length,
         )
-      else if (path.endsWith('/history'))
+      } else if (path.endsWith('/history'))
         data = pageData([historyItem], page, size)
       else if (path === '/units') {
         const filtered = units.filter(
@@ -306,52 +321,154 @@ it('maps backend field errors, keeps the draft, and supports retry', async () =>
   await user.click(screen.getByRole('button', { name: 'Create unit' }))
   await screen.findByRole('heading', { name: 'Unit Details', level: 1 })
 })
-it('requires acknowledgment before moving an already-placed resident', async () => {
+it('places an unassigned resident through a name-only detail dialog while preserving list state', async () => {
+  residents.push({
+    ...resident,
+    id: '33000000-0000-4000-8000-000000000009',
+    name: 'Assigned Resident',
+  })
   const user = userEvent.setup()
-  const router = await show(`/admin/units/${unit.id}/resident?page=2`)
-  const table = await screen.findByRole('table', { name: 'Active residents' })
-  await user.click(within(table).getByRole('button', { name: /Select Alex/ }))
-  expect(screen.getByRole('button', { name: 'Move resident' })).toBeDisabled()
-  expect(screen.getByText(/will move from B-202 to A-101/)).toBeVisible()
+  const router = await show(`/admin/units/${unit.id}?page=2`)
   await user.click(
-    screen.getByRole('checkbox', { name: 'I confirm this resident move.' }),
+    await screen.findByRole('button', { name: 'Place resident' }),
   )
-  await user.click(screen.getByRole('button', { name: 'Move resident' }))
-  await screen.findByRole('heading', { name: 'Unit Details', level: 1 })
+  const dialog = await screen.findByRole('dialog', {
+    name: 'Place resident · A-101',
+  })
+  const table = await within(dialog).findByRole('table', {
+    name: 'Available residents',
+  })
+  expect(
+    within(dialog).queryByText('Assigned Resident'),
+  ).not.toBeInTheDocument()
+  expect(within(dialog).queryByText('Login identifier')).not.toBeInTheDocument()
+  expect(
+    within(dialog).queryByText(resident.loginIdentifier),
+  ).not.toBeInTheDocument()
+  await user.click(
+    within(table).getByRole('button', {
+      name: 'Select resident Alex Resident',
+    }),
+  )
+  await user.click(
+    within(dialog).getByRole('button', { name: 'Place resident' }),
+  )
+  await waitFor(() =>
+    expect(
+      screen.queryByRole('dialog', { name: 'Place resident · A-101' }),
+    ).not.toBeInTheDocument(),
+  )
+  expect(router.state.location.pathname).toBe(`/admin/units/${unit.id}`)
   expect(router.state.location.search.page).toBe(2)
   expect(writes[0]).toMatchObject({
     method: 'put',
     path: `/units/${unit.id}/resident`,
-    body: { residentUserId: resident.id },
+    body: { residentUserId: resident.id, unassignedOnly: true },
   })
 })
-it('clears a selection after a placement conflict instead of resubmitting stale state', async () => {
+it('labels mobile resident names and retains the selected resident after a failed placement', async () => {
+  writeError = new ApiError('Try again later.', 'HTTP_ERROR', 503)
+  const user = userEvent.setup()
+  await show(`/admin/units/${unit.id}`)
+  await user.click(
+    await screen.findByRole('button', { name: 'Place resident' }),
+  )
+  const dialog = await screen.findByRole('dialog', {
+    name: 'Place resident · A-101',
+  })
+  const table = await within(dialog).findByRole('table', {
+    name: 'Available residents',
+  })
+  expect(within(dialog).getAllByText('Name').length).toBeGreaterThan(1)
+  await user.click(
+    within(table).getByRole('button', {
+      name: 'Select resident Alex Resident',
+    }),
+  )
+  await user.click(
+    within(dialog).getByRole('button', { name: 'Place resident' }),
+  )
+  await screen.findByText('Unable to place resident')
+  expect(within(dialog).getByText('Alex Resident')).toBeVisible()
+  expect(within(dialog).getByRole('button', { name: 'Change' })).toBeEnabled()
+  expect(
+    within(dialog).queryByText(resident.loginIdentifier),
+  ).not.toBeInTheDocument()
+  writeError = undefined
+  await user.click(
+    within(dialog).getByRole('button', { name: 'Place resident' }),
+  )
+  await waitFor(() =>
+    expect(
+      screen.queryByRole('dialog', { name: 'Place resident · A-101' }),
+    ).not.toBeInTheDocument(),
+  )
+  expect(writes).toHaveLength(2)
+})
+it('requires selection and discards the draft when the placement dialog closes', async () => {
+  const user = userEvent.setup()
+  await show(`/admin/units/${unit.id}`)
+  const trigger = await screen.findByRole('button', { name: 'Place resident' })
+  await user.click(trigger)
+  const dialog = await screen.findByRole('dialog', {
+    name: 'Place resident · A-101',
+  })
+  await user.click(
+    within(dialog).getByRole('button', { name: 'Place resident' }),
+  )
+  expect(await within(dialog).findByText('Choose a resident.')).toBeVisible()
+  expect(within(dialog).getByRole('group', { name: 'Resident' })).toHaveFocus()
+  expect(writes).toHaveLength(0)
+  const table = await within(dialog).findByRole('table', {
+    name: 'Available residents',
+  })
+  await user.click(
+    within(table).getByRole('button', {
+      name: 'Select resident Alex Resident',
+    }),
+  )
+  await user.keyboard('{Escape}')
+  await waitFor(() => expect(trigger).toHaveFocus())
+  await user.click(trigger)
+  const reopened = await screen.findByRole('dialog', {
+    name: 'Place resident · A-101',
+  })
+  expect(
+    await within(reopened).findByRole('table', { name: 'Available residents' }),
+  ).toBeVisible()
+  expect(
+    within(reopened).queryByRole('button', { name: 'Change' }),
+  ).not.toBeInTheDocument()
+})
+it('clears a stale placement selection on conflict and requires a new selection', async () => {
   writeError = new ApiError(
     'Placement changed. Refresh and try again.',
     'CONFLICT',
     409,
   )
   const user = userEvent.setup()
-  await show(`/admin/units/${unit.id}/resident`)
+  await show(`/admin/units/${unit.id}`)
+  await user.click(
+    await screen.findByRole('button', { name: 'Place resident' }),
+  )
+  const dialog = await screen.findByRole('dialog', {
+    name: 'Place resident · A-101',
+  })
   await user.click(
     within(
-      await screen.findByRole('table', { name: 'Active residents' }),
-    ).getByRole('button', { name: /Select Alex/ }),
+      await within(dialog).findByRole('table', { name: 'Available residents' }),
+    ).getByRole('button', { name: 'Select resident Alex Resident' }),
   )
   await user.click(
-    screen.getByRole('checkbox', { name: 'I confirm this resident move.' }),
+    within(dialog).getByRole('button', { name: 'Place resident' }),
   )
-  await user.click(screen.getByRole('button', { name: 'Move resident' }))
   await screen.findByText('Unable to place resident')
   expect(
-    screen.queryByRole('dialog', { name: 'Move Alex Resident in A-101?' }),
-  ).not.toBeInTheDocument()
+    await within(dialog).findByRole('table', { name: 'Available residents' }),
+  ).toBeVisible()
   expect(
-    within(screen.getByRole('table', { name: 'Active residents' })).getByRole(
-      'button',
-      { name: /Select Alex/ },
-    ),
-  ).toBeEnabled()
+    within(dialog).queryByRole('button', { name: 'Change' }),
+  ).not.toBeInTheDocument()
   expect(writes).toHaveLength(1)
 })
 it('confirms release from the menu without deactivating the resident, then allows archive', async () => {
@@ -440,7 +557,7 @@ it('moves keyboard focus from the action menu into confirmations and restores it
     ).toHaveFocus(),
   )
 })
-it.each(['edit', 'resident'])(
+it.each(['edit'])(
   'blocks direct %s routes for archived units',
   async (page) => {
     units[0].isArchived = true
@@ -517,35 +634,38 @@ it('opens an archived-filter URL directly using unquoted booleans', async () => 
   expect(router.state.location.searchStr).toBe('?isArchived=true')
 })
 
-it('cancels the placement dialog before paging and restores the Select trigger', async () => {
+it('resets local placement paging on Cancel and restores the detail trigger', async () => {
   residents = Array.from({ length: 21 }, (_, index) => ({
     ...resident,
+    activeUnit: null,
     id: `33000000-0000-4000-8000-${String(index + 3).padStart(12, '0')}`,
     name: `Resident ${index + 1}`,
   }))
   const user = userEvent.setup()
-  const router = await show(`/admin/units/${unit.id}/resident`)
-  const table = await screen.findByRole('table', { name: 'Active residents' })
-  const trigger = within(table).getByRole('button', {
-    name: 'Select Resident 1 (alex@example.test)',
-  })
+  const router = await show(`/admin/units/${unit.id}?page=2`)
+  const trigger = await screen.findByRole('button', { name: 'Place resident' })
   await user.click(trigger)
-  expect(
-    await screen.findByRole('dialog', { name: 'Move Resident 1 in A-101?' }),
-  ).toBeVisible()
-  await user.click(screen.getByRole('button', { name: 'Cancel' }))
-  await waitFor(() => expect(trigger).toHaveFocus())
-  await user.click(screen.getByRole('button', { name: 'Next' }))
+  let dialog = await screen.findByRole('dialog', {
+    name: 'Place resident · A-101',
+  })
+  await within(dialog).findByRole('table', { name: 'Available residents' })
+  await user.click(within(dialog).getByRole('button', { name: 'Next' }))
   await waitFor(() =>
     expect(
-      screen.getByRole('button', { name: 'Go to page 2' }),
+      within(dialog).getByRole('button', { name: 'Go to page 2' }),
     ).toHaveAttribute('aria-current', 'page'),
   )
-  expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-  expect(router.state.location.pathname).toBe(
-    `/admin/units/${unit.id}/resident`,
+  await user.click(within(dialog).getByRole('button', { name: 'Cancel' }))
+  await waitFor(() => expect(trigger).toHaveFocus())
+  await user.click(trigger)
+  dialog = await screen.findByRole('dialog', { name: 'Place resident · A-101' })
+  await waitFor(() =>
+    expect(
+      within(dialog).getByRole('button', { name: 'Go to page 1' }),
+    ).toHaveAttribute('aria-current', 'page'),
   )
-  expect(router.state.location.search.residentPage).toBe(2)
+  expect(router.state.location.search.page).toBe(2)
+  expect(router.state.location.pathname).toBe(`/admin/units/${unit.id}`)
   expect(writes).toEqual([])
 })
 it('debounces unit search through the URL, resets pagination and clears only the search field', async () => {
@@ -673,7 +793,7 @@ it.each([
     state: 'vacant',
     archived: false,
     occupied: false,
-    actions: ['View', 'Edit', 'Place resident'],
+    actions: ['View', 'Edit'],
   },
   {
     state: 'occupied',
@@ -714,7 +834,6 @@ it.each([
     const destinations = {
       View: `/admin/units/${unit.id}`,
       Edit: `/admin/units/${unit.id}/edit`,
-      'Place resident': `/admin/units/${unit.id}/resident`,
     }
     for (const [name, path] of Object.entries(destinations)) {
       const item = within(menu).queryByRole('menuitem', { name })
@@ -891,7 +1010,7 @@ it.each([
     state: 'vacant',
     archived: false,
     occupied: false,
-    items: ['Place resident', 'Maintenance history', 'Archive unit'],
+    items: ['Maintenance history', 'Archive unit'],
   },
   {
     state: 'occupied',
@@ -924,7 +1043,7 @@ it.each([
         within(card).getByRole('link', { name: 'Maintenance history' }),
       ).toHaveAttribute('href', expect.stringContaining('displayStatus=VACANT'))
     } else {
-      expect(within(card).getAllByRole('button')).toHaveLength(1)
+      expect(within(card).getAllByRole('button')).toHaveLength(occupied ? 1 : 2)
       expect(within(card).getAllByRole('link')).toHaveLength(1)
       expect(within(card).getByRole('link', { name: 'Edit' })).toHaveAttribute(
         'href',
@@ -992,7 +1111,7 @@ it('disables the detail action menu and edit navigation during a confirmed write
   expect(edit).toHaveAttribute('aria-disabled', 'true')
   await user.click(edit)
   expect(router.state.location.pathname).toBe(`/admin/units/${unit.id}`)
-  expect(screen.getByRole('button', { name: 'Archiving…' })).toBeDisabled()
+  expect(screen.getByRole('button', { name: 'Loading…' })).toBeDisabled()
   expect(screen.getByRole('button', { name: 'Cancel' })).toBeDisabled()
   await user.keyboard('{Escape}')
   expect(screen.getByRole('dialog', { name: 'Archive A-101?' })).toBeVisible()
@@ -1006,7 +1125,6 @@ it('disables the detail action menu and edit navigation during a confirmed write
 it.each([
   { suffix: '/edit', title: 'Edit Unit', ready: 'form' },
   { suffix: '', title: 'Unit Details', ready: 'details' },
-  { suffix: '/resident', title: 'Resident Placement', ready: 'residents' },
   { suffix: '/history', title: 'Maintenance History', ready: 'history' },
   {
     suffix: `/history/${historyItem.id}`,
@@ -1035,8 +1153,6 @@ it.each([
     if (ready === 'form') await screen.findByLabelText('Unit Name')
     else if (ready === 'details')
       await screen.findByRole('region', { name: 'Unit information' })
-    else if (ready === 'residents')
-      await screen.findByRole('table', { name: 'Active residents' })
     else if (ready === 'history')
       await screen.findByRole('table', { name: 'Maintenance history' })
     else await screen.findByText('Replaced seal')
@@ -1079,36 +1195,41 @@ it.each(['archive', 'release'] as const)(
   },
 )
 
-it('keeps the placement dialog open during a held write and prevents cancellation or duplicate submission', async () => {
-  residents[0].activeUnit = null
-  let finishWrite: (() => void) | undefined
-  pendingWrite = new Promise<void>((resolve) => {
+it('locks placement through the generic loader and prevents duplicate submission', async () => {
+  let finishWrite!: () => void
+  pendingWrite = new Promise((resolve) => {
     finishWrite = resolve
   })
   const user = userEvent.setup()
-  await show(`/admin/units/${unit.id}/resident`)
+  await show(`/admin/units/${unit.id}`)
   await user.click(
-    within(
-      await screen.findByRole('table', { name: 'Active residents' }),
-    ).getByRole('button', { name: /Select Alex/ }),
+    await screen.findByRole('button', { name: 'Place resident' }),
   )
   const dialog = await screen.findByRole('dialog', {
-    name: 'Place Alex Resident in A-101?',
+    name: 'Place resident · A-101',
   })
+  await user.click(
+    within(
+      await within(dialog).findByRole('table', { name: 'Available residents' }),
+    ).getByRole('button', { name: 'Select resident Alex Resident' }),
+  )
   await user.click(
     within(dialog).getByRole('button', { name: 'Place resident' }),
   )
-  expect(
-    within(dialog).getByRole('button', { name: 'Placing…' }),
-  ).toBeDisabled()
-  expect(within(dialog).getByRole('button', { name: 'Cancel' })).toBeDisabled()
-  await user.keyboard('{Escape}')
-  expect(dialog).toBeVisible()
-  expect(writes).toHaveLength(1)
-  await act(async () => {
-    finishWrite?.()
+  const loader = await screen.findByRole('dialog', {
+    name: 'Action in progress',
   })
-  await screen.findByRole('heading', { name: 'Unit Details', level: 1 })
+  expect(within(loader).getByRole('status')).toHaveTextContent('Loading…')
+  await user.keyboard('{Escape}')
+  expect(loader).toBeVisible()
+  fireEvent.submit(dialog.querySelector('form')!)
+  expect(writes).toHaveLength(1)
+  await act(() => finishWrite())
+  await waitFor(() =>
+    expect(
+      screen.queryByRole('dialog', { name: 'Place resident · A-101' }),
+    ).not.toBeInTheDocument(),
+  )
 })
 
 it('loads history detail directly with chronological milestones, work result and a filter-preserving return', async () => {
@@ -1186,10 +1307,7 @@ it('rejects a mismatched history detail and supports retry without leaking its r
   expect(await screen.findByText('Replaced seal')).toBeVisible()
 })
 
-it.each([
-  { suffix: '/resident', title: 'Resident Placement' },
-  { suffix: '/history', title: 'Maintenance History' },
-])(
+it.each([{ suffix: '/history', title: 'Maintenance History' }])(
   'uses $title consistently and returns to Unit Details through breadcrumbs',
   async ({ suffix, title }) => {
     const user = userEvent.setup()

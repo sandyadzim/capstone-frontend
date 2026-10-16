@@ -168,8 +168,6 @@ export const unitsSearchSchema = z.object({
     (value) => (value === 'true' ? true : value === 'false' ? false : value),
     z.boolean().catch(false).default(false),
   ),
-  residentPage: pageSearchSchema.default(1),
-  residentPageSize: pageSizeSearchSchema.default(20),
   historyPage: pageSearchSchema.default(1),
   historyPageSize: pageSizeSearchSchema.default(20),
 })

@@ -12,6 +12,7 @@ import {
   UnitUnavailable,
 } from '../components/unit-page'
 import { UnitConfirmationDialog } from '../components/unit-confirmation-dialog'
+import { UnitPlacementAction } from '../components/unit-placement-action'
 import { UnitDetailActions } from '../components/unit-detail-actions'
 import { useUnitNavigation } from '../hooks/use-unit-navigation'
 import { useUnitMutations } from '../hooks/use-unit-mutations'
@@ -113,6 +114,20 @@ export function UnitDetailPage() {
               search={search}
               busy={mutations.busy}
               confirmationOpen={confirmationOpen}
+              placementAction={
+                <UnitPlacementAction
+                  key={unit.id}
+                  unit={unit}
+                  disabled={
+                    query.isFetching ||
+                    query.isError ||
+                    mutations.busy ||
+                    confirmationOpen
+                  }
+                  placement={mutations}
+                  headingRef={headingRef}
+                />
+              }
               triggerRef={actionsRef}
               onConfirm={(action) => {
                 returnToHeading.current = false
@@ -146,9 +161,9 @@ export function UnitDetailPage() {
             }
             confirmLabel={
               mutations.archiving
-                ? 'Archiving…'
+                ? 'Loading…'
                 : mutations.releasing
-                  ? 'Releasing…'
+                  ? 'Loading…'
                   : confirmation === 'archive'
                     ? 'Confirm archive'
                     : 'Confirm release'

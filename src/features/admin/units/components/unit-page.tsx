@@ -234,7 +234,6 @@ export function UnitLink({
   to?:
     | '/admin/units/$unitId'
     | '/admin/units/$unitId/edit'
-    | '/admin/units/$unitId/resident'
     | '/admin/units/$unitId/history'
 }) {
   return (

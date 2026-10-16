@@ -536,6 +536,10 @@ export type AccountsControllerListParams = {
    */
   q?: string
   role?: AccountsControllerListRole
+  /**
+   * Only Resident accounts with no unit assignment, applied before pagination
+   */
+  unassignedOnly?: AccountsControllerListUnassignedOnly
   isActive?: AccountsControllerListIsActive
 }
 
@@ -546,6 +550,14 @@ export const AccountsControllerListRole = {
   ADMIN: 'ADMIN',
   TECHNICIAN: 'TECHNICIAN',
   RESIDENT: 'RESIDENT',
+} as const
+
+export type AccountsControllerListUnassignedOnly =
+  (typeof AccountsControllerListUnassignedOnly)[keyof typeof AccountsControllerListUnassignedOnly]
+
+export const AccountsControllerListUnassignedOnly = {
+  true: 'true',
+  false: 'false',
 } as const
 
 export type AccountsControllerListIsActive =
@@ -678,6 +690,7 @@ export type UnitsControllerUpdateBody = {
 export type UnitsControllerPlaceBody = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   residentUserId: string
+  unassignedOnly?: boolean
 }
 
 export type PropertyControllerUpdateBody = {

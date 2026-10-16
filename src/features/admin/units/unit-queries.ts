@@ -50,9 +50,10 @@ export const unitsQueryOptions = (params: {
 export const residentsQueryOptions = (params: {
   page: number
   pageSize: number
+  q?: string
 }) =>
   queryOptions({
-    queryKey: [...residentsKey, params],
+    queryKey: [...residentsKey, 'unassigned', params],
     queryFn: ({ signal }) => listResidents(params, signal),
     meta: { requiresAuth: true },
     retry: false,
