@@ -21,5 +21,5 @@ export const residentReportStatusHelp: Record<
   IN_PROGRESS: 'Your report is being handled by the assigned technician.',
   COMPLETED: 'The work is complete and awaiting administrator review.',
   CLOSED: 'Your report has been closed by the administrator.',
-  REJECTED: 'Your report was not approved. Read the reason below.',
+  REJECTED: 'Your report was not approved. Check Overview for the reason.',
 }

@@ -6,10 +6,8 @@ import {
   Armchair,
   ArrowLeft,
   Building2,
-  Clock3,
   Droplets,
   Shapes,
-  UserRound,
   Zap,
 } from 'lucide-react'
 import { z } from 'zod'
@@ -22,7 +20,7 @@ import {
 } from '@/features/admin/reports/report-labels'
 import { sessionQueryOptions } from '@/features/auth/auth-session'
 import { ApiError } from '@/lib/api/error'
-import { formatDate, formatIdr } from '@/lib/format'
+import { formatDate } from '@/lib/format'
 import { InformationLoading, ReadError } from '@/components/read-feedback'
 import {
   residentReportDetailQueryOptions,
@@ -151,7 +149,7 @@ function ReportDetails({
   )
 }
 
-const tabs = ['Overview', 'Progress', 'Work'] as const
+const tabs = ['Overview', 'Progress'] as const
 const categoryIcons = {
   AC: AirVent,
   ELECTRICAL: Zap,
@@ -165,7 +163,6 @@ function ReportContent({ report }: { report: ReportDetail }) {
   const [tab, setTab] = useState<(typeof tabs)[number]>('Overview')
   const Icon = categoryIcons[report.category]
   const assignment = report.assignment
-  const result = report.maintenanceResult
 
   function handleTabKey(
     event: KeyboardEvent<HTMLButtonElement>,
@@ -219,7 +216,7 @@ function ReportContent({ report }: { report: ReportDetail }) {
       <div
         role="tablist"
         aria-label="Report detail sections"
-        className="grid grid-cols-3 border-b"
+        className="grid grid-cols-2 border-b"
       >
         {tabs.map((name, index) => (
           <button
@@ -272,13 +269,25 @@ function ReportContent({ report }: { report: ReportDetail }) {
                 </p>
               )}
             </section>
-            <dl className="grid grid-cols-2 gap-x-4 gap-y-3 border-t pt-5">
+            {assignment?.technician && (
+              <section aria-label="Your technician" className="border-t pt-6">
+                <dl className="profile-information">
+                  <DetailField label="Technician">
+                    {assignment.technician.name}
+                  </DetailField>
+                  <DetailField label="Estimated arrival">
+                    {assignment.estimatedArrivalAt
+                      ? formatDate(assignment.estimatedArrivalAt)
+                      : 'Not provided yet'}
+                  </DetailField>
+                </dl>
+              </section>
+            )}
+            <dl className="profile-information border-t pt-5">
               <DetailField label="Report number">
                 {report.reportNumber}
               </DetailField>
-              <DetailField label="Unit / Floor">
-                {report.unit.unitNumber} / {report.unit.floor}
-              </DetailField>
+
               <DetailField label="Reported">
                 {formatDate(report.reportedAt)}
               </DetailField>
@@ -290,118 +299,7 @@ function ReportContent({ report }: { report: ReportDetail }) {
             </dl>
           </>
         )}
-        {tab === 'Progress' && (
-          <>
-            <ResidentReportProgress report={report} />
-            <RejectionReason report={report} />
-          </>
-        )}
-        {tab === 'Work' && (
-          <>
-            {assignment ? (
-              <section
-                aria-label="Your technician"
-                className="rounded-2xl border p-4.5"
-              >
-                <h2 className="mb-4 text-base font-semibold">
-                  Your technician
-                </h2>
-                <div className="flex gap-3">
-                  <span
-                    className="flex size-11 shrink-0 items-center justify-center rounded-full bg-accent text-primary"
-                    aria-hidden="true"
-                  >
-                    <UserRound className="size-5" />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold wrap-anywhere">
-                      {assignment.technician?.name ?? 'Not provided yet'}
-                    </p>
-                    <p className="mt-1 text-xs text-muted-foreground wrap-anywhere">
-                      Assigned {formatDate(assignment.assignedAt)}
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-4 flex gap-2 text-sm leading-6">
-                  <Clock3
-                    className="mt-1 size-4 shrink-0 text-muted-foreground"
-                    aria-hidden="true"
-                  />
-                  <div className="min-w-0">
-                    <p className="text-xs text-muted-foreground">
-                      Estimated arrival
-                    </p>
-                    <p className="font-medium wrap-anywhere">
-                      {assignment.estimatedArrivalAt
-                        ? formatDate(assignment.estimatedArrivalAt)
-                        : 'Not provided yet'}
-                    </p>
-                  </div>
-                </div>
-                {assignment.note && (
-                  <p className="mt-4 border-t pt-3 whitespace-pre-wrap text-sm leading-6 text-muted-foreground wrap-anywhere">
-                    {assignment.note}
-                  </p>
-                )}
-              </section>
-            ) : (
-              <p className="text-sm leading-6 text-muted-foreground">
-                A technician hasn’t been assigned yet.
-              </p>
-            )}
-            <section
-              aria-labelledby="work-result-heading"
-              className="space-y-5 border-t pt-6"
-            >
-              <h2 id="work-result-heading" className="text-base font-semibold">
-                Work result
-              </h2>
-              {result ? (
-                <dl className="space-y-4">
-                  <DetailField label="Inspection">
-                    {result.inspectionResult}
-                  </DetailField>
-                  <DetailField label="Problem found">
-                    {result.problemFound}
-                  </DetailField>
-                  <DetailField label="Repair action">
-                    {result.repairAction}
-                  </DetailField>
-                  {result.additionalNotes && (
-                    <DetailField label="Additional notes">
-                      {result.additionalNotes}
-                    </DetailField>
-                  )}
-                </dl>
-              ) : (
-                <p className="text-sm leading-6 text-muted-foreground">
-                  Work results will appear here when they’re available.
-                </p>
-              )}
-              {report.repairPhotos.length > 0 && (
-                <div>
-                  <h3 className="mb-3 text-sm font-medium">Repair photos</h3>
-                  <ReportPhotos
-                    photos={report.repairPhotos}
-                    label="Repair photos"
-                  />
-                </div>
-              )}
-              {(result ||
-                report.status === 'COMPLETED' ||
-                report.status === 'CLOSED') && (
-                <div className="flex flex-wrap items-baseline justify-between gap-2 border-t pt-4">
-                  <span className="text-sm text-muted-foreground">
-                    Total cost (IDR)
-                  </span>
-                  <strong className="text-lg tabular-nums wrap-anywhere">
-                    {formatIdr(report.totalCost)}
-                  </strong>
-                </div>
-              )}
-            </section>
-          </>
-        )}
+        {tab === 'Progress' && <ResidentReportProgress report={report} />}
       </div>
     </>
   )

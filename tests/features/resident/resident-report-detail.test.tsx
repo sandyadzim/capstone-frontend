@@ -196,29 +196,25 @@ it('opens a card by keyboard and returns home', async () => {
   expect(router.state.location.pathname).toBe('/')
 })
 
-it('uses keyboard tabs without making extra requests and explains unavailable work', async () => {
+it('uses two keyboard tabs and keeps technician information in Overview', async () => {
   await show()
   await overview()
-  const overviewTab = screen.getByRole('tab', { name: 'Overview' })
-  expect(overviewTab).toHaveAttribute('aria-selected', 'true')
-  overviewTab.focus()
+  expect(screen.getAllByRole('tab')).toHaveLength(2)
+  expect(screen.queryByRole('tab', { name: 'Work' })).not.toBeInTheDocument()
+  expect(
+    screen.queryByText('A technician hasn’t been assigned yet.'),
+  ).not.toBeInTheDocument()
+  screen.getByRole('tab', { name: 'Overview' }).focus()
   await userEvent.keyboard('{ArrowRight}')
   expect(screen.getByRole('tab', { name: 'Progress' })).toHaveFocus()
-  expect(screen.getByRole('tabpanel', { name: 'Progress' })).toHaveAttribute(
-    'id',
-    'resident-report-panel',
-  )
   expect(screen.queryByText(report.description)).not.toBeInTheDocument()
+  await userEvent.keyboard('{Home}')
+  expect(screen.getByRole('tab', { name: 'Overview' })).toHaveFocus()
+  expect(
+    screen.queryByText('A technician hasn’t been assigned yet.'),
+  ).not.toBeInTheDocument()
   await userEvent.keyboard('{End}')
-  expect(screen.getByRole('tab', { name: 'Work' })).toHaveFocus()
-  expect(
-    screen.getByText('A technician hasn’t been assigned yet.'),
-  ).toBeVisible()
-  expect(
-    screen.getByText('Work results will appear here when they’re available.'),
-  ).toBeVisible()
-  await userEvent.keyboard('{Home}{ArrowLeft}')
-  expect(screen.getByRole('tab', { name: 'Work' })).toHaveFocus()
+  expect(screen.getByRole('tab', { name: 'Progress' })).toHaveFocus()
   await userEvent.keyboard('{ArrowRight}{Tab}')
   expect(screen.getByRole('tabpanel', { name: 'Overview' })).toHaveFocus()
   expect(detailRequests()).toHaveLength(1)
@@ -227,12 +223,12 @@ it('uses keyboard tabs without making extra requests and explains unavailable wo
 it('retains the selected tab on background updates and resets it for another report', async () => {
   const { router } = await show()
   await overview()
-  await userEvent.click(screen.getByRole('tab', { name: 'Work' }))
+  await userEvent.click(screen.getByRole('tab', { name: 'Progress' }))
   report.status = 'IN_PROGRESS'
   await act(async () => {
     await client.refetchQueries({ queryKey: detailKey() })
   })
-  expect(screen.getByRole('tab', { name: 'Work' })).toHaveAttribute(
+  expect(screen.getByRole('tab', { name: 'Progress' })).toHaveAttribute(
     'aria-selected',
     'true',
   )
@@ -259,19 +255,30 @@ it('retains the selected tab on background updates and resets it for another rep
   )
 })
 
-it('renders available work information without exposing admin-only fields or actions', async () => {
+it('shows plain technician and arrival information without a card, icons or work details', async () => {
   report = structuredClone(completedReport)
   report.totalCost = '9007199254740993.01'
   await show()
   await overview()
   expect(screen.getByText('4 Oct 2026, 15:00')).toBeVisible()
-  await userEvent.click(screen.getByRole('tab', { name: 'Work' }))
-  expect(screen.getByText('Technician', { selector: 'p' })).toBeVisible()
+  expect(screen.queryByText('Unit / Floor')).not.toBeInTheDocument()
+  await userEvent.click(screen.getByRole('tab', { name: 'Overview' }))
+  expect(screen.getByText('Technician', { selector: 'dd' })).toBeVisible()
   expect(screen.getByText('2 Oct 2026, 12:00')).toBeVisible()
-  expect(screen.getByText('Bring tools.')).toBeVisible()
-  expect(screen.getByText('Loose connection.')).toBeVisible()
-  expect(screen.getByText('Reconnected the cable.')).toBeVisible()
-  expect(screen.getByText('Rp 9.007.199.254.740.993,01')).toBeVisible()
+  expect(screen.queryByText('Bring tools.')).not.toBeInTheDocument()
+  expect(
+    screen
+      .getByRole('region', { name: 'Your technician' })
+      .querySelector('svg'),
+  ).toBeNull()
+  expect(
+    screen.getByText('Estimated arrival', { selector: 'dt' }),
+  ).toBeVisible()
+  expect(screen.queryByText('Loose connection.')).not.toBeInTheDocument()
+  expect(screen.queryByText('Reconnected the cable.')).not.toBeInTheDocument()
+  expect(
+    screen.queryByText('Rp 9.007.199.254.740.993,01'),
+  ).not.toBeInTheDocument()
   for (const text of [
     'Internal note.',
     'Reviewer',
@@ -295,7 +302,7 @@ it('renders available work information without exposing admin-only fields or act
   expect(within(await overview()).queryByText('Medium')).not.toBeInTheDocument()
 })
 
-it('shows assignment placeholders, rejection reason, and additional notes only when supplied', async () => {
+it('hides missing technicians, keeps rejection reason in Overview and shows an unavailable estimate when assigned', async () => {
   report = {
     ...completedReport,
     status: 'REJECTED',
@@ -314,9 +321,22 @@ it('shows assignment placeholders, rejection reason, and additional notes only w
   await show()
   await overview()
   expect(screen.getByText('Duplicate request.')).toBeVisible()
-  await userEvent.click(screen.getByRole('tab', { name: 'Work' }))
-  expect(screen.getAllByText('Not provided yet')).toHaveLength(2)
-  expect(screen.getByText('Keep the vent clear.')).toBeVisible()
+  await userEvent.click(screen.getByRole('tab', { name: 'Progress' }))
+  expect(screen.queryByText('Duplicate request.')).not.toBeInTheDocument()
+  await userEvent.click(screen.getByRole('tab', { name: 'Overview' }))
+  expect(
+    screen.queryByRole('region', { name: 'Your technician' }),
+  ).not.toBeInTheDocument()
+  expect(
+    screen.queryByText('A technician hasn’t been assigned yet.'),
+  ).not.toBeInTheDocument()
+  report.assignment!.technician = completedReport.assignment!.technician
+  await act(() => client.refetchQueries({ queryKey: detailKey() }))
+  expect(
+    await screen.findByRole('region', { name: 'Your technician' }),
+  ).toBeVisible()
+  expect(screen.getAllByText('Not provided yet')).toHaveLength(1)
+  expect(screen.queryByText('Keep the vent clear.')).not.toBeInTheDocument()
   expect(screen.queryByText('Assignment note')).not.toBeInTheDocument()
 })
 
@@ -324,8 +344,10 @@ it('supports repair photos without a work result and omits an unfinished zero co
   report.repairPhotos = [photo]
   await show()
   await overview()
-  await userEvent.click(screen.getByRole('tab', { name: 'Work' }))
-  expect(screen.getByRole('region', { name: 'Work result' })).toBeVisible()
+  await userEvent.click(screen.getByRole('tab', { name: 'Overview' }))
+  expect(
+    screen.queryByRole('region', { name: 'Work result' }),
+  ).not.toBeInTheDocument()
   expect(screen.queryByText('Total cost (IDR)')).not.toBeInTheDocument()
 })
 
@@ -333,8 +355,8 @@ it('shows a completed zero cost without claiming payment or itemized costs', asy
   report.status = 'COMPLETED'
   await show()
   await overview()
-  await userEvent.click(screen.getByRole('tab', { name: 'Work' }))
-  expect(await screen.findByText('Rp 0,00')).toBeVisible()
+  await userEvent.click(screen.getByRole('tab', { name: 'Overview' }))
+  expect(screen.queryByText('Rp 0,00')).not.toBeInTheDocument()
   expect(screen.queryByText('No cost items')).not.toBeInTheDocument()
 })
 
