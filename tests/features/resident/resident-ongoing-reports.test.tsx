@@ -1,6 +1,12 @@
 // @vitest-environment jsdom
 import type { AxiosRequestConfig } from 'axios'
 import { QueryClientProvider } from '@tanstack/react-query'
+import {
+  createMemoryHistory,
+  createRouter,
+  RouterContextProvider,
+} from '@tanstack/react-router'
+import { routeTree } from '@/routeTree.gen'
 import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, expect, it } from 'vitest'
@@ -55,12 +61,20 @@ afterEach(() => {
 function content(unitId = report.unit.id) {
   return (
     <QueryClientProvider client={client}>
-      <ResidentOngoingReports actorId="resident" unitId={unitId} />
+      <RouterContextProvider
+        router={createRouter({
+          routeTree,
+          context: { queryClient: client },
+          history: createMemoryHistory({ initialEntries: ['/'] }),
+        })}
+      >
+        <ResidentOngoingReports actorId="resident" unitId={unitId} />
+      </RouterContextProvider>
     </QueryClientProvider>
   )
 }
 
-it('uses one filtered request and renders non-interactive summaries with final-before-proposed priority', async () => {
+it('uses one filtered request and renders linked summaries with final-before-proposed priority', async () => {
   records = [
     report,
     {
@@ -81,7 +95,10 @@ it('uses one filtered request and renders non-interactive summaries with final-b
   expect(within(list).queryByText('Low')).not.toBeInTheDocument()
   expect(within(list).getByText('Completed')).toBeVisible()
   expect(within(list).getAllByText(/2 Oct 2026, 01:30/)).toHaveLength(2)
-  expect(within(list).queryByRole('link')).not.toBeInTheDocument()
+  expect(within(list).getAllByRole('link')).toHaveLength(2)
+  expect(
+    within(list).getByRole('link', { name: `View report: ${report.title}` }),
+  ).toHaveAttribute('href', `/reports/${report.id}`)
   expect(within(list).queryByRole('button')).not.toBeInTheDocument()
   expect(within(list).queryByText(report.reportNumber)).not.toBeInTheDocument()
   expect(requests).toHaveLength(1)

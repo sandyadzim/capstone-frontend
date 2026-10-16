@@ -22,6 +22,7 @@ import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminUnitsRouteImport } from './routes/admin.units'
 import { Route as TechnicianIndexRouteImport } from './routes/technician.index'
 import { Route as ResidentExamplesFormRouteImport } from './routes/_resident.examples.form'
+import { Route as ResidentReportsReportIdRouteImport } from './routes/_resident.reports.$reportId'
 import { Route as AdminAccountsIndexRouteImport } from './routes/admin.accounts.index'
 import { Route as AdminAccountsAccountIdRouteImport } from './routes/admin.accounts.$accountId'
 import { Route as AdminAccountsNewRouteImport } from './routes/admin.accounts.new'
@@ -104,6 +105,11 @@ const TechnicianIndexRoute = TechnicianIndexRouteImport.update({
 const ResidentExamplesFormRoute = ResidentExamplesFormRouteImport.update({
   id: '/examples/form',
   path: '/examples/form',
+  getParentRoute: () => ResidentRoute,
+} as any)
+const ResidentReportsReportIdRoute = ResidentReportsReportIdRouteImport.update({
+  id: '/reports/$reportId',
+  path: '/reports/$reportId',
   getParentRoute: () => ResidentRoute,
 } as any)
 const AdminAccountsIndexRoute = AdminAccountsIndexRouteImport.update({
@@ -220,6 +226,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/technician/': typeof TechnicianIndexRoute
   '/examples/form': typeof ResidentExamplesFormRoute
+  '/reports/$reportId': typeof ResidentReportsReportIdRoute
   '/admin/accounts/$accountId': typeof AdminAccountsAccountIdRouteWithChildren
   '/admin/accounts/new': typeof AdminAccountsNewRoute
   '/admin/examples/form': typeof AdminExamplesFormRoute
@@ -248,6 +255,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/technician': typeof TechnicianIndexRoute
   '/examples/form': typeof ResidentExamplesFormRoute
+  '/reports/$reportId': typeof ResidentReportsReportIdRoute
   '/admin/accounts/new': typeof AdminAccountsNewRoute
   '/admin/examples/form': typeof AdminExamplesFormRoute
   '/admin/reports/$reportId': typeof AdminReportsReportIdRoute
@@ -280,6 +288,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/technician/': typeof TechnicianIndexRoute
   '/_resident/examples/form': typeof ResidentExamplesFormRoute
+  '/_resident/reports/$reportId': typeof ResidentReportsReportIdRoute
   '/admin/accounts/$accountId': typeof AdminAccountsAccountIdRouteWithChildren
   '/admin/accounts/new': typeof AdminAccountsNewRoute
   '/admin/examples/form': typeof AdminExamplesFormRoute
@@ -315,6 +324,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/technician/'
     | '/examples/form'
+    | '/reports/$reportId'
     | '/admin/accounts/$accountId'
     | '/admin/accounts/new'
     | '/admin/examples/form'
@@ -343,6 +353,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/technician'
     | '/examples/form'
+    | '/reports/$reportId'
     | '/admin/accounts/new'
     | '/admin/examples/form'
     | '/admin/reports/$reportId'
@@ -374,6 +385,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/technician/'
     | '/_resident/examples/form'
+    | '/_resident/reports/$reportId'
     | '/admin/accounts/$accountId'
     | '/admin/accounts/new'
     | '/admin/examples/form'
@@ -493,6 +505,13 @@ declare module '@tanstack/react-router' {
       path: '/examples/form'
       fullPath: '/examples/form'
       preLoaderRoute: typeof ResidentExamplesFormRouteImport
+      parentRoute: typeof ResidentRoute
+    }
+    '/_resident/reports/$reportId': {
+      id: '/_resident/reports/$reportId'
+      path: '/reports/$reportId'
+      fullPath: '/reports/$reportId'
+      preLoaderRoute: typeof ResidentReportsReportIdRouteImport
       parentRoute: typeof ResidentRoute
     }
     '/admin/accounts/': {
@@ -635,12 +654,14 @@ interface ResidentRouteChildren {
   ResidentProfileRoute: typeof ResidentProfileRoute
   ResidentIndexRoute: typeof ResidentIndexRoute
   ResidentExamplesFormRoute: typeof ResidentExamplesFormRoute
+  ResidentReportsReportIdRoute: typeof ResidentReportsReportIdRoute
 }
 
 const ResidentRouteChildren: ResidentRouteChildren = {
   ResidentProfileRoute: ResidentProfileRoute,
   ResidentIndexRoute: ResidentIndexRoute,
   ResidentExamplesFormRoute: ResidentExamplesFormRoute,
+  ResidentReportsReportIdRoute: ResidentReportsReportIdRoute,
 }
 
 const ResidentRouteWithChildren = ResidentRoute._addFileChildren(

@@ -1,9 +1,29 @@
 import { queryOptions } from '@tanstack/react-query'
 import { getProperty } from '@/features/admin/settings/settings-api'
 import { getResidentUnit } from './resident-api'
-import { listReports } from '@/features/admin/reports/report-api'
+import { getReport, listReports } from '@/features/admin/reports/report-api'
 
 export const residentReportsKey = ['resident', 'reports'] as const
+
+export function residentReportDetailQueryOptions(
+  actorId: string,
+  unitId: string,
+  reportId: string,
+) {
+  return queryOptions({
+    queryKey: [
+      ...residentReportsKey,
+      'detail',
+      actorId,
+      unitId,
+      reportId.toLowerCase(),
+    ],
+    queryFn: ({ signal }) => getReport(reportId, signal),
+    meta: { requiresAuth: true },
+    staleTime: 60_000,
+    retry: false,
+  })
+}
 
 export function residentReportsQueryOptions(actorId: string, unitId: string) {
   return queryOptions({
