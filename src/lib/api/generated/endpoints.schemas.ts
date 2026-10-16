@@ -326,9 +326,7 @@ export interface CostItemResponseDto {
   id: string
   type: CostItemResponseDtoType
   description: string
-  quantity: string
-  unitPrice: string
-  subtotal: string
+  price: string
   createdAt: string
   updatedAt: string
 }
@@ -880,10 +878,8 @@ export type MaintenanceExecutionControllerSaveCostItemsBodyItemsItem = {
    * @maxLength 240
    */
   description: string
-  /** @pattern ^(?:0|[1-9]\d*)(?:\.\d{1,3})?$ */
-  quantity: string
-  /** @pattern ^(?:0|[1-9]\d*)(?:\.\d{1,2})?$ */
-  unitPrice: string
+  /** @pattern ^(?:0|[1-9]\d{0,20})(?:\.\d{1,2})?$ */
+  price: string
 }
 
 export type MaintenanceExecutionControllerSaveCostItemsBody = {

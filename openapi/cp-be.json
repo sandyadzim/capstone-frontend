@@ -2356,21 +2356,12 @@
                           "minLength": 1,
                           "maxLength": 240
                         },
-                        "quantity": {
+                        "price": {
                           "type": "string",
-                          "pattern": "^(?:0|[1-9]\\d*)(?:\\.\\d{1,3})?$"
-                        },
-                        "unitPrice": {
-                          "type": "string",
-                          "pattern": "^(?:0|[1-9]\\d*)(?:\\.\\d{1,2})?$"
+                          "pattern": "^(?:0|[1-9]\\d{0,20})(?:\\.\\d{1,2})?$"
                         }
                       },
-                      "required": [
-                        "type",
-                        "description",
-                        "quantity",
-                        "unitPrice"
-                      ],
+                      "required": ["type", "description", "price"],
                       "additionalProperties": false
                     }
                   }
@@ -3516,9 +3507,7 @@
           "id": { "type": "string", "format": "uuid" },
           "type": { "type": "string", "enum": ["SERVICE", "MATERIAL"] },
           "description": { "type": "string" },
-          "quantity": { "type": "string", "example": "1.250" },
-          "unitPrice": { "type": "string", "example": "125000.00" },
-          "subtotal": { "type": "string", "example": "156250.00" },
+          "price": { "type": "string", "example": "125000.00" },
           "createdAt": { "type": "string", "format": "date-time" },
           "updatedAt": { "type": "string", "format": "date-time" }
         },
@@ -3526,9 +3515,7 @@
           "id",
           "type",
           "description",
-          "quantity",
-          "unitPrice",
-          "subtotal",
+          "price",
           "createdAt",
           "updatedAt"
         ]

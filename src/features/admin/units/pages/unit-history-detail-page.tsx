@@ -294,12 +294,11 @@ export function UnitHistoryDetailPage() {
                         {item.description}
                       </p>
                       <p className="mt-1 text-muted-foreground">
-                        {item.type === 'SERVICE' ? 'Service' : 'Material'} ·{' '}
-                        {item.quantity} × {formatIdr(item.unitPrice)}
+                        {item.type === 'SERVICE' ? 'Service' : 'Material'}
                       </p>
                     </div>
                     <span className="tabular-nums">
-                      {formatIdr(item.subtotal)}
+                      {formatIdr(item.price)}
                     </span>
                   </li>
                 ))}

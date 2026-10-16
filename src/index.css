@@ -252,7 +252,8 @@
 /* Keep focused controls clear of pinned portal headers and navigation. */
 html:has(.resident-profile),
 html:has(.technician-profile),
-html:has(.technician-task-detail) {
+html:has(.technician-task-detail),
+html:has(.technician-completion) {
   scroll-padding-top: calc(5rem + env(safe-area-inset-top));
   scroll-padding-bottom: calc(7rem + env(safe-area-inset-bottom));
 }

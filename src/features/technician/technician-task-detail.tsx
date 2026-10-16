@@ -13,7 +13,7 @@ import {
 } from '@/features/admin/reports/report-labels'
 import { sessionQueryOptions } from '@/features/auth/auth-session'
 import { ApiError } from '@/lib/api/error'
-import { formatDate } from '@/lib/format'
+import { formatDate, formatIdr } from '@/lib/format'
 import { technicianTaskDetailQueryOptions } from './technician-queries'
 import { StartWorkSheet } from './start-work-sheet'
 
@@ -178,6 +178,39 @@ function TaskDetails({
               void query.refetch()
             }}
           />
+          {report.status === 'IN_PROGRESS' &&
+            report.assignment?.technician?.id === actorId && (
+              <Button
+                nativeButton={false}
+                role="link"
+                className="min-h-11 w-full"
+                disabled={query.isFetching || query.isError}
+                render={
+                  <Link
+                    to="/technician/tasks/$reportId/complete"
+                    params={{ reportId }}
+                  />
+                }
+              >
+                Complete task
+              </Button>
+            )}
+          {['COMPLETED', 'CLOSED'].includes(report.status) && (
+            <section
+              className="rounded-xl bg-muted/60 p-4"
+              aria-label="Completion summary"
+            >
+              <h2 className="text-base font-semibold">Task completed</h2>
+              {report.status === 'COMPLETED' && (
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  Your work is awaiting administrator review.
+                </p>
+              )}
+              <p className="mt-3 text-sm font-medium">
+                Total cost: {formatIdr(report.totalCost)}
+              </p>
+            </section>
+          )}
           {report.rejectionReason && (
             <section
               aria-label="Rejection reason"

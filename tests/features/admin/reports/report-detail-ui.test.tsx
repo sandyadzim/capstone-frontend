@@ -178,7 +178,13 @@ it('shows recorded work, audit identities, grouped attachments and authoritative
   ).toBeInTheDocument()
   expect(
     within(section('Costs and receipt')).getAllByText('Rp 0,01'),
-  ).toHaveLength(2)
+  ).toHaveLength(1)
+  expect(
+    within(section('Costs and receipt')).getByText('Rp 0,00'),
+  ).toBeVisible()
+  expect(
+    within(section('Costs and receipt')).queryByText(/×/),
+  ).not.toBeInTheDocument()
   expect(screen.getByRole('link', { name: /View receipt/ })).toHaveAttribute(
     'href',
     'https://example.test/receipt.pdf',

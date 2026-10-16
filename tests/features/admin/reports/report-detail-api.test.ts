@@ -76,7 +76,19 @@ it.each([
   },
   {
     ...completedReport,
-    costItems: [{ ...completedReport.costItems![0], quantity: '1e3' }],
+    costItems: [{ ...completedReport.costItems![0], price: '1e3' }],
+  },
+  {
+    ...completedReport,
+    costItems: [
+      {
+        ...completedReport.costItems![0],
+        price: undefined,
+        quantity: '1',
+        unitPrice: '1',
+        subtotal: '1',
+      },
+    ],
   },
   { ...reportDetail, totalCost: 100 },
   { ...reportDetail, closedAt: 'invalid' },

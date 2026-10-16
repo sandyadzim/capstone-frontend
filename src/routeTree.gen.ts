@@ -44,6 +44,7 @@ import { Route as AdminUnitsUnitIdIndexRouteImport } from './routes/admin.units.
 import { Route as AdminUnitsUnitIdEditRouteImport } from './routes/admin.units.$unitId.edit'
 import { Route as AdminUnitsUnitIdHistoryRouteImport } from './routes/admin.units.$unitId.history'
 import { Route as AdminUnitsUnitIdResidentRouteImport } from './routes/admin.units.$unitId.resident'
+import { Route as TechnicianTasksReportIdCompleteRouteImport } from './routes/technician.tasks.$reportId_.complete'
 import { Route as AdminUnitsUnitIdHistoryIndexRouteImport } from './routes/admin.units.$unitId.history.index'
 import { Route as AdminUnitsUnitIdHistoryReportIdRouteImport } from './routes/admin.units.$unitId.history.$reportId'
 
@@ -224,6 +225,12 @@ const AdminUnitsUnitIdResidentRoute =
     path: '/resident',
     getParentRoute: () => AdminUnitsUnitIdRoute,
   } as any)
+const TechnicianTasksReportIdCompleteRoute =
+  TechnicianTasksReportIdCompleteRouteImport.update({
+    id: '/tasks/$reportId_/complete',
+    path: '/tasks/$reportId/complete',
+    getParentRoute: () => TechnicianRoute,
+  } as any)
 const AdminUnitsUnitIdHistoryIndexRoute =
   AdminUnitsUnitIdHistoryIndexRouteImport.update({
     id: '/',
@@ -270,6 +277,7 @@ export interface FileRoutesByFullPath {
   '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
   '/admin/units/$unitId/history': typeof AdminUnitsUnitIdHistoryRouteWithChildren
   '/admin/units/$unitId/resident': typeof AdminUnitsUnitIdResidentRoute
+  '/technician/tasks/$reportId/complete': typeof TechnicianTasksReportIdCompleteRoute
   '/admin/accounts/$accountId/': typeof AdminAccountsAccountIdIndexRoute
   '/admin/units/$unitId/': typeof AdminUnitsUnitIdIndexRoute
   '/admin/units/$unitId/history/$reportId': typeof AdminUnitsUnitIdHistoryReportIdRoute
@@ -299,6 +307,7 @@ export interface FileRoutesByTo {
   '/admin/accounts/$accountId/edit': typeof AdminAccountsAccountIdEditRoute
   '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
   '/admin/units/$unitId/resident': typeof AdminUnitsUnitIdResidentRoute
+  '/technician/tasks/$reportId/complete': typeof TechnicianTasksReportIdCompleteRoute
   '/admin/accounts/$accountId': typeof AdminAccountsAccountIdIndexRoute
   '/admin/units/$unitId': typeof AdminUnitsUnitIdIndexRoute
   '/admin/units/$unitId/history/$reportId': typeof AdminUnitsUnitIdHistoryReportIdRoute
@@ -339,6 +348,7 @@ export interface FileRoutesById {
   '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
   '/admin/units/$unitId/history': typeof AdminUnitsUnitIdHistoryRouteWithChildren
   '/admin/units/$unitId/resident': typeof AdminUnitsUnitIdResidentRoute
+  '/technician/tasks/$reportId_/complete': typeof TechnicianTasksReportIdCompleteRoute
   '/admin/accounts/$accountId/': typeof AdminAccountsAccountIdIndexRoute
   '/admin/units/$unitId/': typeof AdminUnitsUnitIdIndexRoute
   '/admin/units/$unitId/history/$reportId': typeof AdminUnitsUnitIdHistoryReportIdRoute
@@ -379,6 +389,7 @@ export interface FileRouteTypes {
     | '/admin/units/$unitId/edit'
     | '/admin/units/$unitId/history'
     | '/admin/units/$unitId/resident'
+    | '/technician/tasks/$reportId/complete'
     | '/admin/accounts/$accountId/'
     | '/admin/units/$unitId/'
     | '/admin/units/$unitId/history/$reportId'
@@ -408,6 +419,7 @@ export interface FileRouteTypes {
     | '/admin/accounts/$accountId/edit'
     | '/admin/units/$unitId/edit'
     | '/admin/units/$unitId/resident'
+    | '/technician/tasks/$reportId/complete'
     | '/admin/accounts/$accountId'
     | '/admin/units/$unitId'
     | '/admin/units/$unitId/history/$reportId'
@@ -447,6 +459,7 @@ export interface FileRouteTypes {
     | '/admin/units/$unitId/edit'
     | '/admin/units/$unitId/history'
     | '/admin/units/$unitId/resident'
+    | '/technician/tasks/$reportId_/complete'
     | '/admin/accounts/$accountId/'
     | '/admin/units/$unitId/'
     | '/admin/units/$unitId/history/$reportId'
@@ -707,6 +720,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUnitsUnitIdResidentRouteImport
       parentRoute: typeof AdminUnitsUnitIdRoute
     }
+    '/technician/tasks/$reportId_/complete': {
+      id: '/technician/tasks/$reportId_/complete'
+      path: '/tasks/$reportId/complete'
+      fullPath: '/technician/tasks/$reportId/complete'
+      preLoaderRoute: typeof TechnicianTasksReportIdCompleteRouteImport
+      parentRoute: typeof TechnicianRoute
+    }
     '/admin/units/$unitId/history/': {
       id: '/admin/units/$unitId/history/'
       path: '/'
@@ -878,6 +898,7 @@ interface TechnicianRouteChildren {
   TechnicianIndexRoute: typeof TechnicianIndexRoute
   TechnicianExamplesFormRoute: typeof TechnicianExamplesFormRoute
   TechnicianTasksReportIdRoute: typeof TechnicianTasksReportIdRoute
+  TechnicianTasksReportIdCompleteRoute: typeof TechnicianTasksReportIdCompleteRoute
 }
 
 const TechnicianRouteChildren: TechnicianRouteChildren = {
@@ -885,6 +906,7 @@ const TechnicianRouteChildren: TechnicianRouteChildren = {
   TechnicianIndexRoute: TechnicianIndexRoute,
   TechnicianExamplesFormRoute: TechnicianExamplesFormRoute,
   TechnicianTasksReportIdRoute: TechnicianTasksReportIdRoute,
+  TechnicianTasksReportIdCompleteRoute: TechnicianTasksReportIdCompleteRoute,
 }
 
 const TechnicianRouteWithChildren = TechnicianRoute._addFileChildren(

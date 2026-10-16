@@ -156,13 +156,10 @@ export function ReportDetailSections({
                       {item.description}
                     </p>
                     <p className="mt-1 text-muted-foreground wrap-anywhere">
-                      {item.type === 'SERVICE' ? 'Service' : 'Material'} ·{' '}
-                      {item.quantity} × {formatIdr(item.unitPrice)}
+                      {item.type === 'SERVICE' ? 'Service' : 'Material'}
                     </p>
                   </div>
-                  <span className="tabular-nums">
-                    {formatIdr(item.subtotal)}
-                  </span>
+                  <span className="tabular-nums">{formatIdr(item.price)}</span>
                 </li>
               ))}
             </ul>

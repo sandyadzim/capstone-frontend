@@ -149,9 +149,7 @@ export const historyDetailSchema = z.object({
         id: z.uuid(),
         type: z.enum(['SERVICE', 'MATERIAL']),
         description: z.string(),
-        quantity: z.string().regex(/^\d+(?:\.\d+)?$/),
-        unitPrice: moneySchema,
-        subtotal: moneySchema,
+        price: moneySchema,
       }),
     )
     .optional(),

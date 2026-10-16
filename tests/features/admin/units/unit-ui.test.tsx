@@ -1140,6 +1140,9 @@ it('loads history detail directly with chronological milestones, work result and
   )
   expect(screen.getByText('No additional notes')).toBeVisible()
   expect(screen.getByRole('heading', { name: 'Cost Details' })).toBeVisible()
+  const costSection = screen.getByRole('region', { name: 'Cost Details' })
+  expect(within(costSection).getByText('Rp 125.000,50')).toBeVisible()
+  expect(within(costSection).queryByText(/×/)).not.toBeInTheDocument()
   const breadcrumb = screen.getByRole('navigation', { name: 'Breadcrumb' })
   await user.click(
     within(breadcrumb).getByRole('link', { name: 'Maintenance History' }),

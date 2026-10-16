@@ -274,7 +274,10 @@ it('uses fixed eligibility filters, debounced search, pagination and all support
   await waitFor(() =>
     expect(reads().at(-1)?.params).toMatchObject({ q: 'sam', page: 1 }),
   )
-  await user.click(within(dialog).getByRole('combobox', { name: 'Page size' }))
+  const pageSize = within(dialog).getByRole('combobox', { name: 'Page size' })
+  await waitFor(() => expect(pageSize).toBeEnabled())
+  await user.click(pageSize)
+  await screen.findByRole('option', { name: '10' })
   for (const size of [10, 20, 50, 100])
     expect(
       screen.getByRole('option', { name: String(size) }),
