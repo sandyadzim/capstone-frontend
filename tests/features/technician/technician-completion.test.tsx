@@ -939,3 +939,32 @@ it('preserves the largest supported item price through the formatted field and r
     ],
   })
 })
+
+it('preserves the task-list page through completion Cancel, Back and successful completion', async () => {
+  const user = userEvent.setup()
+  const source = '?page=2&from=tasks'
+  const view = await show(path.replace('/complete', '') + source)
+  await user.click(await screen.findByRole('link', { name: 'Complete task' }))
+  await screen.findByLabelText('Inspection findings')
+  expect(screen.getByRole('link', { name: 'Back to task' })).toHaveAttribute(
+    'href',
+    path.replace('/complete', '') + source,
+  )
+  await user.click(screen.getByRole('link', { name: 'Cancel' }))
+  expect(
+    await screen.findByRole('link', { name: 'Back to tasks' }),
+  ).toHaveAttribute('href', '/technician/tasks?page=2')
+  await user.click(screen.getByRole('link', { name: 'Complete task' }))
+  await fill()
+  selectReceipt()
+  await submit()
+  await screen.findByRole('region', { name: 'Completion summary' })
+  expect(view.router.state.location.search).toMatchObject({
+    from: 'tasks',
+    page: 2,
+  })
+  expect(screen.getByRole('link', { name: 'Back to tasks' })).toHaveAttribute(
+    'href',
+    '/technician/tasks?page=2',
+  )
+})

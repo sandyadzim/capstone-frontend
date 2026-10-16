@@ -15,6 +15,7 @@ import type { ReportListItem } from '@/features/admin/reports/report-schema'
 import { residentReportStatusStyles } from '@/features/resident/resident-report-status'
 import { formatDate } from '@/lib/format'
 import { Link } from '@tanstack/react-router'
+import type { TechnicianTasksSearch } from './technician-tasks-search'
 
 const categoryIcons = {
   AC: AirVent,
@@ -25,13 +26,20 @@ const categoryIcons = {
   OTHER: Shapes,
 }
 
-export function TechnicianTaskCard({ report }: { report: ReportListItem }) {
+export function TechnicianTaskCard({
+  report,
+  source,
+}: {
+  report: ReportListItem
+  source?: TechnicianTasksSearch
+}) {
   const Icon = categoryIcons[report.category]
   return (
     <li className="min-w-0 overflow-hidden rounded-2xl border border-border/60 bg-card shadow-[0_2px_3px_#00000003,0_5px_14px_#00000004]">
       <Link
         to="/technician/tasks/$reportId"
         params={{ reportId: report.id }}
+        search={source ? { from: 'tasks', ...source } : {}}
         aria-label={`View task: ${report.title}`}
         className="block rounded-2xl focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring"
       >
@@ -55,7 +63,7 @@ export function TechnicianTaskCard({ report }: { report: ReportListItem }) {
           <h3 className="mt-4 text-lg leading-6.5 font-medium tracking-tight wrap-anywhere">
             {report.title}
           </h3>
-          <p className="mt-3 flex flex-wrap items-center gap-x-1.5 text-xs leading-5 text-muted-foreground">
+          <p className="mt-3 flex flex-wrap wrap-anywhere items-center gap-x-1.5 text-xs leading-5 text-muted-foreground">
             <Building2 aria-hidden="true" className="mr-1 size-3.5" />
             Unit {report.unit.unitNumber}
             <span aria-hidden="true">·</span>Floor {report.unit.floor}

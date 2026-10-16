@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Link, useParams } from '@tanstack/react-router'
+import { Link, useParams, useSearch } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
@@ -16,6 +16,7 @@ export function TechnicianCompletionPage() {
   const { reportId } = useParams({
     from: '/technician/tasks/$reportId_/complete',
   })
+  const source = useSearch({ from: '/technician/tasks/$reportId_/complete' })
   const client = useQueryClient()
   const { data: actor } = useQuery(sessionQueryOptions(client))
   return (
@@ -31,6 +32,7 @@ export function TechnicianCompletionPage() {
             <Link
               to="/technician/tasks/$reportId"
               params={{ reportId }}
+              search={source}
               aria-label="Back to task"
             />
           }

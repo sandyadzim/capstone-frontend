@@ -3,10 +3,9 @@ import { ClipboardList, Home } from 'lucide-react'
 import { ProtectedPortal } from '@/features/auth/components/protected-portal'
 
 export function TechnicianLayout() {
-  const isHome = useLocation({
-    select: (location) =>
-      location.pathname.replace(/\/$/, '') === '/technician',
-  })
+  const pathname = useLocation({ select: (location) => location.pathname })
+  const isHome = pathname.replace(/\/$/, '') === '/technician'
+  const isTasks = pathname.startsWith('/technician/tasks')
   return (
     <ProtectedPortal role="TECHNICIAN">
       {() => (
@@ -30,7 +29,7 @@ export function TechnicianLayout() {
                 to="/technician"
                 activeOptions={{ exact: true }}
                 aria-current={isHome ? 'page' : undefined}
-                className="flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg text-xs text-primary focus-visible:outline-2 focus-visible:outline-ring"
+                className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg text-xs focus-visible:outline-2 focus-visible:outline-ring ${isHome ? 'text-primary' : 'text-muted-foreground'}`}
               >
                 <span
                   className={
@@ -41,16 +40,21 @@ export function TechnicianLayout() {
                 </span>
                 Home
               </Link>
-              <button
-                type="button"
-                disabled
-                className="flex min-h-14 cursor-not-allowed flex-col items-center justify-center gap-1 rounded-lg text-xs text-muted-foreground"
+              <Link
+                to="/technician/tasks"
+                search={{ view: 'ongoing', page: 1 }}
+                aria-current={isTasks ? 'page' : undefined}
+                className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg text-xs focus-visible:outline-2 focus-visible:outline-ring ${isTasks ? 'text-primary' : 'text-muted-foreground'}`}
               >
-                <span className="px-4 py-1">
+                <span
+                  className={
+                    isTasks ? 'rounded-lg bg-accent px-4 py-1' : 'px-4 py-1'
+                  }
+                >
                   <ClipboardList aria-hidden="true" className="size-5" />
                 </span>
                 Tasks
-              </button>
+              </Link>
             </nav>
           </div>
         </div>

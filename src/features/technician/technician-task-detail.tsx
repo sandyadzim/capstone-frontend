@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Link, useParams } from '@tanstack/react-router'
+import { Link, useParams, useSearch } from '@tanstack/react-router'
 import { ArrowLeft, Building2 } from 'lucide-react'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
@@ -19,6 +19,7 @@ import { StartWorkSheet } from './start-work-sheet'
 
 export function TechnicianTaskDetail() {
   const { reportId } = useParams({ from: '/technician/tasks/$reportId' })
+  const source = useSearch({ from: '/technician/tasks/$reportId' })
   const client = useQueryClient()
   const { data: actor } = useQuery(sessionQueryOptions(client))
   return (
@@ -32,9 +33,16 @@ export function TechnicianTaskDetail() {
           className="size-11"
           render={
             <Link
-              to="/technician"
+              to={source.from === 'tasks' ? '/technician/tasks' : '/technician'}
+              search={
+                source.from === 'tasks'
+                  ? { view: source.view, page: source.page }
+                  : {}
+              }
               activeOptions={{ exact: true }}
-              aria-label="Back to home"
+              aria-label={
+                source.from === 'tasks' ? 'Back to tasks' : 'Back to home'
+              }
             />
           }
         >
@@ -66,6 +74,7 @@ function TaskDetails({
   actorId: string
   reportId: string
 }) {
+  const source = useSearch({ from: '/technician/tasks/$reportId' })
   const query = useQuery(technicianTaskDetailQueryOptions(actorId, reportId))
   const [accessLost, setAccessLost] = useState(false)
   const heading = useRef<HTMLHeadingElement>(null)
@@ -189,6 +198,7 @@ function TaskDetails({
                   <Link
                     to="/technician/tasks/$reportId/complete"
                     params={{ reportId }}
+                    search={source}
                   />
                 }
               >

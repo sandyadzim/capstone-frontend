@@ -23,6 +23,7 @@ import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminUnitsRouteImport } from './routes/admin.units'
 import { Route as TechnicianIndexRouteImport } from './routes/technician.index'
 import { Route as TechnicianProfileRouteImport } from './routes/technician.profile'
+import { Route as TechnicianTasksRouteImport } from './routes/technician.tasks'
 import { Route as ResidentExamplesFormRouteImport } from './routes/_resident.examples.form'
 import { Route as ResidentReportsIndexRouteImport } from './routes/_resident.reports.index'
 import { Route as ResidentReportsReportIdRouteImport } from './routes/_resident.reports.$reportId'
@@ -37,6 +38,7 @@ import { Route as AdminUnitsIndexRouteImport } from './routes/admin.units.index'
 import { Route as AdminUnitsUnitIdRouteImport } from './routes/admin.units.$unitId'
 import { Route as AdminUnitsNewRouteImport } from './routes/admin.units.new'
 import { Route as TechnicianExamplesFormRouteImport } from './routes/technician.examples.form'
+import { Route as TechnicianTasksIndexRouteImport } from './routes/technician.tasks.index'
 import { Route as TechnicianTasksReportIdRouteImport } from './routes/technician.tasks.$reportId'
 import { Route as AdminAccountsAccountIdIndexRouteImport } from './routes/admin.accounts.$accountId.index'
 import { Route as AdminAccountsAccountIdEditRouteImport } from './routes/admin.accounts.$accountId.edit'
@@ -117,6 +119,11 @@ const TechnicianProfileRoute = TechnicianProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => TechnicianRoute,
 } as any)
+const TechnicianTasksRoute = TechnicianTasksRouteImport.update({
+  id: '/tasks',
+  path: '/tasks',
+  getParentRoute: () => TechnicianRoute,
+} as any)
 const ResidentExamplesFormRoute = ResidentExamplesFormRouteImport.update({
   id: '/examples/form',
   path: '/examples/form',
@@ -187,10 +194,15 @@ const TechnicianExamplesFormRoute = TechnicianExamplesFormRouteImport.update({
   path: '/examples/form',
   getParentRoute: () => TechnicianRoute,
 } as any)
+const TechnicianTasksIndexRoute = TechnicianTasksIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TechnicianTasksRoute,
+} as any)
 const TechnicianTasksReportIdRoute = TechnicianTasksReportIdRouteImport.update({
-  id: '/tasks/$reportId',
-  path: '/tasks/$reportId',
-  getParentRoute: () => TechnicianRoute,
+  id: '/$reportId',
+  path: '/$reportId',
+  getParentRoute: () => TechnicianTasksRoute,
 } as any)
 const AdminAccountsAccountIdIndexRoute =
   AdminAccountsAccountIdIndexRouteImport.update({
@@ -227,9 +239,9 @@ const AdminUnitsUnitIdResidentRoute =
   } as any)
 const TechnicianTasksReportIdCompleteRoute =
   TechnicianTasksReportIdCompleteRouteImport.update({
-    id: '/tasks/$reportId_/complete',
-    path: '/tasks/$reportId/complete',
-    getParentRoute: () => TechnicianRoute,
+    id: '/$reportId_/complete',
+    path: '/$reportId/complete',
+    getParentRoute: () => TechnicianTasksRoute,
   } as any)
 const AdminUnitsUnitIdHistoryIndexRoute =
   AdminUnitsUnitIdHistoryIndexRouteImport.update({
@@ -256,6 +268,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/units': typeof AdminUnitsRouteWithChildren
   '/technician/profile': typeof TechnicianProfileRoute
+  '/technician/tasks': typeof TechnicianTasksRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/technician/': typeof TechnicianIndexRoute
   '/examples/form': typeof ResidentExamplesFormRoute
@@ -273,6 +286,7 @@ export interface FileRoutesByFullPath {
   '/admin/accounts/': typeof AdminAccountsIndexRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/admin/units/': typeof AdminUnitsIndexRoute
+  '/technician/tasks/': typeof TechnicianTasksIndexRoute
   '/admin/accounts/$accountId/edit': typeof AdminAccountsAccountIdEditRoute
   '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
   '/admin/units/$unitId/history': typeof AdminUnitsUnitIdHistoryRouteWithChildren
@@ -304,6 +318,7 @@ export interface FileRoutesByTo {
   '/admin/accounts': typeof AdminAccountsIndexRoute
   '/admin/reports': typeof AdminReportsIndexRoute
   '/admin/units': typeof AdminUnitsIndexRoute
+  '/technician/tasks': typeof TechnicianTasksIndexRoute
   '/admin/accounts/$accountId/edit': typeof AdminAccountsAccountIdEditRoute
   '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
   '/admin/units/$unitId/resident': typeof AdminUnitsUnitIdResidentRoute
@@ -326,6 +341,7 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/units': typeof AdminUnitsRouteWithChildren
   '/technician/profile': typeof TechnicianProfileRoute
+  '/technician/tasks': typeof TechnicianTasksRouteWithChildren
   '/_resident/': typeof ResidentIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/technician/': typeof TechnicianIndexRoute
@@ -344,6 +360,7 @@ export interface FileRoutesById {
   '/admin/accounts/': typeof AdminAccountsIndexRoute
   '/admin/reports/': typeof AdminReportsIndexRoute
   '/admin/units/': typeof AdminUnitsIndexRoute
+  '/technician/tasks/': typeof TechnicianTasksIndexRoute
   '/admin/accounts/$accountId/edit': typeof AdminAccountsAccountIdEditRoute
   '/admin/units/$unitId/edit': typeof AdminUnitsUnitIdEditRoute
   '/admin/units/$unitId/history': typeof AdminUnitsUnitIdHistoryRouteWithChildren
@@ -368,6 +385,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/units'
     | '/technician/profile'
+    | '/technician/tasks'
     | '/admin/'
     | '/technician/'
     | '/examples/form'
@@ -385,6 +403,7 @@ export interface FileRouteTypes {
     | '/admin/accounts/'
     | '/admin/reports/'
     | '/admin/units/'
+    | '/technician/tasks/'
     | '/admin/accounts/$accountId/edit'
     | '/admin/units/$unitId/edit'
     | '/admin/units/$unitId/history'
@@ -416,6 +435,7 @@ export interface FileRouteTypes {
     | '/admin/accounts'
     | '/admin/reports'
     | '/admin/units'
+    | '/technician/tasks'
     | '/admin/accounts/$accountId/edit'
     | '/admin/units/$unitId/edit'
     | '/admin/units/$unitId/resident'
@@ -437,6 +457,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/units'
     | '/technician/profile'
+    | '/technician/tasks'
     | '/_resident/'
     | '/admin/'
     | '/technician/'
@@ -455,6 +476,7 @@ export interface FileRouteTypes {
     | '/admin/accounts/'
     | '/admin/reports/'
     | '/admin/units/'
+    | '/technician/tasks/'
     | '/admin/accounts/$accountId/edit'
     | '/admin/units/$unitId/edit'
     | '/admin/units/$unitId/history'
@@ -573,6 +595,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TechnicianProfileRouteImport
       parentRoute: typeof TechnicianRoute
     }
+    '/technician/tasks': {
+      id: '/technician/tasks'
+      path: '/tasks'
+      fullPath: '/technician/tasks'
+      preLoaderRoute: typeof TechnicianTasksRouteImport
+      parentRoute: typeof TechnicianRoute
+    }
     '/_resident/examples/form': {
       id: '/_resident/examples/form'
       path: '/examples/form'
@@ -671,12 +700,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TechnicianExamplesFormRouteImport
       parentRoute: typeof TechnicianRoute
     }
+    '/technician/tasks/': {
+      id: '/technician/tasks/'
+      path: '/'
+      fullPath: '/technician/tasks/'
+      preLoaderRoute: typeof TechnicianTasksIndexRouteImport
+      parentRoute: typeof TechnicianTasksRoute
+    }
     '/technician/tasks/$reportId': {
       id: '/technician/tasks/$reportId'
-      path: '/tasks/$reportId'
+      path: '/$reportId'
       fullPath: '/technician/tasks/$reportId'
       preLoaderRoute: typeof TechnicianTasksReportIdRouteImport
-      parentRoute: typeof TechnicianRoute
+      parentRoute: typeof TechnicianTasksRoute
     }
     '/admin/accounts/$accountId/': {
       id: '/admin/accounts/$accountId/'
@@ -722,10 +758,10 @@ declare module '@tanstack/react-router' {
     }
     '/technician/tasks/$reportId_/complete': {
       id: '/technician/tasks/$reportId_/complete'
-      path: '/tasks/$reportId/complete'
+      path: '/$reportId/complete'
       fullPath: '/technician/tasks/$reportId/complete'
       preLoaderRoute: typeof TechnicianTasksReportIdCompleteRouteImport
-      parentRoute: typeof TechnicianRoute
+      parentRoute: typeof TechnicianTasksRoute
     }
     '/admin/units/$unitId/history/': {
       id: '/admin/units/$unitId/history/'
@@ -893,20 +929,34 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface TechnicianTasksRouteChildren {
+  TechnicianTasksReportIdRoute: typeof TechnicianTasksReportIdRoute
+  TechnicianTasksIndexRoute: typeof TechnicianTasksIndexRoute
+  TechnicianTasksReportIdCompleteRoute: typeof TechnicianTasksReportIdCompleteRoute
+}
+
+const TechnicianTasksRouteChildren: TechnicianTasksRouteChildren = {
+  TechnicianTasksReportIdRoute: TechnicianTasksReportIdRoute,
+  TechnicianTasksIndexRoute: TechnicianTasksIndexRoute,
+  TechnicianTasksReportIdCompleteRoute: TechnicianTasksReportIdCompleteRoute,
+}
+
+const TechnicianTasksRouteWithChildren = TechnicianTasksRoute._addFileChildren(
+  TechnicianTasksRouteChildren,
+)
+
 interface TechnicianRouteChildren {
   TechnicianProfileRoute: typeof TechnicianProfileRoute
+  TechnicianTasksRoute: typeof TechnicianTasksRouteWithChildren
   TechnicianIndexRoute: typeof TechnicianIndexRoute
   TechnicianExamplesFormRoute: typeof TechnicianExamplesFormRoute
-  TechnicianTasksReportIdRoute: typeof TechnicianTasksReportIdRoute
-  TechnicianTasksReportIdCompleteRoute: typeof TechnicianTasksReportIdCompleteRoute
 }
 
 const TechnicianRouteChildren: TechnicianRouteChildren = {
   TechnicianProfileRoute: TechnicianProfileRoute,
+  TechnicianTasksRoute: TechnicianTasksRouteWithChildren,
   TechnicianIndexRoute: TechnicianIndexRoute,
   TechnicianExamplesFormRoute: TechnicianExamplesFormRoute,
-  TechnicianTasksReportIdRoute: TechnicianTasksReportIdRoute,
-  TechnicianTasksReportIdCompleteRoute: TechnicianTasksReportIdCompleteRoute,
 }
 
 const TechnicianRouteWithChildren = TechnicianRoute._addFileChildren(

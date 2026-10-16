@@ -143,7 +143,10 @@ it('shows the Concierge home and real property, then opens profile within the te
     'aria-current',
     'page',
   )
-  expect(within(nav).getByRole('button', { name: 'Tasks' })).toBeDisabled()
+  expect(within(nav).getByRole('link', { name: 'Tasks' })).toHaveAttribute(
+    'href',
+    '/technician/tasks',
+  )
   expect(
     screen.queryByRole('link', { name: 'Example form' }),
   ).not.toBeInTheDocument()

@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { useForm, type FieldPath } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { ImageUploadField } from '@/components/image-upload-field'
@@ -41,6 +41,7 @@ export function CompletionForm({
   disabled: boolean
 }) {
   const navigate = useNavigate()
+  const source = useSearch({ from: '/technician/tasks/$reportId_/complete' })
   const feedback = useRef<HTMLParagraphElement>(null)
   const [fileError, setFileError] = useState<{
     field: 'photos' | 'receipt'
@@ -81,6 +82,7 @@ export function CompletionForm({
       await navigate({
         to: '/technician/tasks/$reportId',
         params: { reportId: report.id },
+        search: source,
       })
     } catch (error) {
       let first: FieldPath<CompletionValues> | undefined
@@ -241,6 +243,7 @@ export function CompletionForm({
               <Link
                 to="/technician/tasks/$reportId"
                 params={{ reportId: report.id }}
+                search={source}
               />
             }
           >
