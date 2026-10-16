@@ -4,27 +4,25 @@ import userEvent from '@testing-library/user-event'
 import { expect, it } from 'vitest'
 import { FullScreenLoader } from '@/components/full-screen-loader'
 
-it('locks focus until the action finishes, announces updates, and restores the page', async () => {
-  const view = (open: boolean, message: string) => (
+it('locks focus until the action finishes, announces generic loading, and restores the page', async () => {
+  const view = (open: boolean) => (
     <>
       <button>Background action</button>
-      <FullScreenLoader open={open} message={message} />
+      <FullScreenLoader open={open} />
     </>
   )
-  const { rerender } = render(view(false, 'Saving changes…'))
+  const { rerender } = render(view(false))
   const user = userEvent.setup()
   const background = screen.getByRole('button', { name: 'Background action' })
   await user.click(background)
-  rerender(view(true, 'Saving changes…'))
+  rerender(view(true))
   const loader = await screen.findByRole('dialog', {
     name: 'Action in progress',
   })
   await waitFor(() =>
     expect(loader.contains(document.activeElement)).toBe(true),
   )
-  expect(within(loader).getByRole('status')).toHaveTextContent(
-    'Saving changes…',
-  )
+  expect(within(loader).getByRole('status')).toHaveTextContent('Loading…')
   expect(within(loader).queryByRole('button')).not.toBeInTheDocument()
   expect(
     screen.queryByRole('button', { name: 'Background action' }),
@@ -34,11 +32,9 @@ it('locks focus until the action finishes, announces updates, and restores the p
     loader,
   )
   expect(loader.contains(document.activeElement)).toBe(true)
-  rerender(view(true, 'Uploading image…'))
-  expect(within(loader).getByRole('status')).toHaveTextContent(
-    'Uploading image…',
-  )
-  rerender(view(false, 'Uploading image…'))
+  rerender(view(true))
+  expect(within(loader).getByRole('status')).toHaveTextContent('Loading…')
+  rerender(view(false))
   await waitFor(() =>
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument(),
   )

@@ -6,13 +6,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 
-export function FullScreenLoader({
-  open,
-  message = 'Please wait…',
-}: {
-  open: boolean
-  message?: string
-}) {
+export function FullScreenLoader({ open }: { open: boolean }) {
   return (
     <Dialog
       open={open}
@@ -36,7 +30,7 @@ export function FullScreenLoader({
           aria-atomic="true"
           className="max-w-md text-center text-sm leading-6 wrap-anywhere"
         >
-          {message}
+          Loading…
         </p>
       </DialogContent>
     </Dialog>
