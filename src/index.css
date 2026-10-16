@@ -250,27 +250,39 @@
 }
 
 /* Keep focused controls clear of the pinned profile header and navigation. */
-html:has(.resident-profile) {
+html:has(.resident-profile),
+html:has(.technician-profile) {
   scroll-padding-top: calc(5rem + env(safe-area-inset-top));
   scroll-padding-bottom: calc(7rem + env(safe-area-inset-bottom));
 }
 
-.resident-information {
+.resident-information,
+.profile-information {
   display: grid;
   gap: 1rem;
   font-size: 0.875rem;
   line-height: 1.5rem;
 }
 
-.resident-information dt {
+.resident-information dt,
+.profile-information dt {
   color: var(--muted-foreground);
   font-size: 0.75rem;
   line-height: 1rem;
 }
 
-.resident-information dd {
+.resident-information dd,
+.profile-information dd {
   margin: 0.25rem 0 0;
   overflow-wrap: anywhere;
+}
+
+.profile-information {
+  gap: 1.25rem;
+}
+
+.profile-information dt {
+  line-height: 1.25rem;
 }
 
 .admin-shell {

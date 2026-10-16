@@ -5,7 +5,7 @@ import { Building2 } from 'lucide-react'
 import { sessionQueryOptions } from '@/features/auth/auth-session'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { InformationLoading, ReadError } from './resident-information'
+import { InformationLoading, ReadError } from '@/components/read-feedback'
 import { ResidentOngoingReports } from './resident-ongoing-reports'
 import {
   residentPropertyQueryOptions,

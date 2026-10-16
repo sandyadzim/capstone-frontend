@@ -22,6 +22,7 @@ import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminUnitsRouteImport } from './routes/admin.units'
 import { Route as TechnicianIndexRouteImport } from './routes/technician.index'
+import { Route as TechnicianProfileRouteImport } from './routes/technician.profile'
 import { Route as ResidentExamplesFormRouteImport } from './routes/_resident.examples.form'
 import { Route as ResidentReportsIndexRouteImport } from './routes/_resident.reports.index'
 import { Route as ResidentReportsReportIdRouteImport } from './routes/_resident.reports.$reportId'
@@ -107,6 +108,11 @@ const AdminUnitsRoute = AdminUnitsRouteImport.update({
 const TechnicianIndexRoute = TechnicianIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => TechnicianRoute,
+} as any)
+const TechnicianProfileRoute = TechnicianProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => TechnicianRoute,
 } as any)
 const ResidentExamplesFormRoute = ResidentExamplesFormRouteImport.update({
@@ -236,6 +242,7 @@ export interface FileRoutesByFullPath {
   '/admin/reports': typeof AdminReportsRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/units': typeof AdminUnitsRouteWithChildren
+  '/technician/profile': typeof TechnicianProfileRoute
   '/admin/': typeof AdminIndexRoute
   '/technician/': typeof TechnicianIndexRoute
   '/examples/form': typeof ResidentExamplesFormRoute
@@ -265,6 +272,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/profile': typeof ResidentProfileRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/technician/profile': typeof TechnicianProfileRoute
   '/': typeof ResidentIndexRoute
   '/admin': typeof AdminIndexRoute
   '/technician': typeof TechnicianIndexRoute
@@ -300,6 +308,7 @@ export interface FileRoutesById {
   '/admin/reports': typeof AdminReportsRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/units': typeof AdminUnitsRouteWithChildren
+  '/technician/profile': typeof TechnicianProfileRoute
   '/_resident/': typeof ResidentIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/technician/': typeof TechnicianIndexRoute
@@ -339,6 +348,7 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/units'
+    | '/technician/profile'
     | '/admin/'
     | '/technician/'
     | '/examples/form'
@@ -368,6 +378,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/profile'
     | '/admin/settings'
+    | '/technician/profile'
     | '/'
     | '/admin'
     | '/technician'
@@ -402,6 +413,7 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/units'
+    | '/technician/profile'
     | '/_resident/'
     | '/admin/'
     | '/technician/'
@@ -527,6 +539,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/technician/'
       preLoaderRoute: typeof TechnicianIndexRouteImport
+      parentRoute: typeof TechnicianRoute
+    }
+    '/technician/profile': {
+      id: '/technician/profile'
+      path: '/profile'
+      fullPath: '/technician/profile'
+      preLoaderRoute: typeof TechnicianProfileRouteImport
       parentRoute: typeof TechnicianRoute
     }
     '/_resident/examples/form': {
@@ -836,11 +855,13 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface TechnicianRouteChildren {
+  TechnicianProfileRoute: typeof TechnicianProfileRoute
   TechnicianIndexRoute: typeof TechnicianIndexRoute
   TechnicianExamplesFormRoute: typeof TechnicianExamplesFormRoute
 }
 
 const TechnicianRouteChildren: TechnicianRouteChildren = {
+  TechnicianProfileRoute: TechnicianProfileRoute,
   TechnicianIndexRoute: TechnicianIndexRoute,
   TechnicianExamplesFormRoute: TechnicianExamplesFormRoute,
 }

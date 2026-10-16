@@ -5,7 +5,7 @@ import { sessionQueryOptions } from '@/features/auth/auth-session'
 import { useSignOut } from '@/features/auth/hooks/use-sign-out'
 import { Button } from '@/components/ui/button'
 import { useThemeStore } from '@/stores/theme-store'
-import { InformationLoading, ReadError } from './resident-information'
+import { InformationLoading, ReadError } from '@/components/read-feedback'
 import {
   residentPropertyQueryOptions,
   residentUnitQueryOptions,

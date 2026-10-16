@@ -220,7 +220,7 @@ it.each(['ADMIN', 'TECHNICIAN', 'RESIDENT'] as const)(
     ]
     const user = userEvent.setup()
     await show(path, actor)
-    if (role === 'RESIDENT') {
+    if (role === 'RESIDENT' || role === 'TECHNICIAN') {
       await user.click(
         await screen.findByRole('link', {
           name: `Open profile for ${actor.name}`,

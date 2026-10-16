@@ -23,7 +23,7 @@ import {
 import { sessionQueryOptions } from '@/features/auth/auth-session'
 import { ApiError } from '@/lib/api/error'
 import { formatDate, formatIdr } from '@/lib/format'
-import { InformationLoading, ReadError } from './resident-information'
+import { InformationLoading, ReadError } from '@/components/read-feedback'
 import {
   residentReportDetailQueryOptions,
   residentUnitQueryOptions,

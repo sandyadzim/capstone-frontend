@@ -1517,6 +1517,13 @@
             "description": "Include only REPORTED, VERIFIED, ASSIGNED, IN_PROGRESS, and COMPLETED reports. Other filters still apply."
           },
           {
+            "name": "historyOnly",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "boolean", "default": false },
+            "description": "Include only CLOSED and REJECTED reports. Other filters still apply; combining with ongoingOnly=true returns no reports."
+          },
+          {
             "name": "category",
             "required": false,
             "in": "query",

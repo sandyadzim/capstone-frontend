@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { ClipboardList } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ResidentReportCard } from './resident-report-card'
-import { ReadError } from './resident-information'
+import { ReadError } from '@/components/read-feedback'
 import { residentReportsQueryOptions } from './resident-queries'
 
 export function ResidentOngoingReports({

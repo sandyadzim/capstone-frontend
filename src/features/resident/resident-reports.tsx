@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { sessionQueryOptions } from '@/features/auth/auth-session'
 import { usePageCorrection } from '@/hooks/use-page-correction'
 import { ApiError } from '@/lib/api/error'
-import { InformationLoading, ReadError } from './resident-information'
+import { InformationLoading, ReadError } from '@/components/read-feedback'
 import {
   residentReportListQueryOptions,
   residentUnitQueryOptions,
