@@ -254,7 +254,7 @@ it('rejects invalid URL UUIDs without a report request', async () => {
   expect(await screen.findByText(/Invalid report ID/)).toBeVisible()
   expect(reads()).toHaveLength(0)
 })
-it('leads with the prominent unit and report-only information, without status card, tabs or work results', async () => {
+it('leads with the prominent unit and report-only information, with a status badge and read-only Work Result tab', async () => {
   detail = {
     ...completedReport,
     status: 'ASSIGNED',
@@ -267,15 +267,18 @@ it('leads with the prominent unit and report-only information, without status ca
   ).toBeVisible()
   expect(location).toHaveTextContent('Floor 2')
   expect(location).toHaveTextContent('Bring a drain-cleaning kit.')
-  expect(screen.getByText('Status: Assigned')).toBeVisible()
+  expect(screen.getByText('Assigned', { exact: true })).toBeVisible()
   expect(screen.getByText(detail.reportNumber)).toBeVisible()
   expect(screen.getByText('2 Oct 2026, 01:30 WIB')).toBeVisible()
   expect(
     screen.queryByRole('region', { name: 'Task status' }),
   ).not.toBeInTheDocument()
-  expect(screen.queryByRole('tab')).not.toBeInTheDocument()
+  expect(screen.getByRole('tab', { name: 'Work Result' })).toBeVisible()
+  expect(screen.getByText('Assigned', { exact: true })).toHaveAttribute(
+    'data-slot',
+    'badge',
+  )
   for (const value of [
-    'Work result',
     'Total cost (IDR)',
     'Internal note.',
     'Resident creator',
@@ -300,7 +303,9 @@ it.each([
     expect(screen.queryByRole('button', { name: 'Start work' }) !== null).toBe(
       status === 'ASSIGNED',
     )
-    expect(screen.queryByRole('tablist')).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('tablist', { name: 'Task detail sections' }),
+    ).toBeVisible()
   },
 )
 it('renders rejection, closed date, priority fallback and empty damage photos', async () => {
@@ -352,7 +357,7 @@ it('shows skeleton and retry without automatic retries', async () => {
 })
 it('retains refresh data, disables Start work and recovers with Retry', async () => {
   await show()
-  await screen.findByText('Status: Assigned')
+  await screen.findByText('Assigned', { exact: true })
   getError = new ApiError('Unavailable', 'HTTP_ERROR', 503)
   await act(() =>
     client.refetchQueries({
@@ -373,7 +378,7 @@ it('retains refresh data, disables Start work and recovers with Retry', async ()
 })
 it.each([403, 404])('hides cached details on GET %s', async (status) => {
   await show()
-  await screen.findByText('Status: Assigned')
+  await screen.findByText('Assigned', { exact: true })
   getError = new ApiError('Unavailable', 'HTTP_ERROR', status)
   await act(() =>
     client.refetchQueries({
@@ -421,7 +426,7 @@ it('sends one exact WIB payload, updates in place, invalidates tasks and focuses
   await client.fetchQuery(technicianTasksQueryOptions(technician.id))
   await show()
   await send()
-  expect(await screen.findByText('Status: In progress')).toBeVisible()
+  expect(await screen.findByText('In progress', { exact: true })).toBeVisible()
   expect(writes()).toHaveLength(1)
   expect(writes()[0]).toMatchObject({ method: 'post', withCredentials: true })
   expect(JSON.parse(writes()[0].data)).toEqual({
@@ -458,7 +463,7 @@ it('blocks duplicate submission, Escape, outside press and Cancel while pending'
     screen.getByRole('dialog', { name: 'Action in progress' }),
   ).toBeVisible()
   await act(() => pending.release())
-  expect(await screen.findByText('Status: In progress')).toBeVisible()
+  expect(await screen.findByText('In progress', { exact: true })).toBeVisible()
 })
 it('retains arrival after a server field error and focuses it', async () => {
   startError = new ApiError('Check arrival.', 'VALIDATION_ERROR', 400, {
@@ -498,7 +503,7 @@ it('reconciles a lost success response by GET without a second POST', async () =
   commitBeforeError = true
   await show()
   await send()
-  expect(await screen.findByText('Status: In progress')).toBeVisible()
+  expect(await screen.findByText('In progress', { exact: true })).toBeVisible()
   await waitFor(() =>
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument(),
   )
@@ -520,7 +525,7 @@ it('retains the arrival if reconciliation confirms Assigned', async () => {
 it('blocks another POST until an uncertain outcome has a successful read', async () => {
   startError = new ApiError('Timeout.', 'TIMEOUT')
   await show()
-  await screen.findByText('Status: Assigned')
+  await screen.findByText('Assigned', { exact: true })
   getError = new ApiError('Offline', 'NETWORK_ERROR')
   const { sheet } = await send()
   expect(
@@ -657,7 +662,7 @@ it('disables past calendar dates while allowing today, and keeps the sheet open 
   expect(writes()).toHaveLength(0)
   await selectTime(user, '10', '01')
   await user.click(within(sheet).getByRole('button', { name: 'Start' }))
-  expect(await screen.findByText('Status: In progress')).toBeVisible()
+  expect(await screen.findByText('In progress', { exact: true })).toBeVisible()
 })
 it('revalidates the current clock when submitting a draft that has become stale', async () => {
   await show()
@@ -749,4 +754,61 @@ it('validates the returned identity, status and saved arrival before using a sta
   await expect(startTask(detail.id, payload)).rejects.toMatchObject({
     code: 'INVALID_RESPONSE',
   })
+})
+
+it('shows saved findings, photos, costs and receipt in the read-only Work Result tab', async () => {
+  detail = {
+    ...completedReport,
+    assignment: detail.assignment,
+    totalCost: '9007199254740993.01',
+    maintenanceResult: {
+      ...completedReport.maintenanceResult!,
+      additionalNotes: 'Keep clear.',
+    },
+  }
+  await show()
+  const tab = await screen.findByRole('tab', { name: 'Work Result' })
+  await userEvent.click(tab)
+  const panel = screen.getByRole('tabpanel', { name: 'Work Result' })
+  expect(within(panel).getByText('Loose connection.')).toBeVisible()
+  expect(within(panel).getByText('Reconnected the cable.')).toBeVisible()
+  expect(within(panel).getByText('Keep clear.')).toBeVisible()
+  expect(
+    within(panel).getByText(/Total cost: Rp 9.007.199.254.740.993,01/),
+  ).toBeVisible()
+  expect(
+    within(panel).getByRole('link', { name: /View receipt/ }),
+  ).toHaveAttribute('target', '_blank')
+  expect(within(panel).queryByRole('textbox')).not.toBeInTheDocument()
+  const trigger = within(panel).getByRole('button', {
+    name: 'View repair photo 1',
+  })
+  await userEvent.click(trigger)
+  await screen.findByRole('dialog', { name: 'Image preview' })
+  await userEvent.keyboard('{Escape}')
+  await waitFor(() => expect(trigger).toHaveFocus())
+  await act(() =>
+    client.invalidateQueries({
+      queryKey: technicianTaskDetailQueryOptions(technician.id, detail.id)
+        .queryKey,
+    }),
+  )
+  expect(tab).toHaveAttribute('aria-selected', 'true')
+  expect(screen.queryByText('Internal note.')).not.toBeInTheDocument()
+})
+
+it('supports keyboard tabs and an empty Work Result without another request', async () => {
+  await show()
+  const tab = await screen.findByRole('tab', { name: 'Overview' })
+  tab.focus()
+  await userEvent.keyboard('{End}')
+  expect(screen.getByRole('tab', { name: 'Work Result' })).toHaveFocus()
+  expect(screen.getByText('No work result yet.')).toBeVisible()
+  expect(
+    screen.queryByRole('button', { name: 'Start work' }),
+  ).not.toBeInTheDocument()
+  await userEvent.keyboard('{ArrowRight}')
+  expect(screen.getByRole('tab', { name: 'Overview' })).toHaveFocus()
+  expect(screen.getByRole('button', { name: 'Start work' })).toBeVisible()
+  expect(reads()).toHaveLength(1)
 })

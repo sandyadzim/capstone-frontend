@@ -470,7 +470,7 @@ it('signs out once, blocks duplicates while pending and clears private data on c
   const { router } = await show('/technician/profile')
   await client.fetchQuery(technicianTasksQueryOptions(technician.id))
   await user.click(await screen.findByRole('button', { name: 'Sign out' }))
-  expect(screen.getByRole('button', { name: 'Signing out…' })).toBeDisabled()
+  expect(screen.getByRole('button', { name: 'Loading…' })).toBeDisabled()
   expect(
     requests.filter((request) => request.url === '/auth/logout'),
   ).toHaveLength(1)

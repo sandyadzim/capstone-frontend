@@ -137,7 +137,7 @@ export function TechnicianProfile() {
           onClick={() => logout.mutate()}
         >
           <LogOut aria-hidden="true" />
-          {logout.isPending ? 'Signing out…' : 'Sign out'}
+          {logout.isPending ? 'Loading…' : 'Sign out'}
         </Button>
       </div>
     </div>

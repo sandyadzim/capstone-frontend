@@ -110,10 +110,7 @@ function TaskCompletion({
           )}
         </>
       )}
-      <FullScreenLoader
-        open={completion.busy}
-        message={completion.progress || 'Completing task…'}
-      />
+      <FullScreenLoader open={completion.busy} />
     </>
   )
 }

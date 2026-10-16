@@ -61,8 +61,7 @@ export function TechnicianTasks({ actorId }: { actorId: string }) {
               No ongoing tasks
             </h3>
             <p className="mx-auto mt-3 max-w-64 text-sm leading-6 text-muted-foreground">
-              Your assigned maintenance work will appear here. Check with your
-              administrator if you’re expecting a task.
+              Your assigned tasks will appear here.
             </p>
           </div>
         ))}

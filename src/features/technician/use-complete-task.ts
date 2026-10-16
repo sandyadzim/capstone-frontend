@@ -37,7 +37,6 @@ export function useCompleteTask(actorId: string, reportId: string) {
   const client = useQueryClient()
   const active = useRef<AbortController | null>(null)
   const [busy, setBusy] = useState(false)
-  const [progress, setProgress] = useState('')
   const [photos, setPhotos] = useState<File[]>([])
   const [receipt, setReceipt] = useState<File>()
   const [accessLost, setAccessLost] = useState(false)
@@ -105,20 +104,15 @@ export function useCompleteTask(actorId: string, reportId: string) {
     mutationFn: async (attempt: Attempt) => {
       const signal = attempt.controller.signal
       assertCurrent(attempt)
-      setProgress('Saving work results…')
       let saved = await saveWorkResult(reportId, attempt.values, signal)
       store(attempt, saved)
       attempt.phase = 'costs'
-      setProgress('Saving costs…')
       saved = await saveWorkCosts(reportId, attempt.values, signal)
       store(attempt, saved)
       attempt.phase = 'photo'
-      for (const [index, file] of attempt.photos.entries()) {
+      for (const file of attempt.photos) {
         assertCurrent(attempt)
         attempt.file = file
-        setProgress(
-          `Uploading repair photo ${index + 1} of ${attempt.photos.length}…`,
-        )
         const photo = await uploadRepairPhoto(reportId, file, signal)
         assertCurrent(attempt)
         if (saved.repairPhotos.some((existing) => existing.id === photo.id))
@@ -136,7 +130,6 @@ export function useCompleteTask(actorId: string, reportId: string) {
         assertCurrent(attempt)
         attempt.phase = 'receipt'
         attempt.file = attempt.receipt
-        setProgress('Uploading receipt…')
         const attachment = await uploadReceipt(
           reportId,
           attempt.receipt,
@@ -149,7 +142,6 @@ export function useCompleteTask(actorId: string, reportId: string) {
       }
       assertCurrent(attempt)
       attempt.phase = 'complete'
-      setProgress('Completing task…')
       saved = await completeTask(reportId, signal)
       store(attempt, saved)
       return saved
@@ -201,7 +193,6 @@ export function useCompleteTask(actorId: string, reportId: string) {
         [403, 404].includes(error.statusCode ?? 0)
       )
         setAccessLost(true)
-      setProgress('Checking saved task information…')
       await client.invalidateQueries({
         queryKey: detail.queryKey,
         refetchType: 'none',
@@ -240,7 +231,6 @@ export function useCompleteTask(actorId: string, reportId: string) {
           refetchType: 'none',
         })
         setBusy(false)
-        setProgress('')
         mutation.reset()
       }
       active.current = null
@@ -248,7 +238,6 @@ export function useCompleteTask(actorId: string, reportId: string) {
   }
   return {
     busy,
-    progress,
     photos,
     setPhotos,
     receipt,

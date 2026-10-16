@@ -260,6 +260,7 @@ it('submits the exact sequence, trimmed values, decimal strings, files and backe
     path.replace('/complete', ''),
   )
   expect(screen.getAllByText(/awaiting administrator review/)[0]).toBeVisible()
+  await userEvent.click(screen.getByRole('tab', { name: 'Work Result' }))
   expect(screen.getByText(/Total cost: Rp/).textContent).toContain('0,01')
   const changes = writes()
   expect(changes.map((r) => [r.method, r.url?.split('/').at(-1)])).toEqual([
@@ -468,7 +469,7 @@ it('locks pending interaction and prevents duplicate submit', async () => {
   expect(
     await screen.findByRole('dialog', { name: 'Action in progress' }),
   ).toBeVisible()
-  expect(screen.getByText('Saving work results…')).toBeVisible()
+  expect(screen.getByText('Loading…')).toBeVisible()
   fireEvent.submit(
     screen.getByLabelText('Inspection findings').closest('form')!,
   )
@@ -877,6 +878,7 @@ it('displays exact large backend totals after completion without floating-point 
   report.status = 'COMPLETED'
   report.totalCost = '999999999999999999.25'
   await show(path.replace('/complete', ''))
+  await userEvent.click(await screen.findByRole('tab', { name: 'Work Result' }))
   expect(await screen.findByText(/Total cost:/)).toHaveTextContent(
     '999.999.999.999.999.999,25',
   )

@@ -356,10 +356,7 @@ export function StartWorkSheet({
             Start
           </Button>
         </SheetFooter>
-        <FullScreenLoader
-          open={busy}
-          message={checking ? 'Checking task status…' : 'Starting work…'}
-        />
+        <FullScreenLoader open={busy} />
       </SheetContent>
     </Sheet>
   )
