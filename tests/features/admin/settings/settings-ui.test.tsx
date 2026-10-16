@@ -607,9 +607,9 @@ it.each(settingsActions)(
 )
 
 it.each([
-  ['details', 'Save changes', 'Saving…', 'Property details saved'],
-  ['upload', 'Replace logo', 'Uploading…', 'Property logo saved'],
-  ['remove', 'Remove logo', 'Removing…', 'Property logo removed'],
+  ['details', 'Save changes', 'Loading…', 'Property details saved'],
+  ['upload', 'Replace logo', 'Loading…', 'Property logo saved'],
+  ['remove', 'Remove logo', 'Loading…', 'Property logo removed'],
 ])(
   'shows the %s busy state and disables editing until it finishes',
   async (action, button, pendingLabel, successTitle) => {
@@ -643,7 +643,9 @@ it.each([
     expect(name).toHaveAttribute('readonly')
     expect(fileInput).toBeDisabled()
     expect(
-      screen.getByRole('button', { name: /Save changes|Saving…/ }),
+      within(name.closest('form')!).getByRole('button', {
+        name: /Save changes|Loading…/,
+      }),
     ).toBeDisabled()
     await act(async () => release())
     await screen.findByText(successTitle)

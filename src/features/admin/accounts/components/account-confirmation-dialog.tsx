@@ -85,7 +85,7 @@ export function AccountConfirmationDialog({
                 className="size-4 animate-spin motion-reduce:animate-none"
               />
             )}
-            {busy ? 'Saving…' : confirmLabel}
+            {busy ? 'Loading…' : confirmLabel}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -251,7 +251,7 @@ export function AccountPasswordDialog({
                   className="size-4 animate-spin motion-reduce:animate-none"
                 />
               )}
-              {busy ? 'Saving…' : 'Change password'}
+              {busy ? 'Loading…' : 'Change password'}
             </Button>
           </DialogFooter>
         </form>

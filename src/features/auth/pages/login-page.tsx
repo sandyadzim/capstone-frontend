@@ -204,7 +204,7 @@ export function LoginPage({
           disabled={login.isPending}
           aria-busy={login.isPending}
         >
-          {login.isPending ? 'Signing in…' : 'Sign in'}
+          {login.isPending ? 'Loading…' : 'Sign in'}
         </Button>
       </form>
     </AuthLayout>

@@ -398,9 +398,7 @@ it('locks the page through creation and uploads, then unlocks after success', as
   const loader = await screen.findByRole('dialog', {
     name: 'Action in progress',
   })
-  expect(within(loader).getByRole('status')).toHaveTextContent(
-    'Creating report…',
-  )
+  expect(within(loader).getByRole('status')).toHaveTextContent('Loading…')
   expect(
     screen.queryByRole('link', { name: 'Reports' }),
   ).not.toBeInTheDocument()
@@ -411,9 +409,7 @@ it('locks the page through creation and uploads, then unlocks after success', as
     releaseCreate()
   })
   await waitFor(() =>
-    expect(within(loader).getByRole('status')).toHaveTextContent(
-      'Uploading photo 1 of 1…',
-    ),
+    expect(within(loader).getByRole('status')).toHaveTextContent('Loading…'),
   )
   expect(screen.getByRole('dialog', { name: 'Action in progress' })).toBe(
     loader,

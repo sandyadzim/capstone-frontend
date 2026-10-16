@@ -14,7 +14,6 @@ export function useCreateReport() {
   const [report, setReport] = useState<CreatedReport>()
   const [uploadError, setUploadError] = useState<string>()
   const [busy, setBusy] = useState(false)
-  const [progress, setProgress] = useState('')
   const active = useRef<AbortController | null>(null)
 
   useEffect(() => () => active.current?.abort(), [])
@@ -64,7 +63,6 @@ export function useCreateReport() {
     setUploadError(undefined)
     let created: CreatedReport | undefined
     try {
-      setProgress('Creating report…')
       created = await createMutation.mutateAsync({
         values,
         signal: controller.signal,
@@ -76,9 +74,8 @@ export function useCreateReport() {
         client.invalidateQueries({ queryKey: residentReportsKey }),
         client.invalidateQueries({ queryKey: unitsKey }),
       ])
-      for (const [index, file] of files.entries()) {
+      for (const file of files) {
         if (!isCurrent()) return false
-        setProgress(`Uploading photo ${index + 1} of ${files.length}…`)
         await uploadMutation.mutateAsync({
           id: created.id,
           file,
@@ -96,11 +93,10 @@ export function useCreateReport() {
     } finally {
       active.current = null
       setBusy(false)
-      setProgress('')
       createMutation.reset()
       uploadMutation.reset()
     }
   }
 
-  return { report, uploadError, busy, progress, create }
+  return { report, uploadError, busy, create }
 }

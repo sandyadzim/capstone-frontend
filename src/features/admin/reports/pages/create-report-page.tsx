@@ -29,10 +29,7 @@ export function CreateReportPage() {
   }
   return (
     <div className="min-w-0 max-w-3xl">
-      <FullScreenLoader
-        open={creation.busy}
-        message={creation.progress || 'Submitting report…'}
-      />
+      <FullScreenLoader open={creation.busy} />
       <Breadcrumb aria-label="Breadcrumb">
         <BreadcrumbList>
           <BreadcrumbItem>

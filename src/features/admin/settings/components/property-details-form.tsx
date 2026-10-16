@@ -103,7 +103,7 @@ export function PropertyDetailsForm({
               className="animate-spin motion-reduce:animate-none"
             />
           )}
-          {saving ? 'Saving…' : 'Save changes'}
+          {saving ? 'Loading…' : 'Save changes'}
         </Button>
       </div>
     </form>

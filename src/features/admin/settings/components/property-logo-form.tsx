@@ -213,7 +213,7 @@ export function PropertyLogoForm({
               className="animate-spin motion-reduce:animate-none"
             />
           )}
-          {removing ? 'Removing…' : 'Remove logo'}
+          {removing ? 'Loading…' : 'Remove logo'}
         </Button>
         <Button
           disabled={busy || !selection}
@@ -227,7 +227,7 @@ export function PropertyLogoForm({
               className="animate-spin motion-reduce:animate-none"
             />
           )}
-          {uploading ? 'Uploading…' : logoUrl ? 'Replace logo' : 'Upload logo'}
+          {uploading ? 'Loading…' : logoUrl ? 'Replace logo' : 'Upload logo'}
         </Button>
       </div>
     </div>

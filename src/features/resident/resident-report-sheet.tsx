@@ -136,10 +136,7 @@ function ResidentReportSheet({
           : undefined
       }
     >
-      <FullScreenLoader
-        open={creation.busy}
-        message={creation.progress || 'Submitting report…'}
-      />
+      <FullScreenLoader open={creation.busy} />
       {!complete && (
         <SheetHeader className="shrink-0 border-b px-6 py-5 pr-16">
           <SheetTitle

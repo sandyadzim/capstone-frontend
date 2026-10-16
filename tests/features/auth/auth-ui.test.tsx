@@ -161,7 +161,7 @@ it('disables duplicate submission during login and does not render the portal un
   await show()
   await credentials(user)
   await user.click(screen.getByRole('button', { name: 'Sign in' }))
-  const pending = await screen.findByRole('button', { name: 'Signing in…' })
+  const pending = await screen.findByRole('button', { name: 'Loading…' })
   expect(pending).toBeDisabled()
   await user.click(pending)
   expect(adapter).toHaveBeenCalledOnce()

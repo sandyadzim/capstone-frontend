@@ -385,7 +385,7 @@ export function AccountForm({
               className="size-4 animate-spin motion-reduce:animate-none"
             />
           )}
-          {busy ? 'Creating…' : 'Create account'}
+          {busy ? 'Loading…' : 'Create account'}
         </Button>
       </div>
     </form>

@@ -452,9 +452,7 @@ it('locks pending submissions without dismissing the form or refetching report d
   const loader = await screen.findByRole('dialog', {
     name: 'Action in progress',
   })
-  expect(within(loader).getByRole('status')).toHaveTextContent(
-    'Assigning technician…',
-  )
+  expect(within(loader).getByRole('status')).toHaveTextContent('Loading…')
   await user.keyboard('{Tab}{Escape}{Enter}')
   expect(loader).toBeInTheDocument()
   expect(loader.contains(document.activeElement)).toBe(true)
@@ -617,4 +615,25 @@ it('disables assignment while report details refresh or have a read error', asyn
   })
   expect(trigger).toBeDisabled()
   expect(reads()).toHaveLength(0)
+})
+
+it('shows technician names without login identifiers in both selection and confirmation', async () => {
+  const user = userEvent.setup()
+  await show()
+  await user.click(
+    await screen.findByRole('button', { name: 'Assign technician' }),
+  )
+  const dialog = await screen.findByRole('dialog', {
+    name: /Assign technician ·/,
+  })
+  await within(dialog).findAllByText(technician.name)
+  expect(within(dialog).queryByText('Login ID')).not.toBeInTheDocument()
+  expect(
+    within(dialog).queryByText(technician.loginIdentifier),
+  ).not.toBeInTheDocument()
+  await choose(user, dialog)
+  expect(within(dialog).getByText(technician.name)).toBeVisible()
+  expect(
+    within(dialog).queryByText(technician.loginIdentifier),
+  ).not.toBeInTheDocument()
 })

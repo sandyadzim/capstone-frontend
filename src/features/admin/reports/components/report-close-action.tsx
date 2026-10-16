@@ -185,7 +185,7 @@ export function ReportCloseAction({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <FullScreenLoader open={closure.busy} message="Closing report…" />
+      <FullScreenLoader open={closure.busy} />
     </>
   )
 }

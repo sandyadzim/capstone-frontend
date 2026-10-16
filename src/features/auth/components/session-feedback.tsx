@@ -38,7 +38,7 @@ export function AccessDenied({ actor }: { actor: Actor }) {
           disabled={logout.isPending}
           onClick={() => logout.mutate()}
         >
-          {logout.isPending ? 'Signing out…' : 'Sign out'}
+          {logout.isPending ? 'Loading…' : 'Sign out'}
         </Button>
       </div>
     </AuthLayout>

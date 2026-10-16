@@ -465,7 +465,7 @@ it('locks pending status confirmation, prevents another write and preserves a co
       name: /^(Activate |Deactivate |Change password for |Change resident role)/,
     }),
   ).toBeInTheDocument()
-  expect(screen.getByRole('button', { name: 'Saving…' })).toBeDisabled()
+  expect(screen.getByRole('button', { name: 'Loading…' })).toBeDisabled()
   await act(async () => {
     pendingWrite = undefined
     release()

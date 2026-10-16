@@ -264,7 +264,7 @@ export function AccountEditForm({
                 className="size-4 animate-spin motion-reduce:animate-none"
               />
             )}
-            {busy ? 'Saving…' : 'Save changes'}
+            {busy ? 'Loading…' : 'Save changes'}
           </Button>
         </div>
       </form>

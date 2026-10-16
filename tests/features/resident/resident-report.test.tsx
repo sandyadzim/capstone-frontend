@@ -367,7 +367,7 @@ it.each(['create', 'upload'])(
     const loader = await screen.findByRole('dialog', {
       name: 'Action in progress',
     })
-    if (phase === 'upload') await screen.findByText('Uploading photo 1 of 1…')
+    if (phase === 'upload') await screen.findByText('Loading…')
     fireEvent.submit(form)
     await userEvent.keyboard('{Escape}')
     await userEvent.click(

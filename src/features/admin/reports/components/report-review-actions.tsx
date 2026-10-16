@@ -403,14 +403,7 @@ export function ReportReviewActions({
           headingRef={headingRef}
         />
       </div>
-      <FullScreenLoader
-        open={review.busy}
-        message={
-          review.decision === 'reject'
-            ? 'Rejecting report…'
-            : 'Verifying report…'
-        }
-      />
+      <FullScreenLoader open={review.busy} />
     </>
   )
 }

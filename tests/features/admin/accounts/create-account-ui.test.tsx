@@ -370,7 +370,7 @@ it('locks fields and actions during creation, prevents duplicate submission and 
   const user = userEvent.setup()
   const feedback = vi.spyOn(toast, 'add')
   await user.click(screen.getByRole('button', { name: 'Create account' }))
-  await screen.findByRole('button', { name: 'Creating…' })
+  await screen.findByRole('button', { name: 'Loading…' })
   expect(screen.getByLabelText('Name')).toHaveAttribute('readonly')
   expect(screen.getByRole('combobox', { name: 'Role' })).toBeDisabled()
   expect(

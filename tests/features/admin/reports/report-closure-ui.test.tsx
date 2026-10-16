@@ -231,9 +231,7 @@ it('locks pending closure and pauses detail reads without duplicate writes', asy
   const loader = await screen.findByRole('dialog', {
     name: 'Action in progress',
   })
-  expect(within(loader).getByRole('status')).toHaveTextContent(
-    'Closing report…',
-  )
+  expect(within(loader).getByRole('status')).toHaveTextContent('Loading…')
   expect(
     within(dialog).getByRole('button', { name: 'Cancel', hidden: true }),
   ).toBeDisabled()

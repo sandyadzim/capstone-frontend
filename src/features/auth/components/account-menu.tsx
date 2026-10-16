@@ -62,7 +62,7 @@ export function AccountMenu({
           >
             <LogOut aria-hidden="true" />{' '}
             {logout.isPending
-              ? 'Signing out…'
+              ? 'Loading…'
               : logout.isError
                 ? 'Try signing out again'
                 : 'Sign out'}

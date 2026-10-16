@@ -311,7 +311,7 @@ export function ReportForm({
               disabled={locked}
               aria-busy={creation.busy}
             >
-              {creation.busy ? 'Creating…' : 'Create report'}
+              {creation.busy ? 'Loading…' : 'Create report'}
             </Button>
           </>
         )}

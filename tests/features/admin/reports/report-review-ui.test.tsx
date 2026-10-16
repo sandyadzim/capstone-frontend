@@ -309,9 +309,7 @@ it.each(['Verify', 'Reject'] as const)(
     const loader = await screen.findByRole('dialog', {
       name: 'Action in progress',
     })
-    expect(within(loader).getByRole('status')).toHaveTextContent(
-      decision === 'Verify' ? 'Verifying report…' : 'Rejecting report…',
-    )
+    expect(within(loader).getByRole('status')).toHaveTextContent('Loading…')
     await user.keyboard('{Tab}{Escape}')
     expect(loader).toBeInTheDocument()
     expect(loader.contains(document.activeElement)).toBe(true)
