@@ -1,6 +1,6 @@
 import { useState, type KeyboardEvent, type ReactNode } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Link, useParams } from '@tanstack/react-router'
+import { Link, useParams, useSearch } from '@tanstack/react-router'
 import {
   AirVent,
   Armchair,
@@ -37,6 +37,9 @@ import { ResidentReportProgress } from './resident-report-progress'
 
 export function ResidentReportDetail() {
   const { reportId } = useParams({ from: '/_resident/reports/$reportId' })
+  const { from, view, page } = useSearch({
+    from: '/_resident/reports/$reportId',
+  })
   const client = useQueryClient()
   const { data: actor } = useQuery(sessionQueryOptions(client))
   const unit = useQuery({
@@ -55,7 +58,15 @@ export function ResidentReportDetail() {
           variant="ghost"
           size="icon"
           className="size-11"
-          render={<Link to="/" aria-label="Back to home" />}
+          render={
+            <Link
+              to={from === 'reports' ? '/reports' : '/'}
+              search={from === 'reports' ? { view, page } : {}}
+              aria-label={
+                from === 'reports' ? 'Back to reports' : 'Back to home'
+              }
+            />
+          }
         >
           <ArrowLeft aria-hidden="true" />
         </Button>

@@ -21,6 +21,9 @@ function ResidentShell() {
   const isHome = useLocation({
     select: (location) => location.pathname === '/',
   })
+  const isReports = useLocation({
+    select: (location) => location.pathname.startsWith('/reports'),
+  })
   return (
     <div className="min-h-svh bg-muted">
       <div className="mx-auto min-h-svh w-full max-w-107.5 bg-background">
@@ -67,15 +70,21 @@ function ResidentShell() {
           ) : (
             <span aria-hidden="true" />
           )}
-          <button
-            type="button"
-            disabled
-            aria-label="Reports"
-            className="flex min-h-14 flex-col items-center justify-center gap-1 text-xs text-muted-foreground"
+          <Link
+            to="/reports"
+            search={{ view: 'ongoing', page: 1 }}
+            aria-current={isReports ? 'page' : undefined}
+            className="flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg text-xs text-primary focus-visible:outline-2 focus-visible:outline-ring"
           >
-            <ClipboardList aria-hidden="true" className="size-5" />
+            <span
+              className={
+                isReports ? 'rounded-lg bg-accent px-4 py-1' : 'px-4 py-1'
+              }
+            >
+              <ClipboardList aria-hidden="true" className="size-5" />
+            </span>
             Reports
-          </button>
+          </Link>
         </nav>
       </div>
     </div>

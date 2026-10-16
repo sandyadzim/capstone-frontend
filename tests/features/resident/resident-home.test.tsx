@@ -146,8 +146,8 @@ it('keeps the Concierge home focused and links the avatar to the live profile', 
     }),
   ).toBeEnabled()
   expect(
-    within(navigation).getByRole('button', { name: 'Reports' }),
-  ).toBeDisabled()
+    within(navigation).getByRole('link', { name: 'Reports' }),
+  ).toHaveAttribute('href', '/reports')
   expect(
     screen.queryByRole('region', { name: 'Your account' }),
   ).not.toBeInTheDocument()

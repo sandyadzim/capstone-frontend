@@ -166,7 +166,10 @@ it.each(reportStatusSchema.options)(
       screen.queryByRole('region', { name: 'Work result' }),
     ).not.toBeInTheDocument()
     expect(screen.queryByText('Created by')).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Reports' })).toBeDisabled()
+    expect(screen.getByRole('link', { name: 'Reports' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    )
     expect(detailRequests()).toHaveLength(1)
     expect(detailRequests()[0]).toMatchObject({
       url: `/reports/${report.id}`,

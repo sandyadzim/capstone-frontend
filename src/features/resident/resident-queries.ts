@@ -3,6 +3,8 @@ import { getProperty } from '@/features/admin/settings/settings-api'
 import { getResidentUnit } from './resident-api'
 import { getReport, listReports } from '@/features/admin/reports/report-api'
 
+import type { ResidentReportsSearch } from './resident-reports-search'
+
 export const residentReportsKey = ['resident', 'reports'] as const
 
 export function residentReportDetailQueryOptions(
@@ -49,6 +51,30 @@ export function residentUnitQueryOptions(actorId: string) {
   return queryOptions({
     queryKey: ['resident', 'unit', actorId],
     queryFn: ({ signal }) => getResidentUnit(signal),
+    meta: { requiresAuth: true },
+    staleTime: 60_000,
+    retry: false,
+  })
+}
+
+export function residentReportListQueryOptions(
+  actorId: string,
+  unitId: string,
+  { view, page }: ResidentReportsSearch,
+) {
+  return queryOptions({
+    queryKey: [...residentReportsKey, 'list', actorId, unitId, view, page],
+    queryFn: ({ signal }) =>
+      listReports(
+        {
+          ...(view === 'history'
+            ? { historyOnly: true }
+            : { ongoingOnly: true }),
+          page,
+          pageSize: 10,
+        },
+        signal,
+      ),
     meta: { requiresAuth: true },
     staleTime: 60_000,
     retry: false,

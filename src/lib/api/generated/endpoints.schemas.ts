@@ -714,6 +714,10 @@ export type ReportsControllerListParams = {
    * Include only REPORTED, VERIFIED, ASSIGNED, IN_PROGRESS, and COMPLETED reports. Other filters still apply.
    */
   ongoingOnly?: boolean
+  /**
+   * Include only CLOSED and REJECTED reports. Other filters still apply; combining with ongoingOnly=true returns no reports.
+   */
+  historyOnly?: boolean
   category?: ReportsControllerListCategory
   /**
    * Matches final priority, or proposed priority when the report has not been reviewed.

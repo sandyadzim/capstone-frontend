@@ -16,6 +16,8 @@ import { formatDate } from '@/lib/format'
 import { Link } from '@tanstack/react-router'
 import { residentReportStatusStyles } from './resident-report-status'
 
+import type { ResidentReportsSearch } from './resident-reports-search'
+
 const categoryIcons = {
   AC: AirVent,
   ELECTRICAL: Zap,
@@ -25,13 +27,20 @@ const categoryIcons = {
   OTHER: Shapes,
 }
 
-export function ResidentReportCard({ report }: { report: ReportListItem }) {
+export function ResidentReportCard({
+  report,
+  source,
+}: {
+  report: ReportListItem
+  source?: ResidentReportsSearch
+}) {
   const Icon = categoryIcons[report.category]
   return (
     <li className="min-w-0">
       <Link
         to="/reports/$reportId"
         params={{ reportId: report.id }}
+        search={source ? { from: 'reports', ...source } : {}}
         aria-label={`View report: ${report.title}`}
         className="block overflow-hidden rounded-2xl border border-border/60 bg-card shadow-[0_2px_3px_#00000003,0_5px_14px_#00000004] hover:border-primary/40 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
       >
