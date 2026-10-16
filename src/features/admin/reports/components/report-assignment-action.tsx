@@ -216,15 +216,6 @@ export function ReportAssignmentAction({
         <span className="whitespace-normal wrap-anywhere">{account.name}</span>
       ),
     },
-    {
-      id: 'login',
-      header: 'Login ID',
-      cell: (account) => (
-        <span className="whitespace-normal wrap-anywhere">
-          {account.loginIdentifier}
-        </span>
-      ),
-    },
     { id: 'select', header: 'Select', sticky: 'right', cell: selectButton },
   ]
 
@@ -323,7 +314,7 @@ export function ReportAssignmentAction({
                         <div className="px-4">
                           <SearchFilter
                             label="Search technicians"
-                            placeholder="Search name or login ID"
+                            placeholder="Search technicians"
                             value={q}
                             maxLength={254}
                             disabled={assignment.busy || recovering}
@@ -364,14 +355,6 @@ export function ReportAssignmentAction({
                                     {account.name}
                                   </dd>
                                 </div>
-                                <div>
-                                  <dt className="text-xs text-muted-foreground">
-                                    Login ID
-                                  </dt>
-                                  <dd className="mt-1 wrap-anywhere">
-                                    {account.loginIdentifier}
-                                  </dd>
-                                </div>
                               </dl>
                               {selectButton(account)}
                             </div>
@@ -400,9 +383,6 @@ export function ReportAssignmentAction({
                         <div className="min-w-0 flex-1 text-sm">
                           <p className="font-medium wrap-anywhere">
                             {selected?.name}
-                          </p>
-                          <p className="mt-1 text-muted-foreground wrap-anywhere">
-                            {selected?.loginIdentifier}
                           </p>
                         </div>
                         <Button
@@ -446,7 +426,7 @@ export function ReportAssignmentAction({
                 id="assignment-note-help"
                 className="text-sm leading-6 text-muted-foreground"
               >
-                The reporter and assigned technician can see this note.
+                The assigned technician can see this note.
               </p>
               {errors.note && (
                 <FieldError
@@ -478,10 +458,7 @@ export function ReportAssignmentAction({
           </form>
         </DialogContent>
       </Dialog>
-      <FullScreenLoader
-        open={assignment.busy}
-        message="Assigning technician…"
-      />
+      <FullScreenLoader open={assignment.busy} />
     </>
   )
 }
