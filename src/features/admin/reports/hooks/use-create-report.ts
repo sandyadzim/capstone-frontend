@@ -1,3 +1,4 @@
+import { dashboardKey } from '@/features/admin/dashboard/dashboard-queries'
 import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { isCancel } from 'axios'
@@ -34,6 +35,7 @@ export function useCreateReport() {
       Promise.all([
         client.cancelQueries({ queryKey: reportsKey }),
         client.cancelQueries({ queryKey: residentReportsKey }),
+        client.cancelQueries({ queryKey: dashboardKey }),
       ]),
   })
   const uploadMutation = useMutation({
@@ -73,6 +75,7 @@ export function useCreateReport() {
         client.invalidateQueries({ queryKey: reportsKey }),
         client.invalidateQueries({ queryKey: residentReportsKey }),
         client.invalidateQueries({ queryKey: unitsKey }),
+        client.invalidateQueries({ queryKey: dashboardKey }),
       ])
       for (const file of files) {
         if (!isCurrent()) return false

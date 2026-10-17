@@ -13,6 +13,8 @@ import {
   unitsKey,
 } from '@/features/admin/units/unit-queries'
 import { toast } from '@/components/ui/toast'
+import { dashboardSummaryQueryOptions } from '@/features/admin/dashboard/dashboard-queries'
+import { summary } from '../dashboard/fixtures'
 import { admin } from '../settings/fixtures'
 import { unit } from './fixtures'
 
@@ -117,6 +119,33 @@ it.each(['create', 'update', 'place', 'release', 'archive'] as const)(
     })
     expect(feedback).not.toHaveBeenCalled()
     expect(client.getQueryData(unitDetailKey(unit.id))).toBeUndefined()
+    client.clear()
+  },
+)
+
+it.each(['create', 'archive'] as const)(
+  'invalidates the dashboard summary after a successful Unit %s',
+  async (action) => {
+    apiClient.defaults.adapter = async (config) => ({
+      data: { ...unit, isArchived: action === 'archive' },
+      status: 200,
+      statusText: 'OK',
+      headers: {},
+      config,
+    })
+    const { result, client } = setup()
+    const key = dashboardSummaryQueryOptions().queryKey
+    client.setQueryData(key, summary)
+    await act(async () => {
+      if (action === 'create')
+        await result.current.create({
+          unitNumber: 'New unit',
+          floor: 1,
+          maintenanceFlag: false,
+        })
+      else await result.current.archive()
+    })
+    expect(client.getQueryState(key)?.isInvalidated).toBe(true)
     client.clear()
   },
 )

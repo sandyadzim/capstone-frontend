@@ -74,6 +74,7 @@ it('cancels reads, updates detail, and invalidates related records', async () =>
     queryKey: ['admin', 'reports', 'list'],
   })
   expect(invalidate).toHaveBeenCalledWith({ queryKey: ['admin', 'units'] })
+  expect(invalidate).toHaveBeenCalledWith({ queryKey: ['admin', 'dashboard'] })
   expect(client.getQueryState(historyKey)?.isInvalidated).toBe(true)
   expect(result.current.busy).toBe(false)
 })

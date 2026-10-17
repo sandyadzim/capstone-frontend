@@ -1,3 +1,4 @@
+import { dashboardKey } from '@/features/admin/dashboard/dashboard-queries'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from '@/components/ui/toast'
 import { ApiError } from '@/lib/api/error'
@@ -19,11 +20,13 @@ export function useUnitMutations(id: string) {
   async function cancelReads() {
     await client.cancelQueries({ queryKey: unitsKey })
     await client.cancelQueries({ queryKey: ['admin', 'accounts'] })
+    await client.cancelQueries({ queryKey: dashboardKey })
   }
 
   async function refresh() {
     await Promise.all([
       client.invalidateQueries({ queryKey: unitsKey }),
+      client.invalidateQueries({ queryKey: dashboardKey }),
       client.invalidateQueries({ queryKey: ['admin', 'accounts'] }),
     ])
   }

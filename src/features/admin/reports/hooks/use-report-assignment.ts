@@ -1,3 +1,4 @@
+import { dashboardKey } from '@/features/admin/dashboard/dashboard-queries'
 import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { CanceledError, isCancel } from 'axios'
@@ -18,7 +19,11 @@ export function useReportAssignment(id: string) {
     meta: { requiresAuth: true },
     retry: false,
     gcTime: 0,
-    onMutate: () => client.cancelQueries({ queryKey: reportsKey }),
+    onMutate: () =>
+      Promise.all([
+        client.cancelQueries({ queryKey: reportsKey }),
+        client.cancelQueries({ queryKey: dashboardKey }),
+      ]),
     mutationFn: ({
       values,
       signal,
@@ -53,6 +58,7 @@ export function useReportAssignment(id: string) {
       await Promise.all([
         client.invalidateQueries({ queryKey: [...reportsKey, 'list'] }),
         client.invalidateQueries({ queryKey: unitsKey }),
+        client.invalidateQueries({ queryKey: dashboardKey }),
       ])
       if (isCurrent()) return report
     } catch (error) {
@@ -69,6 +75,7 @@ export function useReportAssignment(id: string) {
     await Promise.all([
       client.invalidateQueries({ queryKey: reportsKey }),
       client.invalidateQueries({ queryKey: unitsKey }),
+      client.invalidateQueries({ queryKey: dashboardKey }),
       client.invalidateQueries({ queryKey: accountsKey, refetchType: 'none' }),
     ])
   }

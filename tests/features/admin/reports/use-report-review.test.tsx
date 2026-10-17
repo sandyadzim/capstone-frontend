@@ -66,6 +66,7 @@ it('cancels reads, updates detail, and invalidates related records', async () =>
     queryKey: ['admin', 'reports', 'list'],
   })
   expect(invalidate).toHaveBeenCalledWith({ queryKey: ['admin', 'units'] })
+  expect(invalidate).toHaveBeenCalledWith({ queryKey: ['admin', 'dashboard'] })
   expect(result.current.busy).toBe(false)
 })
 it('locks duplicate submissions and uses authenticated metadata with no retries', async () => {

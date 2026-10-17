@@ -1,56 +1,102 @@
-import { Link } from '@tanstack/react-router'
-import { ArrowRight } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
+import { useEffect } from 'react'
+import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query'
+import { getRouteApi, Link, useNavigate } from '@tanstack/react-router'
+import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { reportsQueryOptions } from '@/features/admin/reports/report-queries'
+import { reportsSearchSchema } from '@/features/admin/reports/report-schema'
+import { sessionKey } from '@/features/auth/auth-session'
+import { ApiError } from '@/lib/api/error'
+import { DashboardSummary, DashboardContext } from './dashboard-summary'
+import { DashboardQueue } from './dashboard-queue'
+import { dashboardSummaryQueryOptions } from './dashboard-queries'
+import { dashboardQueues } from './dashboard-schema'
+import './dashboard.css'
 
 export function DashboardPage() {
-  return (
-    <div>
-      <div className="flex flex-wrap items-center gap-3">
-        <h1 className="text-3xl font-semibold tracking-tight">Dashboard</h1>
-        <Badge variant="secondary">Demo data</Badge>
-      </div>
-      <p className="mt-2 max-w-prose text-sm leading-6 text-muted-foreground">
-        An overview of your property and maintenance activity. These sample
-        figures demonstrate the dashboard.
-      </p>
-      <dl className="mt-6 grid grid-cols-1 overflow-hidden rounded-xl border bg-card sm:grid-cols-2 lg:grid-cols-3">
-        {[
-          ['Total units', '18'],
-          ['Total reports', '42'],
-          ['Active reports', '7'],
-          ['In progress', '3'],
-          ['Closed this month', '5'],
-          ['Total closed cost', 'Rp 12,500,000.50'],
-        ].map(([label, value]) => (
-          <div
-            key={label}
-            className="border-b p-5 last:border-b-0 sm:nth-last-[-n+2]:border-b-0 lg:nth-last-[-n+3]:border-b-0"
-          >
-            <dt className="text-sm text-muted-foreground">{label}</dt>
-            <dd className="mt-3 text-2xl font-semibold tracking-tight tabular-nums wrap-anywhere">
-              {value}
-            </dd>
-          </div>
-        ))}
-      </dl>
-      <section className="mt-6 flex flex-col items-start justify-between gap-4 rounded-xl border bg-accent/50 p-5 sm:flex-row sm:items-center">
-        <div>
-          <h2 className="text-base font-semibold">Property configuration</h2>
-          <p className="mt-1 text-sm leading-6 text-muted-foreground">
-            Update your property details and logo in Settings.
+  const { queue } = getRouteApi('/admin/').useSearch()
+  const navigate = useNavigate({ from: '/admin/' })
+  const client = useQueryClient()
+  const summary = useQuery(dashboardSummaryQueryOptions())
+  const queues = useQueries({
+    queries: dashboardQueues.map(({ status }) =>
+      reportsQueryOptions({ status, page: 1, pageSize: 5 }),
+    ),
+  })
+  const errors = [summary.error, ...queues.map((query) => query.error)]
+  const forbidden = errors.some(
+    (error) => error instanceof ApiError && error.statusCode === 403,
+  )
+  const denied =
+    forbidden ||
+    errors.some(
+      (error) => error instanceof ApiError && error.statusCode === 401,
+    )
+  useEffect(() => {
+    if (forbidden) void client.invalidateQueries({ queryKey: sessionKey })
+  }, [client, forbidden])
+  if (denied)
+    return (
+      <section className="admin-dashboard">
+        <h1>Dashboard</h1>
+        <div className="dashboard-read-error">
+          <p role="alert">
+            Dashboard access could not be confirmed. Your session is being
+            checked.
           </p>
+          <Button
+            variant="outline"
+            className="min-h-11 px-4"
+            onClick={() => {
+              void client.invalidateQueries({ queryKey: sessionKey })
+              void summary.refetch()
+              for (const query of queues) void query.refetch()
+            }}
+          >
+            Retry
+          </Button>
+        </div>
+      </section>
+    )
+  return (
+    <div className="admin-dashboard">
+      <div className="dashboard-heading">
+        <div>
+          <h1>Dashboard</h1>
+          <p>Your property’s maintenance, at a glance.</p>
         </div>
         <Button
-          variant="outline"
           className="min-h-11 px-4"
           nativeButton={false}
           role="link"
-          render={<Link to="/admin/settings" />}
+          render={
+            <Link
+              to="/admin/reports/new"
+              search={reportsSearchSchema.parse({})}
+            />
+          }
         >
-          Open Settings <ArrowRight aria-hidden="true" />
+          <Plus aria-hidden="true" /> Create report
         </Button>
-      </section>
+      </div>
+      <DashboardSummary
+        data={summary.data}
+        updatedAt={summary.dataUpdatedAt}
+        pending={summary.isPending}
+        fetching={summary.isFetching}
+        error={summary.error}
+        retry={() => {
+          void summary.refetch()
+        }}
+      />
+      <DashboardQueue
+        selected={queue}
+        queries={queues}
+        select={(queue) => {
+          void navigate({ search: { queue } })
+        }}
+      />
+      <DashboardContext data={summary.data} pending={summary.isPending} />
     </div>
   )
 }

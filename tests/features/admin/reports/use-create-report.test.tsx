@@ -75,6 +75,7 @@ it('creates once and uploads sequentially, refreshing reports and units', async 
   expect(invalidate).toHaveBeenCalledWith({ queryKey: ['admin', 'reports'] })
   expect(invalidate).toHaveBeenCalledWith({ queryKey: ['admin', 'units'] })
   expect(invalidate).toHaveBeenCalledWith({ queryKey: ['resident', 'reports'] })
+  expect(invalidate).toHaveBeenCalledWith({ queryKey: ['admin', 'dashboard'] })
   await act(async () => {
     expect(await result.current.create(reportCreate, files)).toBe(false)
   })
@@ -119,6 +120,7 @@ it('stops on an upload error and keeps the created report without retrying', asy
   })
   expect(result.current.report?.id).toBe(createdReport.id)
   expect(invalidate).toHaveBeenCalledWith({ queryKey: ['resident', 'reports'] })
+  expect(invalidate).toHaveBeenCalledWith({ queryKey: ['admin', 'dashboard'] })
   expect(result.current.uploadError).toContain(
     'was created, but photo upload failed. Rejected file',
   )
