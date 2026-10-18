@@ -454,16 +454,14 @@ it('expires the shared session after a private 401', async () => {
   ).toBe(true)
 })
 
-it('preserves dashboard priority ordering through filters, details and pagination, and resets page when changing order', async () => {
+it('preserves dashboard priority ordering through filters, details and pagination without rendering sort controls', async () => {
   reports = Array.from({ length: 11 }, (_, index) => ({
     ...report,
     id: `55000000-0000-4000-8000-${String(index + 1).padStart(12, '0')}`,
     status: 'VERIFIED',
   }))
   const user = userEvent.setup()
-  const router = await show(
-    '/admin/reports?status=VERIFIED&sort=priority&pageSize=10',
-  )
+  await show('/admin/reports?status=VERIFIED&sort=priority&pageSize=10')
   await screen.findByRole('table', { name: 'Reports' })
   expect(requests.at(-1)?.params).toMatchObject({
     status: 'VERIFIED',
@@ -471,10 +469,15 @@ it('preserves dashboard priority ordering through filters, details and paginatio
     page: 1,
     pageSize: 10,
   })
-  expect(screen.getByRole('button', { name: 'Priority' })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  )
+  expect(
+    screen.queryByRole('group', { name: 'Report order' }),
+  ).not.toBeInTheDocument()
+  expect(
+    screen.queryByRole('button', { name: 'Latest' }),
+  ).not.toBeInTheDocument()
+  expect(
+    screen.queryByRole('button', { name: 'Priority' }),
+  ).not.toBeInTheDocument()
   const input = screen.getByRole('searchbox', { name: 'Search' })
   await user.type(input, 'AC')
   await waitFor(() =>
@@ -494,12 +497,4 @@ it('preserves dashboard priority ordering through filters, details and paginatio
   expect(
     within(table).getByRole('link', { name: report.reportNumber }),
   ).toHaveAttribute('href', expect.stringContaining('sort=priority'))
-  await user.click(screen.getByRole('button', { name: 'Latest' }))
-  await waitFor(() => expect(router.state.location.search.sort).toBeUndefined())
-  expect(requests.at(-1)?.params).toMatchObject({
-    status: 'VERIFIED',
-    q: 'AC',
-    page: 1,
-  })
-  expect(requests.at(-1)?.params.sort).toBeUndefined()
 })

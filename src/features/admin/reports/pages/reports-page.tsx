@@ -11,7 +11,6 @@ import {
   SelectFilter,
 } from '@/components/list-filters'
 import { Pagination } from '@/components/pagination'
-import { ReportSortControl } from '../components/report-sort-control'
 import { ReportRowActions } from '../components/report-row-actions'
 import { usePageCorrection } from '@/hooks/use-page-correction'
 import { getErrorMessage } from '@/lib/api/error'
@@ -231,21 +230,6 @@ export function ReportsPage() {
             error={rangeError}
           />
         </ListFilters>
-        <div className="flex flex-wrap items-center justify-end gap-3 border-t px-4 py-3 sm:px-6">
-          <ReportSortControl
-            value={sort ?? 'latest'}
-            onChange={(sort) =>
-              void navigate({
-                search: (previous) => ({
-                  ...previous,
-                  sort: sort === 'priority' ? sort : undefined,
-                  page: 1,
-                }),
-                resetScroll: false,
-              })
-            }
-          />
-        </div>
         {datesValid && (
           <>
             <DataTable
