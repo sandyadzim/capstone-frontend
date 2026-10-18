@@ -493,6 +493,33 @@ export interface MaintenanceHistoryResponseDto {
   meta: MaintenanceHistoryMetaResponseDto
 }
 
+export interface DashboardTrendMonthDto {
+  /** @pattern ^[0-9]{4}-(0[1-9]|1[0-2])$ */
+  month: string
+  /** @minimum 0 */
+  reportedCount: number
+  /** @minimum 0 */
+  closedCount: number
+  closedCost: string
+}
+
+export type DashboardTrendsResponseDtoTimeZone =
+  (typeof DashboardTrendsResponseDtoTimeZone)[keyof typeof DashboardTrendsResponseDtoTimeZone]
+
+export const DashboardTrendsResponseDtoTimeZone = {
+  'Asia/Jakarta': 'Asia/Jakarta',
+} as const
+
+export interface DashboardTrendsResponseDto {
+  generatedAt: string
+  timeZone: DashboardTrendsResponseDtoTimeZone
+  /**
+   * @minItems 1
+   * @maxItems 12
+   */
+  months: DashboardTrendMonthDto[]
+}
+
 export interface DashboardSummaryResponseDto {
   /** @minimum 0 */
   totalUnits: number
@@ -943,4 +970,13 @@ export type DashboardHistoryControllerListHistoryParams = {
    * @maximum 100
    */
   pageSize?: number
+}
+
+export type DashboardHistoryControllerTrendsParams = {
+  /**
+   * Calendar months ending with the current partial month; oldest first.
+   * @minimum 1
+   * @maximum 12
+   */
+  months?: number
 }

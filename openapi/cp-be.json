@@ -3056,6 +3056,72 @@
         "tags": ["Dashboard and history"]
       }
     },
+    "/api/dashboard/trends": {
+      "get": {
+        "operationId": "DashboardHistoryController_trends",
+        "parameters": [
+          {
+            "name": "months",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12,
+              "default": 6
+            },
+            "description": "Calendar months ending with the current partial month; oldest first."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardTrendsResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiErrorResponseDto" }
+              }
+            }
+          }
+        },
+        "security": [{ "cookie": [] }],
+        "summary": "Read monthly reported/closed counts and closed maintenance costs in Asia/Jakarta, including archived units and zero months",
+        "tags": ["Dashboard and history"]
+      }
+    },
     "/api/dashboard/summary": {
       "get": {
         "operationId": "DashboardHistoryController_summary",
@@ -3780,6 +3846,34 @@
           }
         },
         "required": ["data", "meta"]
+      },
+      "DashboardTrendMonthDto": {
+        "type": "object",
+        "properties": {
+          "month": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$",
+            "example": "2026-10"
+          },
+          "reportedCount": { "type": "integer", "minimum": 0 },
+          "closedCount": { "type": "integer", "minimum": 0 },
+          "closedCost": { "type": "string", "example": "1250000.50" }
+        },
+        "required": ["month", "reportedCount", "closedCount", "closedCost"]
+      },
+      "DashboardTrendsResponseDto": {
+        "type": "object",
+        "properties": {
+          "generatedAt": { "type": "string", "format": "date-time" },
+          "timeZone": { "type": "string", "enum": ["Asia/Jakarta"] },
+          "months": {
+            "minItems": 1,
+            "maxItems": 12,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/DashboardTrendMonthDto" }
+          }
+        },
+        "required": ["generatedAt", "timeZone", "months"]
       },
       "DashboardSummaryResponseDto": {
         "type": "object",

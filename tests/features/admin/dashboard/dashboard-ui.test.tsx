@@ -14,17 +14,23 @@ import { routeTree } from '@/routeTree.gen'
 import { apiClient } from '@/lib/api/client'
 import { ApiError } from '@/lib/api/error'
 import { sessionKey } from '@/features/auth/auth-session'
-import { dashboardSummaryQueryOptions } from '@/features/admin/dashboard/dashboard-queries'
+import {
+  dashboardSummaryQueryOptions,
+  dashboardTrendsQueryOptions,
+} from '@/features/admin/dashboard/dashboard-queries'
 import { reportsKey } from '@/features/admin/reports/report-queries'
 import { admin, property } from '../settings/fixtures'
 import { reportPage } from '../reports/fixtures'
-import { summary, dashboardReports } from './fixtures'
+import { summary, dashboardReports, makeTrends } from './fixtures'
 
 const original = apiClient.defaults.adapter
 let client: ReturnType<typeof createQueryClient>
 let requests: AxiosRequestConfig[]
 let summaryBody: unknown
 let summaryError: ApiError | undefined
+let trendsBody: unknown
+let trendsError: ApiError | undefined
+let holdTrends: Promise<void> | undefined
 let queueError: string | undefined
 let empty: boolean
 let hold: Promise<void> | undefined
@@ -32,6 +38,17 @@ let holdQueues: Promise<void> | undefined
 let sessionActor: typeof admin | null
 beforeEach(() => {
   vi.stubGlobal('scrollTo', vi.fn())
+  vi.stubGlobal(
+    'ResizeObserver',
+    class {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    },
+  )
+  trendsBody = makeTrends()
+  trendsError = undefined
+  holdTrends = undefined
   client = createQueryClient()
   requests = []
   summaryBody = summary
@@ -53,6 +70,11 @@ beforeEach(() => {
       if (hold) await hold
       if (summaryError) throw summaryError
       data = summaryBody
+    } else if (config.url === '/dashboard/trends') {
+      requests.push(config)
+      if (holdTrends) await holdTrends
+      if (trendsError) throw trendsError
+      data = trendsBody
     } else if (config.url === '/reports') {
       requests.push(config)
       if (holdQueues) await holdQueues
@@ -121,9 +143,15 @@ it('renders live exact metrics, real totals, five previews and the chosen icon-f
   expect(metrics.querySelectorAll('.dashboard-contour')).toHaveLength(4)
   expect(metrics.querySelector('svg')).toBeNull()
   expect(screen.queryByText('Demo data')).not.toBeInTheDocument()
-  expect(screen.getByText('128')).toBeInTheDocument()
-  expect(screen.getByText('486')).toBeInTheDocument()
-  expect(requests).toHaveLength(4)
+  expect(screen.queryByText('non-archived units')).not.toBeInTheDocument()
+  expect(screen.queryByText('total reports')).not.toBeInTheDocument()
+  expect(screen.queryByText('Newest reported first.')).not.toBeInTheDocument()
+  expect(
+    screen.queryByText(
+      'High priority first, then oldest within each priority.',
+    ),
+  ).not.toBeInTheDocument()
+  expect(requests).toHaveLength(5)
   expect(
     requests.filter((r) => r.url === '/reports').map((r) => r.params),
   ).toEqual(
@@ -139,9 +167,7 @@ it('renders live exact metrics, real totals, five previews and the chosen icon-f
   expect(within(table).getByText('High')).toBeInTheDocument()
   expect(within(table).getAllByText('Reported')).toHaveLength(5)
   expect(within(table).getAllByText('2 Oct 2026, 01:30')).toHaveLength(5)
-  expect(
-    screen.getByText('Latest 5 of 83 · by reported date'),
-  ).toBeInTheDocument()
+  expect(screen.getByText('Showing 5 of 83')).toBeInTheDocument()
   expect(screen.getByRole('link', { name: 'Create report' })).toHaveAttribute(
     'href',
     '/admin/reports/new',
@@ -369,7 +395,7 @@ it('requests global priority order, preserves it across queues and links, and re
   await waitFor(() =>
     expect(router.state.location.search.sort).toBe('priority'),
   )
-  await screen.findByText('Showing 5 of 12 · priority, then oldest')
+  await screen.findByText('Showing 5 of 12')
   expect(
     within(order).getByRole('button', { name: 'Priority' }),
   ).toHaveAttribute('aria-pressed', 'true')
@@ -409,13 +435,17 @@ it('requests global priority order, preserves it across queues and links, and re
     expect(router.state.location.search.queue).toBe('assignment'),
   )
   await act(() => router.history.back())
-  await screen.findByText('Latest 5 of 12 · by reported date')
+  await waitFor(() =>
+    expect(
+      within(order).getByRole('button', { name: 'Latest' }),
+    ).toHaveAttribute('aria-pressed', 'true'),
+  )
   expect(within(order).getByRole('button', { name: 'Latest' })).toHaveAttribute(
     'aria-pressed',
     'true',
   )
   await act(() => router.history.forward())
-  await screen.findByText('Showing 5 of 12 · priority, then oldest')
+  await screen.findByText('Showing 5 of 12')
 })
 
 it('loads priority from a direct URL and never presents latest rows as priority during loading or failure', async () => {
@@ -423,9 +453,9 @@ it('loads priority from a direct URL and never presents latest rows as priority 
   const router = await show('/admin?sort=priority')
   await ready()
   expect(router.state.location.search.sort).toBe('priority')
-  await screen.findByText('Showing 5 of 83 · priority, then oldest')
+  await screen.findByText('Showing 5 of 83')
   await user.click(screen.getByRole('button', { name: 'Latest' }))
-  await screen.findByText('Latest 5 of 83 · by reported date')
+  await waitFor(() => expect(router.state.location.search.sort).toBeUndefined())
   // Remove the previously loaded priority cache to exercise an uncached sort change.
   client.removeQueries({
     predicate: (query) =>
@@ -444,9 +474,7 @@ it('loads priority from a direct URL and never presents latest rows as priority 
       'true',
     ),
   )
-  expect(
-    screen.queryByText('Latest 5 of 83 · by reported date'),
-  ).not.toBeInTheDocument()
+  expect(screen.queryByText('Showing 5 of 83')).not.toBeInTheDocument()
   expect(
     screen.queryByRole('link', { name: /Maintenance report 1/ }),
   ).not.toBeInTheDocument()
@@ -454,15 +482,150 @@ it('loads priority from a direct URL and never presents latest rows as priority 
     finish()
   })
   await screen.findByText('Queue offline.')
-  expect(
-    screen.queryByText('Showing 5 of 83 · priority, then oldest'),
-  ).not.toBeInTheDocument()
+  expect(screen.queryByText('Showing 5 of 83')).not.toBeInTheDocument()
   queueError = undefined
   await user.click(screen.getByRole('button', { name: 'Try again' }))
-  await screen.findByText('Showing 5 of 83 · priority, then oldest')
+  await screen.findByText('Showing 5 of 83')
   expect(
     within(screen.getByRole('table', { name: 'Needs review' })).getAllByRole(
       'link',
     )[0],
   ).toHaveTextContent('Maintenance report 5')
+})
+
+it('places live charts between metrics and queues, omits chart tables and period copy, and uses one footer copy in both modes', async () => {
+  const user = userEvent.setup()
+  await show()
+  await ready()
+  const activity = await screen.findByRole('region', {
+    name: 'Maintenance activity',
+  })
+  const summaryRegion = screen.getByRole('region', {
+    name: 'Maintenance summary',
+  })
+  const queueRegion = screen.getByRole('region', { name: 'Needs attention' })
+  expect(
+    summaryRegion.compareDocumentPosition(activity) &
+      Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy()
+  expect(
+    activity.compareDocumentPosition(queueRegion) &
+      Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy()
+  expect(
+    within(activity).getByRole('group', {
+      name: 'Monthly reported and closed reports chart',
+    }),
+  ).toBeInTheDocument()
+  expect(
+    within(activity).getByRole('group', {
+      name: 'Monthly maintenance cost chart',
+    }),
+  ).toBeInTheDocument()
+  expect(within(activity).queryByText('View data')).not.toBeInTheDocument()
+  expect(
+    within(activity).queryByText(/Current month to date/),
+  ).not.toBeInTheDocument()
+  expect(within(activity).queryByRole('table')).not.toBeInTheDocument()
+  expect(
+    requests.find((request) => request.url === '/dashboard/trends')?.params,
+  ).toEqual({ months: 6 })
+  expect(screen.getByText('Showing 5 of 83')).toBeInTheDocument()
+  await user.click(screen.getByRole('button', { name: 'Priority' }))
+  await screen.findByText('Showing 5 of 83')
+  expect(screen.queryByText(/priority, then oldest/)).not.toBeInTheDocument()
+  expect(screen.queryByText('Newest reported first.')).not.toBeInTheDocument()
+})
+
+it('isolates trend loading and errors, retries, and retains exact data after refresh failure', async () => {
+  let finish!: () => void
+  holdTrends = new Promise<void>((resolve) => {
+    finish = resolve
+  })
+  const user = userEvent.setup()
+  await show()
+  await ready()
+  expect(screen.getByText('Loading report activity…')).toBeInTheDocument()
+  expect(screen.getByText('Showing 5 of 83')).toBeInTheDocument()
+  trendsError = new ApiError('Activity offline.', 'NETWORK_ERROR')
+  await act(async () => {
+    finish()
+  })
+  await screen.findByText('Activity offline.')
+  expect(
+    screen.queryByText('No reports in this period.'),
+  ).not.toBeInTheDocument()
+  trendsError = undefined
+  await user.click(screen.getByRole('button', { name: 'Retry activity' }))
+  await screen.findByRole('group', { name: 'Monthly maintenance cost chart' })
+  trendsError = new ApiError('Refresh offline.', 'NETWORK_ERROR')
+  await act(async () => {
+    await client.refetchQueries({
+      queryKey: dashboardTrendsQueryOptions().queryKey,
+    })
+  })
+  expect(
+    await screen.findByText(/Showing the last loaded data/),
+  ).toBeInTheDocument()
+  expect(
+    screen.getByRole('group', { name: 'Monthly maintenance cost chart' }),
+  ).toBeInTheDocument()
+})
+
+it('distinguishes confirmed zero charts and keeps large monetary strings exact in chart tooltips', async () => {
+  vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(
+    () => new DOMRect(0, 0, 640, 240),
+  )
+  const zero = makeTrends()
+  zero.months = zero.months.map((month) => ({
+    ...month,
+    reportedCount: 0,
+    closedCount: 0,
+    closedCost: '0.00',
+  }))
+  trendsBody = zero
+  await show()
+  expect(
+    await screen.findByText('No reports in this period.'),
+  ).toBeInTheDocument()
+  expect(
+    screen.getByText('No closed maintenance costs in this period.'),
+  ).toBeInTheDocument()
+  const large = makeTrends()
+  large.months[0].closedCost = '900719925474099312345678901234.50'
+  trendsBody = large
+  await act(async () => {
+    await client.refetchQueries({
+      queryKey: dashboardTrendsQueryOptions().queryKey,
+    })
+  })
+  const user = userEvent.setup()
+  const chart = await screen.findByRole('group', {
+    name: 'Monthly maintenance cost chart',
+  })
+  const svg = await within(chart).findByRole('application')
+  svg.focus()
+  await user.keyboard('{ArrowRight}{ArrowLeft}')
+
+  expect(
+    screen.getByText('Rp 900.719.925.474.099.312.345.678.901.234,50'),
+  ).toBeInTheDocument()
+})
+
+it('suppresses all dashboard data if trends lose Admin access', async () => {
+  await show()
+  await ready()
+  trendsError = new ApiError('Forbidden', 'FORBIDDEN', 403)
+  await act(async () => {
+    await client.refetchQueries({
+      queryKey: dashboardTrendsQueryOptions().queryKey,
+    })
+  })
+  expect(
+    await screen.findByText(/Dashboard access could not be confirmed/),
+  ).toBeInTheDocument()
+  expect(
+    screen.queryByRole('region', { name: 'Maintenance activity' }),
+  ).not.toBeInTheDocument()
+  expect(screen.queryByText('Rp 28.750.000,50')).not.toBeInTheDocument()
 })

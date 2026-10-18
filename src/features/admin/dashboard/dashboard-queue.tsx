@@ -166,11 +166,6 @@ export function DashboardQueue({
           aria-labelledby={`dashboard-tab-${selected}`}
           tabIndex={0}
         >
-          <p className="dashboard-order-description">
-            {sort === 'priority'
-              ? 'High priority first, then oldest within each priority.'
-              : 'Newest reported first.'}
-          </p>
           <DataTable
             label={queue.label}
             columns={columns}
@@ -208,12 +203,8 @@ export function DashboardQueue({
           {query.data && (
             <div className="dashboard-queue-footer">
               <p>
-                {sort === 'priority' ? 'Showing' : 'Latest'}{' '}
-                {Math.min(query.data.data.length, 5)} of{' '}
-                {query.data.meta.total.toLocaleString('en-GB')} ·{' '}
-                {sort === 'priority'
-                  ? 'priority, then oldest'
-                  : 'by reported date'}
+                Showing {Math.min(query.data.data.length, 5)} of{' '}
+                {query.data.meta.total.toLocaleString('en-GB')}
               </p>
               <Button
                 nativeButton={false}

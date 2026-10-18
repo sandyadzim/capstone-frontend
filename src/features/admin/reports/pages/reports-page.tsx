@@ -231,18 +231,17 @@ export function ReportsPage() {
             error={rangeError}
           />
         </ListFilters>
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t px-4 py-3 sm:px-6">
-          <p className="text-xs leading-5 text-muted-foreground">
-            {sort === 'priority'
-              ? 'High priority first, then oldest within each priority.'
-              : 'Newest reported first.'}
-          </p>
+        <div className="flex flex-wrap items-center justify-end gap-3 border-t px-4 py-3 sm:px-6">
           <ReportSortControl
             value={sort ?? 'latest'}
             onChange={(sort) =>
-              changeSearch({
-                sort: sort === 'priority' ? sort : undefined,
-                page: 1,
+              void navigate({
+                search: (previous) => ({
+                  ...previous,
+                  sort: sort === 'priority' ? sort : undefined,
+                  page: 1,
+                }),
+                resetScroll: false,
               })
             }
           />

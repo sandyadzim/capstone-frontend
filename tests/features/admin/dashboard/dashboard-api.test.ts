@@ -6,10 +6,16 @@ import { ApiError } from '@/lib/api/error'
 import { formatIdr } from '@/lib/format'
 import { createQueryClient } from '@/app/query-client'
 import { clearRevokedSession, sessionKey } from '@/features/auth/auth-session'
-import { getDashboardSummary } from '@/features/admin/dashboard/dashboard-api'
-import { dashboardSummaryQueryOptions } from '@/features/admin/dashboard/dashboard-queries'
+import {
+  getDashboardSummary,
+  getDashboardTrends,
+} from '@/features/admin/dashboard/dashboard-api'
+import {
+  dashboardSummaryQueryOptions,
+  dashboardTrendsQueryOptions,
+} from '@/features/admin/dashboard/dashboard-queries'
 import { dashboardSearchSchema } from '@/features/admin/dashboard/dashboard-schema'
-import { summary } from './fixtures'
+import { summary, makeTrends } from './fixtures'
 import { admin } from '../settings/fixtures'
 
 const original = apiClient.defaults.adapter
@@ -137,4 +143,49 @@ it('validates dashboard sort URLs with a safe latest default', () => {
   for (const sort of [undefined, null, 4, 'oldest', ['priority']]) {
     expect(dashboardSearchSchema.parse({ sort }).sort).toBe('latest')
   }
+})
+
+it('reads six monthly aggregates through the generated client with cancellation and exact money', async () => {
+  const trends = makeTrends(new Date('2026-09-30T17:00:00Z'))
+  trends.months[0].closedCost = '900719925474099312345678901234.50'
+  body = trends
+  let request: InternalAxiosRequestConfig | undefined
+  apiClient.defaults.adapter = async (config) => {
+    request = config
+    return { data: body, status: 200, statusText: 'OK', headers: {}, config }
+  }
+  const controller = new AbortController()
+  expect(await getDashboardTrends(controller.signal)).toEqual(trends)
+  expect(request).toMatchObject({
+    url: '/dashboard/trends',
+    params: { months: 6 },
+    signal: controller.signal,
+  })
+  expect(dashboardTrendsQueryOptions()).toMatchObject({
+    queryKey: ['admin', 'dashboard', 'trends', 6],
+    meta: { requiresAuth: true },
+    retry: false,
+    staleTime: 60_000,
+  })
+})
+it.each([
+  'missing',
+  'duplicate',
+  'nonconsecutive',
+  'wrong-zone',
+  'bad-cost',
+  'bad-count',
+  'bad-time',
+])('rejects malformed monthly aggregates: %s', async (kind) => {
+  const trends = makeTrends()
+  if (kind === 'missing') trends.months.pop()
+  if (kind === 'duplicate') trends.months[1].month = trends.months[0].month
+  if (kind === 'nonconsecutive') trends.months[0].month = '2000-01'
+  if (kind === 'bad-cost') trends.months[0].closedCost = '0.5'
+  if (kind === 'bad-count') trends.months[0].reportedCount = -1
+  if (kind === 'bad-time') trends.generatedAt = 'invalid'
+  body = kind === 'wrong-zone' ? { ...trends, timeZone: 'UTC' } : trends
+  await expect(getDashboardTrends()).rejects.toMatchObject({
+    code: 'INVALID_RESPONSE',
+  })
 })

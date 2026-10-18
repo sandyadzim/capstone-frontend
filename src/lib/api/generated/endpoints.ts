@@ -19,7 +19,9 @@ import type {
   AuthControllerLoginBody,
   AuthenticatedActorResponseDto,
   DashboardHistoryControllerListHistoryParams,
+  DashboardHistoryControllerTrendsParams,
   DashboardSummaryResponseDto,
+  DashboardTrendsResponseDto,
   HealthResponseDto,
   MaintenanceExecutionControllerCloseBody,
   MaintenanceExecutionControllerCompleteBody,
@@ -624,6 +626,19 @@ export const dashboardHistoryControllerListHistory = (
 }
 
 /**
+ * @summary Read monthly reported/closed counts and closed maintenance costs in Asia/Jakarta, including archived units and zero months
+ */
+export const dashboardHistoryControllerTrends = (
+  params?: DashboardHistoryControllerTrendsParams,
+  options?: SecondParameter<typeof apiRequest<DashboardTrendsResponseDto>>,
+) => {
+  return apiRequest<DashboardTrendsResponseDto>(
+    { url: `/api/dashboard/trends`, method: 'GET', params },
+    options,
+  )
+}
+
+/**
  * @summary Read Admin maintenance dashboard metrics
  */
 export const dashboardHistoryControllerSummary = (
@@ -739,6 +754,9 @@ export type AttachmentsControllerUploadLogoResult = NonNullable<
 >
 export type DashboardHistoryControllerListHistoryResult = NonNullable<
   Awaited<ReturnType<typeof dashboardHistoryControllerListHistory>>
+>
+export type DashboardHistoryControllerTrendsResult = NonNullable<
+  Awaited<ReturnType<typeof dashboardHistoryControllerTrends>>
 >
 export type DashboardHistoryControllerSummaryResult = NonNullable<
   Awaited<ReturnType<typeof dashboardHistoryControllerSummary>>

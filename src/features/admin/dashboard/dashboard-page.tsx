@@ -7,9 +7,13 @@ import { reportsQueryOptions } from '@/features/admin/reports/report-queries'
 import { reportsSearchSchema } from '@/features/admin/reports/report-schema'
 import { sessionKey } from '@/features/auth/auth-session'
 import { ApiError } from '@/lib/api/error'
-import { DashboardSummary, DashboardContext } from './dashboard-summary'
+import { DashboardSummary } from './dashboard-summary'
+import { DashboardActivity } from './dashboard-activity'
 import { DashboardQueue } from './dashboard-queue'
-import { dashboardSummaryQueryOptions } from './dashboard-queries'
+import {
+  dashboardSummaryQueryOptions,
+  dashboardTrendsQueryOptions,
+} from './dashboard-queries'
 import { dashboardQueues } from './dashboard-schema'
 import './dashboard.css'
 
@@ -18,6 +22,7 @@ export function DashboardPage() {
   const navigate = useNavigate({ from: '/admin/' })
   const client = useQueryClient()
   const summary = useQuery(dashboardSummaryQueryOptions())
+  const trends = useQuery(dashboardTrendsQueryOptions())
   const queues = useQueries({
     queries: dashboardQueues.map(({ status }) =>
       reportsQueryOptions({
@@ -28,7 +33,11 @@ export function DashboardPage() {
       }),
     ),
   })
-  const errors = [summary.error, ...queues.map((query) => query.error)]
+  const errors = [
+    summary.error,
+    trends.error,
+    ...queues.map((query) => query.error),
+  ]
   const forbidden = errors.some(
     (error) => error instanceof ApiError && error.statusCode === 403,
   )
@@ -55,6 +64,7 @@ export function DashboardPage() {
             onClick={() => {
               void client.invalidateQueries({ queryKey: sessionKey })
               void summary.refetch()
+              void trends.refetch()
               for (const query of queues) void query.refetch()
             }}
           >
@@ -94,18 +104,24 @@ export function DashboardPage() {
           void summary.refetch()
         }}
       />
+      <DashboardActivity query={trends} />
       <DashboardQueue
         selected={queue}
         sort={sort}
         changeSort={(sort) => {
-          void navigate({ search: (previous) => ({ ...previous, sort }) })
+          void navigate({
+            search: (previous) => ({ ...previous, sort }),
+            resetScroll: false,
+          })
         }}
         queries={queues}
         select={(queue) => {
-          void navigate({ search: (previous) => ({ ...previous, queue }) })
+          void navigate({
+            search: (previous) => ({ ...previous, queue }),
+            resetScroll: false,
+          })
         }}
       />
-      <DashboardContext data={summary.data} pending={summary.isPending} />
     </div>
   )
 }

@@ -2,13 +2,13 @@
 
 A property maintenance app with resident, administrator, and technician portals in one React SPA. It connects to the `cp-be` backend using cookie authentication and role-based access.
 
-| Portal     | Entry         | Main features                                                               |
-| ---------- | ------------- | --------------------------------------------------------------------------- |
-| Resident   | `/`           | Create reports, track current-unit reports/history, view profile            |
-| Admin      | `/admin`      | Manage accounts, units, resident placement, reports, and property settings  |
-| Technician | `/technician` | Browse assignments/history, start work, submit results, costs, and receipts |
+| Portal     | Entry         | Main features                                                                  |
+| ---------- | ------------- | ------------------------------------------------------------------------------ |
+| Resident   | `/`           | Create reports, track current-unit reports/history, view profile               |
+| Admin      | `/admin`      | View maintenance queues/metrics; manage accounts, units, reports, and settings |
+| Technician | `/technician` | Browse assignments/history, start work, submit results, costs, and receipts    |
 
-Sign in at `/login` with a backend account for the appropriate role. Resident and technician layouts stay within a 430px mobile shell; admin is responsive. All portals support system, light, and dark appearance. The admin Dashboard currently uses sample data.
+Sign in at `/login` with a backend account for the appropriate role. Resident and technician layouts stay within a 430px mobile shell; admin is responsive. All portals support system, light, and dark appearance. The Admin Dashboard shows live maintenance metrics, Recharts monthly activity/cost charts, and report action queues with Latest/Priority ordering. Charts require the Admin-only `GET /api/dashboard/trends?months=6` aggregate. Priority sorting requires the matching cp-be contract (`GET /api/reports?sort=priority`) and runs before pagination.
 
 ## Quick start
 
@@ -52,7 +52,7 @@ Tests use Vitest, Testing Library, and local HTTP fixtures; they do not require 
 
 ## Working in the repo
 
-The stack is React, Vite, strict TypeScript, Tailwind v4, shadcn Nova / Base UI, TanStack Router and Query, Axios, Zustand, React Hook Form, and Zod. Direct dependencies are pinned in `package.json`; retain `bun.lock`.
+The stack is React, Vite, strict TypeScript, Tailwind v4, shadcn Nova / Base UI, TanStack Router and Query, Axios, Zustand, React Hook Form, Zod, and Recharts 3.8.0 through the existing shadcn Chart setup. Recharts peer ranges support the installed React/React DOM 19 versions. Direct dependencies are pinned in `package.json`; retain `bun.lock`.
 
 ```text
 src/

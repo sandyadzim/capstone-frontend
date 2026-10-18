@@ -107,32 +107,3 @@ export function DashboardSummary({
     </section>
   )
 }
-
-export function DashboardContext({
-  data,
-  pending,
-}: {
-  data?: Summary
-  pending: boolean
-}) {
-  return (
-    <div className="dashboard-context">
-      {pending ? (
-        <>
-          <Skeleton className="h-4 w-40" />
-          <Skeleton className="h-4 w-32" />
-        </>
-      ) : (
-        <>
-          <span>
-            <strong>{count(data?.totalUnits)}</strong> non-archived units
-          </span>
-          <span>
-            <strong>{count(data?.totalReports)}</strong> total reports
-          </span>
-        </>
-      )}
-      <p>Report figures include archived units.</p>
-    </div>
-  )
-}
