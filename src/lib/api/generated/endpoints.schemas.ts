@@ -735,6 +735,10 @@ export type ReportsControllerListParams = {
    */
   priority?: ReportsControllerListPriority
   /**
+   * latest: reportedAt descending, then id descending (default). priority: effective priority HIGH, MEDIUM, LOW, then unknown; oldest reportedAt first, then id ascending. Applied before pagination within actor scope.
+   */
+  sort?: ReportsControllerListSort
+  /**
    * Inclusive calendar date in Asia/Jakarta (YYYY-MM-DD), applied to reportedAt.
    */
   dateFrom?: string
@@ -776,6 +780,14 @@ export const ReportsControllerListPriority = {
   LOW: 'LOW',
   MEDIUM: 'MEDIUM',
   HIGH: 'HIGH',
+} as const
+
+export type ReportsControllerListSort =
+  (typeof ReportsControllerListSort)[keyof typeof ReportsControllerListSort]
+
+export const ReportsControllerListSort = {
+  latest: 'latest',
+  priority: 'priority',
 } as const
 
 export type ReportsControllerCreateBodyCategory =

@@ -11,7 +11,9 @@ import { reportCategoryLabels } from '@/features/admin/reports/report-labels'
 import {
   reportsSearchSchema,
   type ReportListItem,
+  type ReportSort,
 } from '@/features/admin/reports/report-schema'
+import { ReportSortControl } from '@/features/admin/reports/components/report-sort-control'
 import type { listReports } from '@/features/admin/reports/report-api'
 import { getErrorMessage } from '@/lib/api/error'
 import { formatDate } from '@/lib/format'
@@ -21,17 +23,24 @@ type QueueQuery = UseQueryResult<Awaited<ReturnType<typeof listReports>>>
 
 export function DashboardQueue({
   selected,
+  sort,
+  changeSort,
   queries,
   select,
 }: {
   selected: DashboardQueue
+  sort: ReportSort
+  changeSort: (sort: ReportSort) => void
   queries: QueueQuery[]
   select: (id: DashboardQueue) => void
 }) {
   const index = dashboardQueues.findIndex((queue) => queue.id === selected)
   const queue = dashboardQueues[index]
   const query = queries[index]
-  const search = reportsSearchSchema.parse({ status: queue.status })
+  const search = reportsSearchSchema.parse({
+    status: queue.status,
+    sort: sort === 'priority' ? sort : undefined,
+  })
   const columns: DataColumn<ReportListItem>[] = [
     {
       id: 'report',
@@ -88,10 +97,15 @@ export function DashboardQueue({
       className="dashboard-attention"
       aria-labelledby="dashboard-attention-heading"
     >
-      <h2 id="dashboard-attention-heading">Needs attention</h2>
-      <p className="dashboard-attention-description">
-        Pick up the next step in your maintenance workflow.
-      </p>
+      <div className="dashboard-attention-heading">
+        <div>
+          <h2 id="dashboard-attention-heading">Needs attention</h2>
+          <p className="dashboard-attention-description">
+            Pick up the next step in your maintenance workflow.
+          </p>
+        </div>
+        <ReportSortControl value={sort} onChange={changeSort} />
+      </div>
       <div className="dashboard-queue-card">
         <div
           role="tablist"
@@ -152,6 +166,11 @@ export function DashboardQueue({
           aria-labelledby={`dashboard-tab-${selected}`}
           tabIndex={0}
         >
+          <p className="dashboard-order-description">
+            {sort === 'priority'
+              ? 'High priority first, then oldest within each priority.'
+              : 'Newest reported first.'}
+          </p>
           <DataTable
             label={queue.label}
             columns={columns}
@@ -189,9 +208,12 @@ export function DashboardQueue({
           {query.data && (
             <div className="dashboard-queue-footer">
               <p>
-                Latest {Math.min(query.data.data.length, 5)} of{' '}
-                {query.data.meta.total.toLocaleString('en-GB')} · by reported
-                date
+                {sort === 'priority' ? 'Showing' : 'Latest'}{' '}
+                {Math.min(query.data.data.length, 5)} of{' '}
+                {query.data.meta.total.toLocaleString('en-GB')} ·{' '}
+                {sort === 'priority'
+                  ? 'priority, then oldest'
+                  : 'by reported date'}
               </p>
               <Button
                 nativeButton={false}

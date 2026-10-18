@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { moneySchema } from '@/lib/schemas/common'
+import { reportSortSchema } from '@/features/admin/reports/report-schema'
 
 const countSchema = z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER)
 export const dashboardSummarySchema = z.object({
@@ -12,6 +13,7 @@ export const dashboardSummarySchema = z.object({
 })
 export type DashboardSummary = z.output<typeof dashboardSummarySchema>
 export const dashboardSearchSchema = z.object({
+  sort: reportSortSchema.catch('latest').default('latest'),
   queue: z
     .enum(['review', 'assignment', 'closure'])
     .catch('review')

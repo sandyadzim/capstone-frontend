@@ -377,3 +377,22 @@
   outline: 2px solid var(--ring);
   outline-offset: -2px;
 }
+
+.dashboard-attention-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.dashboard-order-description {
+  padding: 16px 24px 0;
+  color: var(--muted-foreground);
+  font-size: 12px;
+  line-height: 1.7;
+}
+@media (max-width: 639px) {
+  .dashboard-order-description {
+    padding: 16px 16px 0;
+  }
+}

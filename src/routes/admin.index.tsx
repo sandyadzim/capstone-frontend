@@ -4,7 +4,9 @@ import { dashboardSearchSchema } from '@/features/admin/dashboard/dashboard-sche
 
 export const Route = createFileRoute('/admin/')({
   validateSearch: dashboardSearchSchema,
-  search: { middlewares: [stripSearchParams({ queue: 'review' })] },
+  search: {
+    middlewares: [stripSearchParams({ queue: 'review', sort: 'latest' })],
+  },
   head: () => ({ meta: [{ title: 'Dashboard · Admin · Property' }] }),
   component: DashboardPage,
 })

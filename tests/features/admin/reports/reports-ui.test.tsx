@@ -453,3 +453,53 @@ it('expires the shared session after a private 401', async () => {
       .every((query) => query.state.data === undefined),
   ).toBe(true)
 })
+
+it('preserves dashboard priority ordering through filters, details and pagination, and resets page when changing order', async () => {
+  reports = Array.from({ length: 11 }, (_, index) => ({
+    ...report,
+    id: `55000000-0000-4000-8000-${String(index + 1).padStart(12, '0')}`,
+    status: 'VERIFIED',
+  }))
+  const user = userEvent.setup()
+  const router = await show(
+    '/admin/reports?status=VERIFIED&sort=priority&pageSize=10',
+  )
+  await screen.findByRole('table', { name: 'Reports' })
+  expect(requests.at(-1)?.params).toMatchObject({
+    status: 'VERIFIED',
+    sort: 'priority',
+    page: 1,
+    pageSize: 10,
+  })
+  expect(screen.getByRole('button', { name: 'Priority' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  )
+  const input = screen.getByRole('searchbox', { name: 'Search' })
+  await user.type(input, 'AC')
+  await waitFor(() =>
+    expect(requests.at(-1)?.params).toMatchObject({
+      q: 'AC',
+      sort: 'priority',
+    }),
+  )
+  await user.click(screen.getByRole('button', { name: 'Next' }))
+  await waitFor(() =>
+    expect(requests.at(-1)?.params).toMatchObject({
+      page: 2,
+      sort: 'priority',
+    }),
+  )
+  const table = await screen.findByRole('table', { name: 'Reports' })
+  expect(
+    within(table).getByRole('link', { name: report.reportNumber }),
+  ).toHaveAttribute('href', expect.stringContaining('sort=priority'))
+  await user.click(screen.getByRole('button', { name: 'Latest' }))
+  await waitFor(() => expect(router.state.location.search.sort).toBeUndefined())
+  expect(requests.at(-1)?.params).toMatchObject({
+    status: 'VERIFIED',
+    q: 'AC',
+    page: 1,
+  })
+  expect(requests.at(-1)?.params.sort).toBeUndefined()
+})

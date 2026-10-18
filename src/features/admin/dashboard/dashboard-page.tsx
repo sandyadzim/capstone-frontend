@@ -14,13 +14,18 @@ import { dashboardQueues } from './dashboard-schema'
 import './dashboard.css'
 
 export function DashboardPage() {
-  const { queue } = getRouteApi('/admin/').useSearch()
+  const { queue, sort } = getRouteApi('/admin/').useSearch()
   const navigate = useNavigate({ from: '/admin/' })
   const client = useQueryClient()
   const summary = useQuery(dashboardSummaryQueryOptions())
   const queues = useQueries({
     queries: dashboardQueues.map(({ status }) =>
-      reportsQueryOptions({ status, page: 1, pageSize: 5 }),
+      reportsQueryOptions({
+        status,
+        page: 1,
+        pageSize: 5,
+        ...(sort === 'priority' ? { sort } : {}),
+      }),
     ),
   })
   const errors = [summary.error, ...queues.map((query) => query.error)]
@@ -91,9 +96,13 @@ export function DashboardPage() {
       />
       <DashboardQueue
         selected={queue}
+        sort={sort}
+        changeSort={(sort) => {
+          void navigate({ search: (previous) => ({ ...previous, sort }) })
+        }}
         queries={queues}
         select={(queue) => {
-          void navigate({ search: { queue } })
+          void navigate({ search: (previous) => ({ ...previous, queue }) })
         }}
       />
       <DashboardContext data={summary.data} pending={summary.isPending} />

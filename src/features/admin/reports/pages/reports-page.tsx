@@ -11,6 +11,7 @@ import {
   SelectFilter,
 } from '@/components/list-filters'
 import { Pagination } from '@/components/pagination'
+import { ReportSortControl } from '../components/report-sort-control'
 import { ReportRowActions } from '../components/report-row-actions'
 import { usePageCorrection } from '@/hooks/use-page-correction'
 import { getErrorMessage } from '@/lib/api/error'
@@ -99,8 +100,17 @@ export function ReportsPage() {
   const search = getRouteApi('/admin/reports').useSearch()
   const columns = reportColumns(search)
   const navigate = useNavigate({ from: '/admin/reports' })
-  const { q, status, category, priority, dateFrom, dateTo, page, pageSize } =
-    search
+  const {
+    q,
+    status,
+    category,
+    priority,
+    sort,
+    dateFrom,
+    dateTo,
+    page,
+    pageSize,
+  } = search
   const rangeError = reportDateRangeError(search)
   const datesValid = !rangeError
   const query = useQuery({
@@ -109,6 +119,7 @@ export function ReportsPage() {
       status,
       category,
       priority,
+      sort,
       dateFrom,
       dateTo,
       page,
@@ -220,6 +231,22 @@ export function ReportsPage() {
             error={rangeError}
           />
         </ListFilters>
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t px-4 py-3 sm:px-6">
+          <p className="text-xs leading-5 text-muted-foreground">
+            {sort === 'priority'
+              ? 'High priority first, then oldest within each priority.'
+              : 'Newest reported first.'}
+          </p>
+          <ReportSortControl
+            value={sort ?? 'latest'}
+            onChange={(sort) =>
+              changeSearch({
+                sort: sort === 'priority' ? sort : undefined,
+                page: 1,
+              })
+            }
+          />
+        </div>
         {datesValid && (
           <>
             <DataTable

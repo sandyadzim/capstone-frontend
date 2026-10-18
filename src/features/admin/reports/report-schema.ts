@@ -28,6 +28,8 @@ export const reportCategorySchema = z.enum([
   'OTHER',
 ])
 export const reportPrioritySchema = z.enum(['LOW', 'MEDIUM', 'HIGH'])
+export const reportSortSchema = z.enum(['latest', 'priority'])
+export type ReportSort = z.output<typeof reportSortSchema>
 
 const optionalReportNoteSchema = z.preprocess(
   (value) => (typeof value === 'string' && !value.trim() ? undefined : value),
@@ -190,6 +192,7 @@ export const reportsSearchSchema = z.object({
   status: reportStatusSchema.optional().catch(undefined),
   category: reportCategorySchema.optional().catch(undefined),
   priority: reportPrioritySchema.optional().catch(undefined),
+  sort: reportSortSchema.optional().catch(undefined),
   dateFrom: calendarDateSchema.optional().catch(undefined),
   dateTo: calendarDateSchema.optional().catch(undefined),
   page: pageSearchSchema.default(1),

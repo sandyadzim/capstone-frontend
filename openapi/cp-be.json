@@ -1555,6 +1555,17 @@
             "description": "Matches final priority, or proposed priority when the report has not been reviewed."
           },
           {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["latest", "priority"],
+              "default": "latest"
+            },
+            "description": "latest: reportedAt descending, then id descending (default). priority: effective priority HIGH, MEDIUM, LOW, then unknown; oldest reportedAt first, then id ascending. Applied before pagination within actor scope."
+          },
+          {
             "name": "dateFrom",
             "required": false,
             "in": "query",

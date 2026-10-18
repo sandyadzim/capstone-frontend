@@ -129,3 +129,12 @@ it('aborts an in-flight summary and cannot restore it after session cleanup', as
   expect(client.getQueryData(options.queryKey)).toBeUndefined()
   client.clear()
 })
+
+it('validates dashboard sort URLs with a safe latest default', () => {
+  expect(dashboardSearchSchema.parse({ sort: 'priority' }).sort).toBe(
+    'priority',
+  )
+  for (const sort of [undefined, null, 4, 'oldest', ['priority']]) {
+    expect(dashboardSearchSchema.parse({ sort }).sort).toBe('latest')
+  }
+})

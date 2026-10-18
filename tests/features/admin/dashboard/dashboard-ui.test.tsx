@@ -60,7 +60,12 @@ beforeEach(() => {
       if (queueError === status)
         throw new ApiError('Queue offline.', 'NETWORK_ERROR')
       data = reportPage(
-        empty ? [] : dashboardReports.map((report) => ({ ...report, status })),
+        empty
+          ? []
+          : (config.params.sort === 'priority'
+              ? [...dashboardReports].reverse()
+              : dashboardReports
+            ).map((report) => ({ ...report, status })),
         1,
         config.params.pageSize,
         empty ? 0 : status === 'REPORTED' ? 83 : status === 'VERIFIED' ? 12 : 7,
@@ -352,4 +357,112 @@ it('defaults invalid queue URLs to review and preserves very large monetary prec
   expect(
     await screen.findByText('Rp 900.719.925.474.099.312.345.678.901.234,50'),
   ).toBeInTheDocument()
+})
+
+it('requests global priority order, preserves it across queues and links, and restores it with browser history', async () => {
+  const user = userEvent.setup()
+  const router = await show('/admin?queue=assignment')
+  await ready()
+  const order = screen.getByRole('group', { name: 'Report order' })
+  within(order).getByRole('button', { name: 'Priority' }).focus()
+  await user.keyboard('{Enter}')
+  await waitFor(() =>
+    expect(router.state.location.search.sort).toBe('priority'),
+  )
+  await screen.findByText('Showing 5 of 12 · priority, then oldest')
+  expect(
+    within(order).getByRole('button', { name: 'Priority' }),
+  ).toHaveAttribute('aria-pressed', 'true')
+  expect(
+    requests
+      .filter((request) => request.params?.sort === 'priority')
+      .map((request) => request.params),
+  ).toEqual(
+    ['REPORTED', 'VERIFIED', 'COMPLETED'].map((status) => ({
+      status,
+      page: 1,
+      pageSize: 5,
+      sort: 'priority',
+    })),
+  )
+  const table = screen.getByRole('table', { name: 'Needs technician' })
+  expect(within(table).getAllByRole('link')[0]).toHaveTextContent(
+    'Maintenance report 5',
+  )
+  expect(within(table).getAllByRole('link')[0]).toHaveAttribute(
+    'href',
+    `/admin/reports/${dashboardReports[4].id}?status=VERIFIED&sort=priority`,
+  )
+  expect(screen.getByRole('link', { name: 'View all' })).toHaveAttribute(
+    'href',
+    '/admin/reports?status=VERIFIED&sort=priority',
+  )
+  await user.click(screen.getByRole('tab', { name: 'Ready for review 7' }))
+  await waitFor(() =>
+    expect(router.state.location.search).toMatchObject({
+      queue: 'closure',
+      sort: 'priority',
+    }),
+  )
+  await act(() => router.history.back())
+  await waitFor(() =>
+    expect(router.state.location.search.queue).toBe('assignment'),
+  )
+  await act(() => router.history.back())
+  await screen.findByText('Latest 5 of 12 · by reported date')
+  expect(within(order).getByRole('button', { name: 'Latest' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  )
+  await act(() => router.history.forward())
+  await screen.findByText('Showing 5 of 12 · priority, then oldest')
+})
+
+it('loads priority from a direct URL and never presents latest rows as priority during loading or failure', async () => {
+  const user = userEvent.setup()
+  const router = await show('/admin?sort=priority')
+  await ready()
+  expect(router.state.location.search.sort).toBe('priority')
+  await screen.findByText('Showing 5 of 83 · priority, then oldest')
+  await user.click(screen.getByRole('button', { name: 'Latest' }))
+  await screen.findByText('Latest 5 of 83 · by reported date')
+  // Remove the previously loaded priority cache to exercise an uncached sort change.
+  client.removeQueries({
+    predicate: (query) =>
+      query.queryKey[0] === 'admin' &&
+      JSON.stringify(query.queryKey).includes('"sort":"priority"'),
+  })
+  let finish!: () => void
+  holdQueues = new Promise<void>((resolve) => {
+    finish = resolve
+  })
+  queueError = 'REPORTED'
+  await user.click(screen.getByRole('button', { name: 'Priority' }))
+  await waitFor(() =>
+    expect(screen.getByRole('button', { name: 'Priority' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    ),
+  )
+  expect(
+    screen.queryByText('Latest 5 of 83 · by reported date'),
+  ).not.toBeInTheDocument()
+  expect(
+    screen.queryByRole('link', { name: /Maintenance report 1/ }),
+  ).not.toBeInTheDocument()
+  await act(async () => {
+    finish()
+  })
+  await screen.findByText('Queue offline.')
+  expect(
+    screen.queryByText('Showing 5 of 83 · priority, then oldest'),
+  ).not.toBeInTheDocument()
+  queueError = undefined
+  await user.click(screen.getByRole('button', { name: 'Try again' }))
+  await screen.findByText('Showing 5 of 83 · priority, then oldest')
+  expect(
+    within(screen.getByRole('table', { name: 'Needs review' })).getAllByRole(
+      'link',
+    )[0],
+  ).toHaveTextContent('Maintenance report 5')
 })
